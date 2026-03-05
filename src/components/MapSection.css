@@ -1,0 +1,106 @@
+.map-section {
+    position: relative;
+    height: 450px;
+    overflow: hidden;
+  }
+  
+  .map-container {
+    position: absolute;
+    inset: 0;
+  }
+  
+  .map-container iframe {
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  
+  .map-overlay {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    pointer-events: auto;
+  }
+  
+  .map-pin {
+    width: 60px;
+    height: 60px;
+    color: #ea4335;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+  }
+  
+  .map-pin svg {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .map-btn {
+    background: #888;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  
+  .map-btn:hover {
+    background: #666;
+  }
+  
+  /* Mobile overlay */
+  .map-mobile-overlay {
+    display: none;
+  }
+  
+  @media (max-width: 768px) {
+    .map-section {
+      height: 350px;
+    }
+  
+    .map-overlay {
+      display: none;
+    }
+  
+    .map-mobile-overlay {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      gap: 1rem;
+    }
+  
+    .map-mobile-overlay a {
+      pointer-events: auto;
+    }
+  
+    .map-pin-mobile {
+      width: 80px;
+      height: 80px;
+      color: #ea4335;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+    }
+  
+    .map-pin-mobile svg {
+      width: 100%;
+      height: 100%;
+    }
+  
+    .map-btn-mobile {
+      background: #6547DB;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: 0.5px;
+    }
+  }
