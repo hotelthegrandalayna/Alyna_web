@@ -1,19 +1,19 @@
-import './Features.css';
+import "./Features.css";
 
 const features = [
-  { icon: '📶', label: 'Free Wi-fi' },
-  { icon: '📱', label: 'Digital check-in' },
-  { icon: '🅿️', label: 'Free Parking' },
-  { icon: '🏊', label: 'Swimming' },
-  { icon: '🎬', label: 'Outdoor movie' },
+  { icon: "📶", label: "Free Wi-fi" },
+  { icon: "📱", label: "Digital check-in" },
+  { icon: "🅿️", label: "Free Parking" },
+  { icon: "🏊", label: "Swimming" },
+  { icon: "🎬", label: "Outdoor movie" },
 ];
 
 const amenityItems = [
-  { icon: '📶', label: 'Free Internet Access' },
-  { icon: '📱', label: 'Digital Check-in' },
-  { icon: '🅿️', label: 'Free Parking' },
-  { icon: '🚶', label: 'Outdoor Activity' },
-  { icon: '🍽️', label: 'Restaurant On-Site' },
+  { icon: "📶", label: "Free Internet Access" },
+  { icon: "📱", label: "Digital Check-in" },
+  { icon: "🅿️", label: "Free Parking" },
+  { icon: "🚶", label: "Outdoor Activity" },
+  { icon: "🍽️", label: "Restaurant On-Site" },
 ];
 
 export default function Features() {
@@ -24,15 +24,25 @@ export default function Features() {
           <span className="section-label">EASY LIFE</span>
           <h2>what special we offer to our guests</h2>
           <p>
-            At Alyna&apos;s Resort, we believe in creating memorable experiences. From our
-            luxurious accommodations to our world-class amenities, every detail is
-            designed with your comfort in mind. Enjoy breathtaking views, exceptional
-            dining, and activities for the whole family.
+            At Alyna&apos;s Resort, we believe in creating memorable
+            experiences. From our luxurious accommodations to our world-class
+            amenities, every detail is designed with your comfort in mind. Enjoy
+            breathtaking views, exceptional dining, and activities for the whole
+            family.
           </p>
           <div className="feature-images">
-            <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=150&q=80" alt="Outdoor" />
-            <img src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=150&q=80" alt="Pathway" />
-            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=150&q=80" alt="Light" />
+            <img
+              src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=150&q=80"
+              alt="Outdoor"
+            />
+            <img
+              src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=150&q=80"
+              alt="Pathway"
+            />
+            <img
+              src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=150&q=80"
+              alt="Light"
+            />
           </div>
           <div className="feature-icons">
             {features.map((f) => (

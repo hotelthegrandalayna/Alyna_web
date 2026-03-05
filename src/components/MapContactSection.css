@@ -1,0 +1,184 @@
+/* --- Desktop and Main Styles --- */
+.contact-wrapper {
+  padding: 80px 0;
+  background-color: #f8f8ff; /* Light, soft background as seen in images */
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 40px;
+  display: flex; /* Use Flexbox for two-column desktop layout */
+  gap: 60px; /* Space between columns */
+  align-items: flex-start; /* Top align both columns */
+}
+
+/* --- Left Column (Contact Details) --- */
+.details-col {
+  flex: 1.2; /* Take slightly more space than the map col */
+}
+
+.resort-title {
+  color: #5d5c73; /* Match the subtle dark-grey color from the image */
+  font-size: 32px;
+  margin-bottom: 40px;
+}
+
+.contact-info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 25px; /* Spacing between location, phone, email rows */
+  margin-bottom: 40px;
+}
+
+.info-item {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.icon-box {
+  width: 40px;
+  height: 40px;
+  background-color: #f08a1c; /* Main orange color for icons */
+  color: white;
+  border-radius: 5px; /* Slightly rounded icons */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  margin-top: 5px; /* Nudge icons down a little for alignment */
+}
+
+.text-box h4 {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.text-box p {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* --- Social Follow --- */
+.social-follow-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.follow-text {
+  color: #333;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.social-icons {
+  display: flex;
+  gap: 10px;
+}
+
+.social-link {
+  width: 35px;
+  height: 35px;
+  background-color: #f08a1c; /* Social icon background color */
+  color: white;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  font-size: 16px;
+  transition: opacity 0.3s ease; /* Smooth hover effect */
+}
+
+.social-link:hover {
+  opacity: 0.8; /* Subtle change on hover */
+}
+
+/* --- Right Column (Map Image Box) --- */
+.map-image-col {
+  flex: 1;
+  padding-top: 5vw;
+}
+
+.framed-map-box {
+  width: 100%;
+  position: relative; /* Container for overlay card */
+  border: 10px solid #6c5ce7; /* Distinctive purple frame from image */
+  border-radius: 10px; /* Slight rounding for the frame itself */
+  overflow: hidden; /* Important for keeping image within border-radius */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.framed-map-box img {
+  width: 100%;
+  display: block; /* Eliminate unwanted space below image */
+  object-fit: cover; /* Important for responsiveness and maintaining aspect ratio */
+}
+
+/* --- Map Overlay Card --- */
+.map-overlay-card {
+  position: absolute; /* Place on top of image */
+  top: 15px;
+  left: 15px;
+  background-color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.map-overlay-card h3 {
+  font-size: 16px;
+  color: #333;
+  margin: 0 0 3px 0; /* Tight spacing for title */
+}
+
+.map-link {
+  font-size: 13px;
+  color: #00bcd4; /* Specific blue color for "view large map" */
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.map-link:hover {
+  text-decoration: underline;
+}
+
+/* --- Mobile Responsive (Max-width 768px) --- */
+@media screen and (max-width: 768px) {
+  .contact-wrapper {
+    padding: 60px 0; /* Reduced padding on mobile */
+  }
+
+  .section-container {
+    flex-direction: column; /* Stack columns vertically on mobile */
+    padding: 10px 20px; /* Even smaller side padding for mobile screens */
+    gap: 40px; /* Reduced gap between stacked columns */
+    align-items: flex-start; /* Keep everything left-aligned */
+  }
+
+  .details-col,
+  .map-image-col {
+    width: 100%; /* Ensure both sections take full width when stacked */
+  }
+
+  /* Center social icons row on mobile for better balance */
+  .social-follow-row {
+    justify-content: flex-start;
+    margin-bottom: 20px;
+  }
+
+  /* Reduce map image column width slightly on mobile so it doesn't overpower */
+  .map-image-col {
+    width: 90%;
+    margin: 0 auto; /* Center the map section on mobile */
+  }
+  .map-image-col {
+    padding-top: 0;
+  }
+}

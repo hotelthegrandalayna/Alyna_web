@@ -1,25 +1,28 @@
-import Header from './components/Header';
-import Hero from './components/Hero';
-import PopularAccommodations from './components/PopularAccommodations';
-import Features from './components/Features';
-import Testimonials from './components/Testimonials';
-import MapSection from './components/MapSection';
-import Footer from './components/Footer';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Home from "./Home";
+import AboutPage from "./components/AboutPage";
+import "./App.css";
+import MapContactSection from "./components/MapContactSection";
+import Gallery from "./components/Gallery";
 
 function App() {
   return (
-    <div className="app">
-      <Header />
-      <main>
-        <Hero />
-        <PopularAccommodations />
-        <Features />
-        <Testimonials />
-        <MapSection />
+    <Router>
+      <div className="app">
+        <Header />
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/contact" element={<MapContactSection />} />
+            <Route path="/gallery" element={<Gallery />} />
+          </Routes>
+        </main>
         <Footer />
-      </main>
-    </div>
+      </div>
+    </Router>
   );
 }
 

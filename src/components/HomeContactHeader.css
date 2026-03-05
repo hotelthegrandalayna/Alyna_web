@@ -1,0 +1,26 @@
+.about-wrapper {
+  width: 100%;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.about-hero {
+  height: 400px;
+  background-size: cover;
+  background-position: center;
+  padding: 20px 40px;
+}
+
+.breadcrumb-nav {
+  color: white;
+  font-size: 14px;
+}
+
+.breadcrumb-nav .active-link {
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .about-hero {
+    height: 200px;
+  }
+}
