@@ -1,0 +1,354 @@
+.room-page {
+  background-color: #f6f5ff;
+  padding-bottom: 50px;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.breadcrumb-banner {
+  background-color: #6c5ce7;
+  color: white;
+  padding: 40px 0 100px 0;
+  font-size: 14px;
+}
+
+.active {
+  font-weight: bold;
+}
+
+.main-content {
+  margin-top: -60px; /* Overlap effect */
+}
+
+.room-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 60px;
+  /* background: white; */
+  padding: 75px 0px;
+  border-radius: 8px;
+  /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); */
+}
+
+.main-room-img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.thumbnails {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  justify-content: center;
+}
+
+.thumbnails img {
+  width: 80px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.selected-thumb {
+  border: 2px solid #6c5ce7;
+}
+
+.room-text {
+  margin-top: 25px;
+}
+.price-tag {
+  color: #333;
+  margin-bottom: 10px;
+}
+.room-text p {
+  color: #666;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+/* Sidebar Styles */
+.complimentary-section h4 {
+  color: #333;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+.complimentary-section ul {
+  padding-left: 50px;
+}
+.complimentary-header {
+  display: flex;
+  align-items: center; /* This pulls the icon and text to the same center line */
+  gap: 8px; /* Adds a nice space between the hat and the word */
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* If the icon still feels 1px off due to the specific SVG design */
+.complimentary-header svg {
+  display: block;
+}
+.complimentary-section li {
+  /* display: flex; */
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  margin-bottom: 8px;
+  color: #555;
+}
+
+.availability-card {
+  background: #fff9f2;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 30px;
+}
+
+.calendar-ui {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 15px 0;
+}
+
+.cal-header {
+  display: flex;
+  justify-content: space-between;
+  background: #b2a7ff;
+  color: white;
+  padding: 8px;
+  border-radius: 20px;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.cal-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 11px;
+  gap: 8px;
+}
+
+.booked {
+  color: #2ecc71;
+  border: 1px solid #2ecc71;
+  border-radius: 50%;
+}
+
+.cal-legend {
+  font-size: 11px;
+  color: #777;
+}
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+.red {
+  background: red;
+}
+.orange {
+  background: orange;
+}
+.green {
+  background: #2ecc71;
+}
+
+/* Booking Button */
+.booking-cta {
+  text-align: center;
+  width: 50%;
+  margin: 30px auto;
+  display: flex;
+  justify-content: center;
+}
+.phone-icon-box {
+  height: 65px;
+  width: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cta-box {
+  border: 2px solid #b2a7ff;
+  padding: 10px;
+  border-radius: 12px;
+  position: relative;
+}
+.cta-box small {
+  font-size: 10px;
+  color: #6c5ce7;
+  font-weight: bold;
+  position: absolute;
+  top: -8px;
+  left: 20px;
+  background: white;
+  padding: 0 5px;
+}
+
+.phone-btn {
+  background: linear-gradient(90deg, #30336b, #6c5ce7);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.phone-btn span {
+  background: #f08a1c;
+  padding: 4px 15px;
+  border-radius: 5px;
+}
+
+/* Container to establish the space */
+.booking-card-container {
+  position: relative;
+  width: 100%;
+  max-width: 550px;
+  display: flex;
+  justify-content: center;
+}
+
+/* The faint thin purple border outline seen in the image */
+.outer-glow-border {
+  position: absolute;
+  top: -10px;
+  left: 125px;
+  width: 54%;
+  height: 120px;
+  border: 2px solid #6547db;
+  border-radius: 30px;
+  z-index: 1;
+}
+
+/* The main purple box */
+.main-booking-box {
+  position: relative;
+  background: linear-gradient(135deg, #2a1563 0%, #4625b5 100%);
+  width: 50%;
+  height: 100px;
+  border-radius: 20px;
+  display: flex;
+  align-items: flex-start; /* Keeps the CTA text near the top */
+  padding: 15px 20px;
+  box-sizing: border-box;
+  z-index: 2; /* Sits above the thin border */
+}
+
+.content-left {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+/* A custom CSS representation of the orange phone icon */
+.phone-icon {
+  width: 30px;
+  height: 30px;
+  background-color: #ff7a00;
+  border-radius: 50%;
+  transform: rotate(-30deg);
+  position: relative;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+/* This pseudo-element creates the curved handset look */
+.phone-icon::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 7px;
+  width: 14px;
+  height: 16px;
+  border: 4px solid #fff;
+  border-radius: 50% 50% 0 0;
+  border-bottom: none;
+}
+
+.cta-and-number {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* The main instructional text */
+.cta-text {
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  font-style: italic;
+  margin: -35px 0 10px 5px; /* Margin bottom creates space for the flow */
+  letter-spacing: 1px;
+}
+
+/* *** THE FLOATING OVERLAP EFFECT *** */
+.floating-number-box {
+  position: absolute;
+  background-color: #f27c07;
+  top: -10px;
+  left: 15px;
+  width: 270px;
+  height: 52px;
+  border-radius: 15px;
+  box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+/* Styles the actual number text */
+.phone-number {
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  font-style: italic;
+  letter-spacing: 0.5px;
+}
+
+/* Responsive Mobile Style */
+@media (max-width: 768px) {
+  .booking-card-container {
+    max-width: 87%;
+  }
+  .room-grid {
+    grid-template-columns: 1fr;
+    padding: 15px;
+  }
+  .breadcrumb-banner {
+    padding-bottom: 60px;
+  }
+  .main-content {
+    margin-top: -30px;
+  }
+  .thumbnails img {
+    width: 60px;
+  }
+
+  .outer-glow-border {
+    left: 0%;
+    width: 100%;
+  }
+
+  .main-booking-box {
+    width: 90%;
+  }
+
+  .floating-number-box {
+    width: 200px;
+    height: 40px;
+  }
+  .cta-text {
+    font-size: 8px;
+    margin-left: -3px;
+  }
+}

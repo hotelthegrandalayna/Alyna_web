@@ -6,6 +6,7 @@ import AboutPage from "./components/AboutPage";
 import "./App.css";
 import MapContactSection from "./components/MapContactSection";
 import Gallery from "./components/Gallery";
+import RoomDetails from "./components/RoomDetails";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<MapContactSection />} />
             <Route path="/gallery" element={<Gallery />} />
+            <Route path="/room" element={<RoomDetails />} />
           </Routes>
         </main>
         <Footer />
