@@ -1,137 +1,163 @@
 .popular-accommodations {
-    padding: 4rem 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.section-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: bold;
+  letter-spacing: 0.15em;
+  color: #f27405;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.section-header h2 {
+  color: #6547db;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.accommodation-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.accommodation-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.card-image {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-dots {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+}
+
+.image-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.card-content {
+  padding: 1.5rem;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.tag {
+  font-size: 0.75rem;
+  color: #666;
+  background: #f0f0f0;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+}
+
+.card-content h3 {
+  color: #4a2c6a;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+}
+
+.card-content p {
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+}
+
+.btn-details {
+  background: #6547db;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-details:hover {
+  background: #7a5a97;
+}
+.slider-controls {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.slider-btn {
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: #f27405;
+  width: 32px;
+  height: 32px;
+  border-radius: 22px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  background: #ffffff;
+}
+
+.slider-btn:hover {
+  background: rgba(239, 225, 225, 0.8);
+}
+/* Mobile */
+@media (max-width: 768px) {
+  .popular-accommodations {
+    padding: 3rem 1.5rem;
   }
-  
-  .section-header {
-    text-align: center;
-    margin-bottom: 3rem;
-  }
-  
-  .section-label {
-    display: block;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.15em;
-    color: #e67e22;
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
-  }
-  
+
   .section-header h2 {
-    color: #4a2c6a;
-    font-size: 2rem;
-    font-weight: 700;
-    margin: 0;
+    font-size: 1.5rem;
   }
-  
+
   .accommodation-cards {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
-  
-  .accommodation-card {
-    background: white;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  }
-  
-  .card-image {
-    position: relative;
-    aspect-ratio: 4 / 3;
-    overflow: hidden;
-  }
-  
-  .card-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .image-dots {
-    position: absolute;
-    bottom: 1rem;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 6px;
-  }
-  
-  .image-dots span {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.8);
-  }
-  
-  .card-content {
-    padding: 1.5rem;
-  }
-  
-  .card-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 0.75rem;
-  }
-  
-  .tag {
-    font-size: 0.75rem;
-    color: #666;
-    background: #f0f0f0;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-  }
-  
-  .card-content h3 {
-    color: #4a2c6a;
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin: 0 0 0.5rem 0;
-  }
-  
-  .card-content p {
-    color: #666;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    margin: 0 0 1rem 0;
-  }
-  
+
   .btn-details {
-    background: #6547DB;
-    color: white;
-    border: none;
-    padding: 0.6rem 1.5rem;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
+    width: 100%;
   }
-  
-  .btn-details:hover {
-    background: #7a5a97;
-  }
-  
-  /* Mobile */
-  @media (max-width: 768px) {
-    .popular-accommodations {
-      padding: 3rem 1.5rem;
-    }
-  
-    .section-header h2 {
-      font-size: 1.5rem;
-    }
-  
-    .accommodation-cards {
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
-    }
-  
-    .btn-details {
-      width: 100%;
-    }
-  }
+}

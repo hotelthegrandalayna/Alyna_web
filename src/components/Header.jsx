@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 import "./Header.css";
 
 export default function Header() {
@@ -15,9 +16,10 @@ export default function Header() {
   return (
     <header className="header">
       <nav className="navbar">
-        <a href="#home" className="logo">
-          Alyna&apos;s Resort
-        </a>
+        <NavLink to="/" className="logo">
+          Alyna&apos;s <br /> Resort
+        </NavLink>
+
         <button
           className="hamburger"
           aria-label="Toggle menu"
@@ -27,12 +29,17 @@ export default function Header() {
           <span></span>
           <span></span>
         </button>
+
         <ul className={`nav-links ${menuOpen ? "open" : ""}`}>
           {navLinks.map((link) => (
             <li key={link.label}>
-              <a href={link.href} onClick={() => setMenuOpen(false)}>
+              <NavLink
+                to={link.href}
+                className={({ isActive }) => (isActive ? "active" : "")}
+                onClick={() => setMenuOpen(false)}
+              >
                 {link.label}
-              </a>
+              </NavLink>
             </li>
           ))}
         </ul>

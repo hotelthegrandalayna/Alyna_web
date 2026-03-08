@@ -4,11 +4,12 @@ import {
   FaMapMarkerAlt,
   FaPhoneAlt,
   FaEnvelope,
-  FaFacebookF,
-  FaTwitter,
+  FaFacebook,
+  FaWhatsapp,
   FaInstagram,
   FaYoutube,
 } from "react-icons/fa";
+import { FaLocationDot } from "react-icons/fa6";
 
 const MapContactSection = () => {
   // Placeholder image - REPLACE WITH YOUR MAP IMAGE ASSET PATH
@@ -21,13 +22,15 @@ const MapContactSection = () => {
       <div className="section-container">
         {/* Left Column (Contact Details) */}
         <div className="details-col">
-          <h2 className="resort-title">Alyna's Resort</h2>
+          <h2 className="resort-title">
+            Alyna's <br /> Resort
+          </h2>
 
           <div className="contact-info-list">
             {/* Location */}
             <div className="info-item">
               <div className="icon-box location-icon">
-                <FaMapMarkerAlt />
+                <FaLocationDot />
               </div>
               <div className="text-box">
                 <h4>Location</h4>
@@ -63,19 +66,22 @@ const MapContactSection = () => {
           </div>
 
           {/* Social Links (Follow us) */}
-          <div className="social-follow-row">
-            <span className="follow-text">Follow us</span>
+          <div className="social-section">
+            <div className="social-label">
+              <span className="social-line" />
+              <span className="follow-text">Follow us</span>
+            </div>
             <div className="social-icons">
-              <a href="#" className="social-link facebook">
-                <FaFacebookF />
+              <a href="#" aria-label="Facebook" className="facebook">
+                <FaFacebook />
               </a>
-              <a href="#" className="social-link twitter">
-                <FaTwitter />
+              <a href="#" aria-label="WhatsApp" className="whatsapp">
+                <FaWhatsapp />
               </a>
-              <a href="#" className="social-link instagram">
+              <a href="#" aria-label="Instagram" className="instagram">
                 <FaInstagram />
               </a>
-              <a href="#" className="social-link youtube">
+              <a href="#" aria-label="YouTube" className="youtube">
                 <FaYoutube />
               </a>
             </div>

@@ -1,11 +1,14 @@
 import "./Features.css";
 
 const features = [
-  { icon: "📶", label: "Free Wi-fi" },
-  { icon: "📱", label: "Digital check-in" },
+  { icon: "📶", label: "Free Internet Access" },
+  { icon: "📱", label: "Digital Check-In" },
   { icon: "🅿️", label: "Free Parking" },
   { icon: "🏊", label: "Swimming" },
   { icon: "🎬", label: "Outdoor movie" },
+  { icon: "📶", label: "Free Internet Access" },
+  { icon: "📱", label: "Digital Check-in" },
+  { icon: "🅿️", label: "Free Parking" },
 ];
 
 const amenityItems = [
@@ -14,6 +17,9 @@ const amenityItems = [
   { icon: "🅿️", label: "Free Parking" },
   { icon: "🚶", label: "Outdoor Activity" },
   { icon: "🍽️", label: "Restaurant On-Site" },
+  { icon: "📶", label: "Free Internet Access" },
+  { icon: "📱", label: "Digital Check-in" },
+  { icon: "🅿️", label: "Free Parking" },
 ];
 
 export default function Features() {
@@ -21,14 +27,14 @@ export default function Features() {
     <section className="features" id="about">
       <div className="features-grid">
         <div className="features-content">
-          <span className="section-label">EASY LIFE</span>
+          <span className="section-label">FACILITIES</span>
           <h2>what special we offer to our guests</h2>
           <p>
-            At Alyna&apos;s Resort, we believe in creating memorable
-            experiences. From our luxurious accommodations to our world-class
-            amenities, every detail is designed with your comfort in mind. Enjoy
-            breathtaking views, exceptional dining, and activities for the whole
-            family.
+            Attractively ornamented with complete marble & tiles and luxurious
+            fabrics, our two prominent Presidential suites are 1900 1800 sq ft.
+            These two unique suites boast an octagonal living area, the sides of
+            which are fitted with windows overlooking the sea, the Bay of Bengal
+            for the best views in the city.
           </p>
           <div className="feature-images">
             <img
@@ -44,14 +50,6 @@ export default function Features() {
               alt="Light"
             />
           </div>
-          <div className="feature-icons">
-            {features.map((f) => (
-              <div key={f.label} className="feature-item">
-                <span className="feature-icon">{f.icon}</span>
-                <span>{f.label}</span>
-              </div>
-            ))}
-          </div>
         </div>
         <div className="features-image">
           <img
@@ -59,6 +57,14 @@ export default function Features() {
             alt="BBQ and dining"
           />
         </div>
+      </div>
+      <div className="feature-icons">
+        {features.map((f) => (
+          <div key={f.label} className="feature-item">
+            <span className="feature-icon">{f.icon}</span>
+            <span>{f.label}</span>
+          </div>
+        ))}
       </div>
       <div className="amenities-section">
         <span className="section-label">AMENITIES</span>
