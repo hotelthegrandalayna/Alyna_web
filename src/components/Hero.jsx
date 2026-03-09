@@ -1,4 +1,4 @@
-import './Hero.css';
+import "./Hero.css";
 
 export default function Hero() {
   return (
@@ -13,7 +13,8 @@ export default function Hero() {
         <h1>Wake Up Where the Hills Meet the Sea</h1>
         <p>
           <span className="hero-accent"></span>
-          Comfort for every traveler, from budget to luxury, at the heart of Sitakund.
+          Comfort for every traveler, from budget to luxury, at the heart of
+          Sitakund.
         </p>
       </div>
     </section>

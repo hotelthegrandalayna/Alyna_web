@@ -1,5 +1,9 @@
 import { useState } from "react";
 import "./PopularAccommodations.css";
+import { FaWifi } from "react-icons/fa";
+import { MdOutlineBreakfastDining, MdVerifiedUser } from "react-icons/md";
+import { TbAirConditioning } from "react-icons/tb";
+import { FiMonitor } from "react-icons/fi";
 
 const accommodations = [
   {
@@ -64,6 +68,24 @@ export default function PopularAccommodations() {
             <article key={item.id} className="accommodation-card">
               <div className="card-image">
                 <img src={item.images[activeIndex]} alt={item.title} />
+
+                <div className="top-buttons">
+                  <button className="img-btn">
+                    <FaWifi />
+                  </button>
+                  <button className="img-btn">
+                    <MdVerifiedUser />
+                  </button>
+                  <button className="img-btn">
+                    <MdOutlineBreakfastDining />
+                  </button>
+                  <button className="img-btn">
+                    <TbAirConditioning />
+                  </button>
+                  <button className="img-btn">
+                    <FiMonitor />
+                  </button>
+                </div>
 
                 <div className="slider-controls">
                   <button

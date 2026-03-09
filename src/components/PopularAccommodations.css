@@ -121,6 +121,10 @@
   right: 12px;
   display: flex;
   gap: 8px;
+  background: #7d799b;
+  border-radius: 20px;
+  padding: 4px;
+  opacity: 0.9;
 }
 
 .slider-btn {
@@ -142,6 +146,33 @@
 .slider-btn:hover {
   background: rgba(239, 225, 225, 0.8);
 }
+
+.top-buttons {
+  position: absolute;
+  top: 12px;
+  right: 0px;
+  display: flex;
+  gap: 8px;
+  background: #787878;
+  padding: 6px 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.img-btn {
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  cursor: pointer;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.img-btn:hover {
+  color: #f27405;
+}
+
 /* Mobile */
 @media (max-width: 768px) {
   .popular-accommodations {
