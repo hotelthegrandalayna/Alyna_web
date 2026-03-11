@@ -21,7 +21,7 @@ export default function Footer() {
             </div>
             <div className="contact-label">Location</div>
             <div className="contact-value">
-              Ward No. 9, Shitpur, Palli Bidyut Road, Sitakund, Chattogram-4310,
+              Ward No. 9, Shibpur, Palli Bidyut Road, Sitakund, Chattogram-4310,
               Bangladesh.
             </div>
           </div>

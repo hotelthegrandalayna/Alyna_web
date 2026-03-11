@@ -7,6 +7,7 @@ import "./App.css";
 import MapContactSection from "./components/MapContactSection";
 import Gallery from "./components/Gallery";
 import RoomDetails from "./components/RoomDetails";
+import RoomDetails2 from "./components/RoomDetails2";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/contact" element={<MapContactSection />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/room" element={<RoomDetails />} />
+            <Route path="/room2" element={<RoomDetails2 />} />
           </Routes>
         </main>
         <Footer />

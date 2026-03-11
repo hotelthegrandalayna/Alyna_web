@@ -35,20 +35,18 @@
 .info-item {
   display: flex;
   gap: 20px;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .icon-box {
   width: 40px;
   height: 40px;
-  background-color: #f08a1c; /* Main orange color for icons */
-  color: white;
+  color: #f08a1c;
   border-radius: 5px; /* Slightly rounded icons */
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 20px;
-  margin-top: 5px; /* Nudge icons down a little for alignment */
 }
 
 .text-box h4 {
@@ -148,7 +146,7 @@
   width: 100%;
   position: relative; /* Container for overlay card */
   border: 10px solid #6c5ce7; /* Distinctive purple frame from image */
-  border-radius: 10px; /* Slight rounding for the frame itself */
+  border-radius: 5px; /* Slight rounding for the frame itself */
   overflow: hidden; /* Important for keeping image within border-radius */
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }

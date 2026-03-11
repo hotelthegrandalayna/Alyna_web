@@ -5,7 +5,7 @@ import HomeContactHeader from "./HomeContactHeader";
 import { FaPhone } from "react-icons/fa6";
 import RoomCalendar from "./RoomCalendar";
 
-const RoomDetails = () => {
+const RoomDetails2 = () => {
   const images = [
     "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80",
     "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=80",
@@ -102,4 +102,4 @@ const RoomDetails = () => {
   );
 };
 
-export default RoomDetails;
+export default RoomDetails2;

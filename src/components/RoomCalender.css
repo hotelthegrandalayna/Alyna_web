@@ -1,0 +1,107 @@
+.calendar-wrapper {
+  background: #fff3e8;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* HEADER */
+.react-calendar__navigation {
+  background: #9a87d6;
+  border-radius: 30px;
+  padding: 5px;
+}
+
+/* .react-calendar__navigation button {
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+} */
+
+/* remove borders */
+.react-calendar {
+  border: none;
+  width: 100%;
+  background: transparent;
+}
+
+/* weekday labels */
+/* .react-calendar__month-view__weekdays {
+  text-transform: none;
+  font-weight: 500;
+  color: #777;
+} */
+.react-calendar__month-view__days__day--weekend {
+  color: #1b1b1b;
+}
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+  background: none;
+  color: black;
+}
+.react-calendar__tile--active {
+  background: none;
+  color: black;
+}
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus,
+.react-calendar__navigation button:enabled {
+  background: none;
+  color: white;
+}
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+  background: none;
+  color: black;
+}
+/* day numbers */
+.react-calendar__tile {
+  /* background: none; */
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+/* colored days */
+.day-red {
+  color: red !important;
+  font-weight: bold;
+}
+
+.day-orange {
+  color: orange !important;
+  font-weight: bold;
+}
+
+.day-green {
+  color: green !important;
+  font-weight: bold;
+}
+
+/* legend */
+.legend {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.legend p {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  display: inline-block;
+}
+
+.red {
+  background: red;
+}
+.orange {
+  background: orange;
+}
+.green {
+  background: green;
+}

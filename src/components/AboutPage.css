@@ -116,8 +116,8 @@
   flex: 1;
 }
 .photo-accent {
-  background-color: #6c5ce7;
-  border-radius: 8px;
+  /* background-color: #6c5ce7;
+  border-radius: 8px; */
   padding-top: 20px;
   position: relative;
   text-align: center;

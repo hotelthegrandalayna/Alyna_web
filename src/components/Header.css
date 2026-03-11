@@ -30,7 +30,8 @@
   padding: 0;
 }
 
-.nav-links a {
+.nav-links a,
+.nav-parent {
   color: white;
   text-decoration: none;
   font-size: 0.95rem;
@@ -63,13 +64,63 @@
 
 .nav-links a {
   text-decoration: none;
-  padding: 8px 12px;
+  padding: 6px 12px;
 }
 
 .nav-links a.active {
   border: 2px solid rgb(255, 255, 255);
 }
+.nav-item {
+  position: relative;
+}
 
+/* Submenu active state */
+.dropdown li a.active {
+  border: 2px solid #6547db; /* or white, choose as you like */
+  border-radius: 4px;
+  padding: 4px 10px; /* adjust to keep text inside the border */
+  background: #f0f0f0; /* optional highlight background */
+}
+
+/* Dropdown hidden by default */
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  list-style: none;
+  padding: 10px 0;
+  margin: 0;
+  min-width: 120px;
+  border-radius: 4px;
+  display: none;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Dropdown items */
+.dropdown li {
+  padding: 5px 15px;
+}
+
+.dropdown li a {
+  text-decoration: none;
+  color: black;
+}
+
+/* Show dropdown on hover */
+.nav-item:hover .dropdown {
+  display: block;
+}
+
+/* .nav-parent {
+  cursor: pointer;
+  padding: 8px 12px;
+  text-decoration: none;
+}
+
+.nav-parent:hover {
+  border: 2px solid white;
+} */
 /* Mobile styles */
 @media (max-width: 768px) {
   .hamburger {
@@ -78,7 +129,7 @@
 
   .nav-links {
     position: fixed;
-    top: 56px;
+    top: 78px;
     left: 0;
     right: 0;
     background: #6547db;
@@ -99,5 +150,9 @@
     transform: translateY(0);
     opacity: 1;
     visibility: visible;
+  }
+
+  .nav-parent {
+    padding-left: 10px;
   }
 }

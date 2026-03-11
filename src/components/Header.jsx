@@ -7,7 +7,13 @@ export default function Header() {
 
   const navLinks = [
     { label: "Home", href: "/" },
-    { label: "Rooms", href: "/room" },
+    {
+      label: "Rooms",
+      submenu: [
+        { label: "Room 1", href: "/room" },
+        { label: "Room 2", href: "/room2" },
+      ],
+    },
     { label: "Gallery", href: "/gallery" },
     { label: "About", href: "/about" },
     { label: "Contact Us", href: "/contact" },
@@ -32,14 +38,46 @@ export default function Header() {
 
         <ul className={`nav-links ${menuOpen ? "open" : ""}`}>
           {navLinks.map((link) => (
-            <li key={link.label}>
-              <NavLink
-                to={link.href}
-                className={({ isActive }) => (isActive ? "active" : "")}
-                onClick={() => setMenuOpen(false)}
-              >
-                {link.label}
-              </NavLink>
+            <li key={link.label} className="nav-item">
+              {link.submenu ? (
+                <>
+                  <span
+                    className={`nav-parent ${
+                      link.submenu.some(
+                        (sub) => window.location.pathname === sub.href,
+                      )
+                        ? "active"
+                        : ""
+                    }`}
+                  >
+                    {link.label}
+                  </span>
+
+                  <ul className="dropdown">
+                    {link.submenu.map((sub) => (
+                      <li key={sub.label}>
+                        <NavLink
+                          to={sub.href}
+                          className={({ isActive }) =>
+                            isActive ? "active" : ""
+                          }
+                          onClick={() => setMenuOpen(false)}
+                        >
+                          {sub.label}
+                        </NavLink>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                <NavLink
+                  to={link.href}
+                  className={({ isActive }) => (isActive ? "active" : "")}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {link.label}
+                </NavLink>
+              )}
             </li>
           ))}
         </ul>

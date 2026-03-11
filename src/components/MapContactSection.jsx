@@ -22,9 +22,7 @@ const MapContactSection = () => {
       <div className="section-container">
         {/* Left Column (Contact Details) */}
         <div className="details-col">
-          <h2 className="resort-title">
-            Alyna's <br /> Resort
-          </h2>
+          <h2 className="resort-title">Alyna's Resort</h2>
 
           <div className="contact-info-list">
             {/* Location */}
@@ -43,7 +41,7 @@ const MapContactSection = () => {
 
             {/* Phone */}
             <div className="info-item">
-              <div className="icon-box phone-icon">
+              <div className="icon-box">
                 <FaPhoneAlt />
               </div>
               <div className="text-box">
