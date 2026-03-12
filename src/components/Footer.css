@@ -54,17 +54,18 @@
   line-height: 1.6;
 }
 
-.social-section {
+.social-section-2 {
   display: flex;
   align-items: center;
-  justify-content: end;
+  justify-content: center;
   gap: 1.5rem;
 }
 
-.social-label {
+.social-label-2 {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  padding-left: 60px;
 }
 
 .social-line-2 {
@@ -75,7 +76,7 @@
   display: inline-block;
 }
 
-.follow-text {
+.follow-text-2 {
   font-size: white;
 }
 
@@ -146,8 +147,12 @@
     grid-column: 2 / 3;
   }
 
-  .social-section {
+  .social-section-2 {
     flex-direction: column;
     align-items: flex-start;
+    padding-left: 10px;
+  }
+  .social-label-2 {
+    padding-left: 0;
   }
 }

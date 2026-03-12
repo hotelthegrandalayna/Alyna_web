@@ -1,7 +1,42 @@
+/* --- HERO SECTION --- */
+.about-wrapper {
+  width: 100%;
+}
+
+.about-hero {
+  height: 320px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  align-items: center; /* vertical center */
+}
+
+/* Optional dark overlay for readability */
+.about-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.breadcrumb-nav {
+  margin-left: 60px;
+  color: white;
+  font-size: 20px;
+  font-weight: 500;
+  position: relative;
+  z-index: 2;
+}
+
+.breadcrumb-nav .active-link {
+  font-weight: 600;
+}
+
 /* --- Desktop and Main Styles --- */
 .contact-wrapper {
   padding: 80px 0;
-  background-color: #f8f8ff; /* Light, soft background as seen in images */
+  background-color: #f8f8ff;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -9,18 +44,18 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px 40px;
-  display: flex; /* Use Flexbox for two-column desktop layout */
-  gap: 60px; /* Space between columns */
-  align-items: flex-start; /* Top align both columns */
+  display: flex;
+  gap: 60px;
+  align-items: flex-start;
 }
 
 /* --- Left Column (Contact Details) --- */
 .details-col {
-  flex: 1.2; /* Take slightly more space than the map col */
+  flex: 1.2;
 }
 
 .resort-title {
-  color: #5d5c73; /* Match the subtle dark-grey color from the image */
+  color: #5d5c73;
   font-size: 32px;
   margin-bottom: 40px;
 }
@@ -28,7 +63,7 @@
 .contact-info-list {
   display: flex;
   flex-direction: column;
-  gap: 25px; /* Spacing between location, phone, email rows */
+  gap: 25px;
   margin-bottom: 40px;
 }
 
@@ -42,7 +77,7 @@
   width: 40px;
   height: 40px;
   color: #f08a1c;
-  border-radius: 5px; /* Slightly rounded icons */
+  border-radius: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -86,7 +121,7 @@
 }
 
 .follow-text {
-  font-size: white;
+  color: #333;
 }
 
 .social-icons {
@@ -108,21 +143,9 @@
   transition: transform 0.2s;
 }
 
-.social-icons a.facebook {
-  background: #f27405;
-  color: white;
-}
-
-.social-icons a.whatsapp {
-  background: #f27405;
-  color: white;
-}
-
-.social-icons a.instagram {
-  background: #f27405;
-  color: white;
-}
-
+.social-icons a.facebook,
+.social-icons a.whatsapp,
+.social-icons a.instagram,
 .social-icons a.youtube {
   background: #f27405;
   color: white;
@@ -133,7 +156,7 @@
 }
 
 .social-link:hover {
-  opacity: 0.8; /* Subtle change on hover */
+  opacity: 0.8;
 }
 
 /* --- Right Column (Map Image Box) --- */
@@ -144,22 +167,22 @@
 
 .framed-map-box {
   width: 100%;
-  position: relative; /* Container for overlay card */
-  border: 10px solid #6c5ce7; /* Distinctive purple frame from image */
-  border-radius: 5px; /* Slight rounding for the frame itself */
-  overflow: hidden; /* Important for keeping image within border-radius */
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  position: relative;
+  border: 10px solid #6c5ce7;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .framed-map-box img {
   width: 100%;
-  display: block; /* Eliminate unwanted space below image */
-  object-fit: cover; /* Important for responsiveness and maintaining aspect ratio */
+  display: block;
+  object-fit: cover;
 }
 
 /* --- Map Overlay Card --- */
 .map-overlay-card {
-  position: absolute; /* Place on top of image */
+  position: absolute;
   top: 15px;
   left: 15px;
   background-color: white;
@@ -171,12 +194,12 @@
 .map-overlay-card h3 {
   font-size: 16px;
   color: #333;
-  margin: 0 0 3px 0; /* Tight spacing for title */
+  margin: 0 0 3px 0;
 }
 
 .map-link {
   font-size: 13px;
-  color: #00bcd4; /* Specific blue color for "view large map" */
+  color: #00bcd4;
   text-decoration: none;
   font-weight: 500;
 }
@@ -185,36 +208,45 @@
   text-decoration: underline;
 }
 
-/* --- Mobile Responsive (Max-width 768px) --- */
+/* --- Mobile Responsive --- */
 @media screen and (max-width: 768px) {
+  .about-hero {
+    height: 220px;
+  }
+
+  .breadcrumb-nav {
+    margin-left: 25px;
+    font-size: 16px;
+  }
+
   .contact-wrapper {
-    padding: 60px 0; /* Reduced padding on mobile */
+    padding: 60px 0;
   }
 
   .section-container {
-    flex-direction: column; /* Stack columns vertically on mobile */
-    padding: 10px 20px; /* Even smaller side padding for mobile screens */
-    gap: 40px; /* Reduced gap between stacked columns */
-    align-items: flex-start; /* Keep everything left-aligned */
+    flex-direction: column;
+    padding: 10px 20px;
+    gap: 40px;
+    align-items: flex-start;
   }
 
   .details-col,
   .map-image-col {
-    width: 100%; /* Ensure both sections take full width when stacked */
+    width: 100%;
   }
 
-  /* Center social icons row on mobile for better balance */
   .social-follow-row {
     justify-content: flex-start;
     margin-bottom: 20px;
   }
 
-  /* Reduce map image column width slightly on mobile so it doesn't overpower */
   .map-image-col {
     width: 90%;
-    margin: 0 auto; /* Center the map section on mobile */
-  }
-  .map-image-col {
+    margin: 0 auto;
     padding-top: 0;
+  }
+  .social-line {
+    display: none;
+    font-weight: 900;
   }
 }

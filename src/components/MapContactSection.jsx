@@ -18,7 +18,7 @@ const MapContactSection = () => {
 
   return (
     <div>
-      <HomeContactHeader />
+      <HomeContactHeader title="Contact" />
       <div className="section-container">
         {/* Left Column (Contact Details) */}
         <div className="details-col">

@@ -42,10 +42,10 @@ export default function Footer() {
             <div className="contact-value">alynasresort@gmail.com</div>
           </div>
 
-          <div className="social-section">
-            <div className="social-label">
+          <div className="social-section-2">
+            <div className="social-label-2">
               <span className="social-line-2" />
-              <span className="follow-text">Follow us</span>
+              <span className="follow-text-2">Follow us</span>
             </div>
             <div className="social-icons">
               <a href="#" aria-label="Facebook" className="facebook">

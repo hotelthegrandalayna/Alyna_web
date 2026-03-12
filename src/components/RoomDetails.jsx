@@ -4,6 +4,8 @@ import { LuChefHat } from "react-icons/lu";
 import HomeContactHeader from "./HomeContactHeader";
 import { FaPhone } from "react-icons/fa6";
 import RoomCalendar from "./RoomCalendar";
+import { useEffect } from "react";
+import phoneIcon from "../assets/room-service.png";
 
 const RoomDetails = () => {
   const images = [
@@ -14,9 +16,14 @@ const RoomDetails = () => {
 
   const [mainImage, setMainImage] = useState(images[0]);
 
+  // Scroll to top when page loads
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="room-page">
-      <HomeContactHeader />
+      <HomeContactHeader title="The Serene Suite" />
 
       <div className="container main-content">
         <div className="room-grid">
@@ -77,7 +84,8 @@ const RoomDetails = () => {
           <div className="room-sidebar">
             <div className="complimentary-section">
               <div className="complimentary-header">
-                <LuChefHat size="24px" />
+                {/* <LuChefHat size="24px" /> */}
+                <img src={phoneIcon} alt="phone icon" className="icon-img" />
                 <span>COMPLIMENTARY</span>
               </div>
 

@@ -39,7 +39,7 @@ const Gallery = () => {
 
   return (
     <section className="gallery-section">
-      <HomeContactHeader />
+      <HomeContactHeader title="Gallery" />
 
       <div className="container">
         {/* Video Section */}

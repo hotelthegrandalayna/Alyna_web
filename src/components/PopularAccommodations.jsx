@@ -4,6 +4,7 @@ import { FaWifi } from "react-icons/fa";
 import { MdOutlineBreakfastDining, MdVerifiedUser } from "react-icons/md";
 import { TbAirConditioning } from "react-icons/tb";
 import { FiMonitor } from "react-icons/fi";
+import { NavLink } from "react-router-dom";
 
 const accommodations = [
   {
@@ -16,6 +17,7 @@ const accommodations = [
       "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=600&q=80",
       "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600&q=80",
     ],
+    links: "/room",
   },
   {
     id: 2,
@@ -27,6 +29,7 @@ const accommodations = [
       "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=600&q=80",
       "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600&q=80",
     ],
+    links: "/room2",
   },
 ];
 
@@ -115,8 +118,12 @@ export default function PopularAccommodations() {
 
                 <h3>{item.title}</h3>
                 <p>{item.description}</p>
+                {/* 
+                <button className="btn-details">See Details</button> */}
 
-                <button className="btn-details">See Details</button>
+                <NavLink to={item.links} className="details-link">
+                  <button className="btn-details">See Details</button>
+                </NavLink>
               </div>
             </article>
           );

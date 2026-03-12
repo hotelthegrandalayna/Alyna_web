@@ -1,5 +1,6 @@
 import React from "react";
 import "./AboutPage.css";
+import HomeContactHeader from "./HomeContactHeader";
 
 const AboutPage = () => {
   // Online Dummy Images
@@ -13,14 +14,7 @@ const AboutPage = () => {
   return (
     <div className="about-wrapper">
       {/* Hero Section */}
-      <section
-        className="about-hero"
-        style={{ backgroundImage: `url(${heroImage})` }}
-      >
-        <div className="breadcrumb-nav">
-          <span>Home</span> / <span className="active-link">About</span>
-        </div>
-      </section>
+      <HomeContactHeader title="About" />
 
       {/* Mission Section */}
       <section className="content-block purple-section">

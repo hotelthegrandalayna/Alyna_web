@@ -4,14 +4,15 @@ import "./Header.css";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [roomOpen, setRoomOpen] = useState(false);
 
   const navLinks = [
     { label: "Home", href: "/" },
     {
       label: "Rooms",
       submenu: [
-        { label: "Room 1", href: "/room" },
-        { label: "Room 2", href: "/room2" },
+        { label: "The Serene Suite", href: "/room" },
+        { label: "The Explorer’s Basecamp", href: "/room2" },
       ],
     },
     { label: "Gallery", href: "/gallery" },
@@ -26,11 +27,7 @@ export default function Header() {
           Alyna&apos;s <br /> Resort
         </NavLink>
 
-        <button
-          className="hamburger"
-          aria-label="Toggle menu"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
+        <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
           <span></span>
           <span></span>
           <span></span>
@@ -41,27 +38,22 @@ export default function Header() {
             <li key={link.label} className="nav-item">
               {link.submenu ? (
                 <>
-                  <span
-                    className={`nav-parent ${
-                      link.submenu.some(
-                        (sub) => window.location.pathname === sub.href,
-                      )
-                        ? "active"
-                        : ""
-                    }`}
+                  <div
+                    className="nav-parent"
+                    onClick={() => setRoomOpen(!roomOpen)}
                   >
-                    {link.label}
-                  </span>
+                    {link.label} ▾
+                  </div>
 
-                  <ul className="dropdown">
+                  <ul className={`dropdown ${roomOpen ? "show" : ""}`}>
                     {link.submenu.map((sub) => (
                       <li key={sub.label}>
                         <NavLink
                           to={sub.href}
-                          className={({ isActive }) =>
-                            isActive ? "active" : ""
-                          }
-                          onClick={() => setMenuOpen(false)}
+                          onClick={() => {
+                            setMenuOpen(false);
+                            setRoomOpen(false);
+                          }}
                         >
                           {sub.label}
                         </NavLink>
@@ -70,11 +62,7 @@ export default function Header() {
                   </ul>
                 </>
               ) : (
-                <NavLink
-                  to={link.href}
-                  className={({ isActive }) => (isActive ? "active" : "")}
-                  onClick={() => setMenuOpen(false)}
-                >
+                <NavLink to={link.href} onClick={() => setMenuOpen(false)}>
                   {link.label}
                 </NavLink>
               )}

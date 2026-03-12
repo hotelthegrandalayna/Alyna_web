@@ -4,6 +4,7 @@ import { LuChefHat } from "react-icons/lu";
 import HomeContactHeader from "./HomeContactHeader";
 import { FaPhone } from "react-icons/fa6";
 import RoomCalendar from "./RoomCalendar";
+import { useEffect } from "react";
 
 const RoomDetails2 = () => {
   const images = [
@@ -14,9 +15,14 @@ const RoomDetails2 = () => {
 
   const [mainImage, setMainImage] = useState(images[0]);
 
+  // Scroll to top when page loads
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="room-page">
-      <HomeContactHeader />
+      <HomeContactHeader title="Explorer Base Camp" />
 
       <div className="container main-content">
         <div className="room-grid">
