@@ -213,7 +213,7 @@
 .booking-card-container {
   position: relative;
   width: 100%;
-  max-width: 550px;
+  max-width: 500px;
   display: flex;
   justify-content: center;
   padding-top: 20px;
@@ -223,9 +223,9 @@
 .outer-glow-border {
   position: absolute;
   top: 10px;
-  left: 125px;
+  left: 115px;
   width: 54%;
-  height: 120px;
+  height: 100px;
   border: 2px solid #6547db;
   border-radius: 30px;
   z-index: 1;
@@ -236,7 +236,7 @@
   position: relative;
   background: linear-gradient(135deg, #2a1563 0%, #4625b5 100%);
   width: 50%;
-  height: 100px;
+  height: 80px;
   border-radius: 20px;
   display: flex;
   align-items: flex-start; /* Keeps the CTA text near the top */
@@ -283,10 +283,10 @@
 /* The main instructional text */
 .cta-text {
   color: white;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: bold;
   font-style: italic;
-  margin: -35px 0 10px 5px; /* Margin bottom creates space for the flow */
+  margin: -35px 0 10px -20px; /* Margin bottom creates space for the flow */
   letter-spacing: 1px;
 }
 
@@ -294,16 +294,17 @@
 .floating-number-box {
   position: absolute;
   background-color: #f27c07;
-  top: -10px;
+  top: -15px;
   left: 15px;
-  width: 270px;
-  height: 52px;
+  width: 248px;
+  height: 38px;
   border-radius: 15px;
   box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.4);
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   z-index: 10;
+  padding-left: 15px;
 }
 
 /* Styles the actual number text */
@@ -318,11 +319,45 @@
   width: 40px;
   height: 40px;
 }
+/* Basic setup for the phone icon */
+.phone-icon-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease; /* smooth zoom */
+}
+
+/* Trigger animation when parent container is hovered */
+.booking-card-container:hover .phone-icon-box {
+  animation: shakeZoom 0.5s infinite;
+}
+
+/* Shake + zoom animation */
+@keyframes shakeZoom {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  20% {
+    transform: rotate(-10deg) scale(1.1);
+  }
+  40% {
+    transform: rotate(10deg) scale(1.1);
+  }
+  60% {
+    transform: rotate(-10deg) scale(1.1);
+  }
+  80% {
+    transform: rotate(10deg) scale(1.1);
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+}
 
 /* Responsive Mobile Style */
 @media (max-width: 768px) {
   .booking-card-container {
-    max-width: 87%;
+    max-width: 66%;
   }
   .room-grid {
     grid-template-columns: 1fr;
@@ -341,18 +376,25 @@
   .outer-glow-border {
     left: 0%;
     width: 100%;
+    height: 96px;
   }
 
   .main-booking-box {
     width: 90%;
+    height: 75px;
   }
 
   .floating-number-box {
-    width: 200px;
-    height: 40px;
+    width: 48vw;
+    height: 34px;
+    top: -18px;
+    left: -7px;
   }
   .cta-text {
-    font-size: 8px;
-    margin-left: -3px;
+    font-size: 7px;
+    margin-left: -45px;
+  }
+  .phone-number {
+    font-size: 20px;
   }
 }

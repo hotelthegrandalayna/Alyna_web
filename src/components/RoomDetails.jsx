@@ -65,7 +65,7 @@ const RoomDetails = () => {
               <div className="main-booking-box">
                 <div className="content-left">
                   <div className="phone-icon-box">
-                    <FaPhone fontSize={"40px"} color="orange" />
+                    <FaPhone fontSize={"40px"} color="#f27c07" />
                   </div>
 
                   <div className="cta-and-number">
@@ -84,8 +84,8 @@ const RoomDetails = () => {
           <div className="room-sidebar">
             <div className="complimentary-section">
               <div className="complimentary-header">
-                {/* <LuChefHat size="24px" /> */}
-                <img src={phoneIcon} alt="phone icon" className="icon-img" />
+                <LuChefHat size="24px" />
+                {/* <img src={phoneIcon} alt="phone icon" className="icon-img" /> */}
                 <span>COMPLIMENTARY</span>
               </div>
 
