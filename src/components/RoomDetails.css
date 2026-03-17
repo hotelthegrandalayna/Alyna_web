@@ -358,6 +358,7 @@
 @media (max-width: 768px) {
   .booking-card-container {
     max-width: 66%;
+    margin: 0 auto;
   }
   .room-grid {
     grid-template-columns: 1fr;
@@ -391,7 +392,7 @@
     left: -7px;
   }
   .cta-text {
-    font-size: 7px;
+    font-size: 6px;
     margin-left: -45px;
   }
   .phone-number {
