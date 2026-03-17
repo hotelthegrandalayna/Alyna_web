@@ -8,6 +8,7 @@ import MapContactSection from "./components/MapContactSection";
 import Gallery from "./components/Gallery";
 import RoomDetails from "./components/RoomDetails";
 import RoomDetails2 from "./components/RoomDetails2";
+import { Analytics } from "@vercel/analytics/react";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           </Routes>
         </main>
         <Footer />
+        <Analytics />
       </div>
     </Router>
   );
