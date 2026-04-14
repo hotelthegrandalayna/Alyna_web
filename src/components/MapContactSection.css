@@ -87,12 +87,12 @@
 
 .text-box h4 {
   font-size: 16px;
-  color: #333;
+  color: #475569;
   margin-bottom: 5px;
 }
 
 .text-box p {
-  color: #666;
+  color: #5c5b62;
   font-size: 14px;
   line-height: 1.6;
   margin: 0;
@@ -194,13 +194,13 @@
 
 .map-overlay-card h3 {
   font-size: 16px;
-  color: #333;
+  color: #475569;
   margin: 0 0 3px 0;
 }
 
 .map-link {
   font-size: 13px;
-  color: #00bcd4;
+  color: #0099ff;
   text-decoration: none;
   font-weight: 500;
 }
@@ -208,7 +208,10 @@
 .map-link:hover {
   text-decoration: underline;
 }
-
+.italicS {
+  transform: skew(-10deg);
+  font-weight: 600;
+}
 /* --- Mobile Responsive --- */
 @media screen and (max-width: 768px) {
   .about-hero {

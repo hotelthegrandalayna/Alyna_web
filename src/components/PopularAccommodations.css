@@ -1,12 +1,13 @@
 .popular-accommodations {
-  padding: 4rem 2rem;
+  padding: 1rem 2rem;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.section-header {
-  text-align: center;
+.section-header-h {
+  text-align: left;
   margin-bottom: 3rem;
+  padding-top: 20px;
 }
 
 .section-label {
@@ -19,7 +20,7 @@
   margin-bottom: 0.5rem;
 }
 
-.section-header h2 {
+.section-header-h h2 {
   color: #6547db;
   font-size: 2rem;
   font-weight: 700;
@@ -105,7 +106,7 @@
   color: white;
   border: none;
   padding: 0.6rem 1.5rem;
-  border-radius: 8px;
+  border-radius: 4px;
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
@@ -113,7 +114,7 @@
 }
 
 .btn-details:hover {
-  background: #7a5a97;
+  background: #7459df;
 }
 .slider-controls {
   position: absolute;
@@ -176,10 +177,10 @@
 /* Mobile */
 @media (max-width: 768px) {
   .popular-accommodations {
-    padding: 3rem 1.5rem;
+    padding: 1rem 1.5rem;
   }
 
-  .section-header h2 {
+  .section-header-h h2 {
     font-size: 1.5rem;
   }
 
@@ -190,5 +191,9 @@
 
   .btn-details {
     width: 100%;
+  }
+  .section-header-h {
+    text-align: left;
+    margin-bottom: 3rem;
   }
 }

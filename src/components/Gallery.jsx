@@ -1,6 +1,7 @@
 import React from "react";
 import "./Gallery.css";
 import HomeContactHeader from "./HomeContactHeader";
+import ScrollReveal from "./ScrollReveal";
 
 const Gallery = () => {
   // Dummy data for the gallery
@@ -30,20 +31,22 @@ const Gallery = () => {
       label: "Bedroom",
       url: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600",
     },
-    {
-      id: 6,
-      label: "Garden",
-      url: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=600",
-    },
+    // {
+    //   id: 6,
+    //   label: "Garden",
+    //   url: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=600",
+    // },
   ];
 
   return (
     <section className="gallery-section">
       <HomeContactHeader title="Gallery" />
 
+      <ScrollReveal />
+
       <div className="container">
         {/* Video Section */}
-        <div className="gallery-group">
+        <div className="gallery-group scroll-animate">
           <h3 className="group-title">VIDEO</h3>
           <div className="video-container">
             <iframe
@@ -57,7 +60,7 @@ const Gallery = () => {
         </div>
 
         {/* Images Grid Section */}
-        <div className="gallery-group">
+        <div className="gallery-group scroll-animate">
           <h3 className="group-title">IMAGES</h3>
           <div className="image-grid">
             {images.map((img) => (

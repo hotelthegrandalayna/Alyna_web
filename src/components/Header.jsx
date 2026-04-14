@@ -1,10 +1,13 @@
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
+import { NavLink, useLocation } from "react-router-dom";
 import "./Header.css";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [roomOpen, setRoomOpen] = useState(false);
+
+  const location = useLocation(); // 👈 detect route change
+  const hoverTimer = useRef(null);
 
   const navLinks = [
     { label: "Home", href: "/" },
@@ -12,13 +15,38 @@ export default function Header() {
       label: "Rooms",
       submenu: [
         { label: "The Serene Suite", href: "/room" },
-        { label: "The Explorer’s Basecamp", href: "/room2" },
+        { label: "The Explorer's Basecamp", href: "/room2" },
       ],
     },
     { label: "Gallery", href: "/gallery" },
     { label: "About", href: "/about" },
     { label: "Contact Us", href: "/contact" },
   ];
+
+  // 🔥 CLOSE DROPDOWN ON ROUTE CHANGE
+  useEffect(() => {
+    setRoomOpen(false);
+    setMenuOpen(false);
+  }, [location]);
+
+  // cleanup timer
+  useEffect(() => {
+    return () => {
+      if (hoverTimer.current) clearTimeout(hoverTimer.current);
+    };
+  }, []);
+
+  const handleRoomsMouseEnter = () => {
+    if (hoverTimer.current) {
+      clearTimeout(hoverTimer.current);
+      hoverTimer.current = null;
+    }
+    setRoomOpen(true); // always force open
+  };
+
+  const handleRoomsMouseLeave = () => {
+    hoverTimer.current = setTimeout(() => setRoomOpen(false), 200);
+  };
 
   return (
     <header className="header">
@@ -35,11 +63,16 @@ export default function Header() {
 
         <ul className={`nav-links ${menuOpen ? "open" : ""}`}>
           {navLinks.map((link) => (
-            <li key={link.label} className="nav-item">
+            <li
+              key={link.label + location.pathname} // 🔥 force re-render
+              className="nav-item"
+              onMouseEnter={link.submenu ? handleRoomsMouseEnter : undefined}
+              onMouseLeave={link.submenu ? handleRoomsMouseLeave : undefined}
+            >
               {link.submenu ? (
                 <>
                   <div
-                    className="nav-parent"
+                    className={`nav-parent ${roomOpen ? "active" : ""}`}
                     onClick={() => setRoomOpen(!roomOpen)}
                   >
                     {link.label} ▾
@@ -50,6 +83,9 @@ export default function Header() {
                       <li key={sub.label}>
                         <NavLink
                           to={sub.href}
+                          className={({ isActive }) =>
+                            isActive ? "active" : ""
+                          }
                           onClick={() => {
                             setMenuOpen(false);
                             setRoomOpen(false);
@@ -62,7 +98,11 @@ export default function Header() {
                   </ul>
                 </>
               ) : (
-                <NavLink to={link.href} onClick={() => setMenuOpen(false)}>
+                <NavLink
+                  to={link.href}
+                  className={({ isActive }) => (isActive ? "active" : "")}
+                  onClick={() => setMenuOpen(false)}
+                >
                   {link.label}
                 </NavLink>
               )}

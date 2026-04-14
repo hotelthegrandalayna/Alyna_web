@@ -1,6 +1,7 @@
 import React from "react";
 import "./AboutPage.css";
 import HomeContactHeader from "./HomeContactHeader";
+import ScrollReveal from "./ScrollReveal";
 
 const AboutPage = () => {
   // Online Dummy Images
@@ -16,9 +17,11 @@ const AboutPage = () => {
       {/* Hero Section */}
       <HomeContactHeader title="About" />
 
+      <ScrollReveal />
+
       {/* Mission Section */}
       <section className="content-block purple-section">
-        <div className="content-container">
+        <div className="content-container scroll-animate">
           <div className="flex-row">
             <div className="title-col">
               <h2>OUR MISSION</h2>
@@ -45,7 +48,7 @@ const AboutPage = () => {
         style={{ backgroundImage: `url(${visionBg})` }}
       >
         <div className="dark-overlay"></div>
-        <div className="content-container">
+        <div className="content-container scroll-animate">
           <div className="flex-row">
             <div className="title-col">
               <h2>OUR VISION</h2>
@@ -68,7 +71,7 @@ const AboutPage = () => {
 
       {/* Values Section */}
       <section className="content-block purple-section">
-        <div className="content-container">
+        <div className="content-container scroll-animate">
           <div className="flex-row">
             <div className="title-col">
               <h2>OUR VALUES</h2>
@@ -91,7 +94,7 @@ const AboutPage = () => {
 
       {/* Founder Section */}
       <section className="founder-section">
-        <div className="content-container">
+        <div className="content-container scroll-animate">
           <div className="founder-layout">
             <div className="founder-info">
               <h2>WHAT OUR FOUNDER HAS TO SAY!</h2>

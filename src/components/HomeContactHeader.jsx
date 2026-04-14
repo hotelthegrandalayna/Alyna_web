@@ -13,7 +13,7 @@ const HomeContactHeader = ({ title }) => {
         style={{ backgroundImage: `url(${heroImage})` }}
       >
         <div className="breadcrumb-nav">
-          <span>Home</span> / <span className="active-link">{title}</span>
+          <span>Home</span>/ <span className="active-link">{title}</span>
         </div>
       </section>
     </div>

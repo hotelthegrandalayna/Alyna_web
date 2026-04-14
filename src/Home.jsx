@@ -4,14 +4,27 @@ import PopularAccommodations from "./components/PopularAccommodations";
 import Features from "./components/Features";
 import Testimonials from "./components/Testimonials";
 import MapSection from "./components/MapSection";
+import ScrollReveal from "./components/ScrollReveal";
 
 const Home = () => {
   return (
     <>
+      <ScrollReveal />
+
       <Hero />
-      <PopularAccommodations />
-      <Features />
-      <Testimonials />
+
+      <div className="scroll-animate">
+        <PopularAccommodations />
+      </div>
+
+      <div className="scroll-animate">
+        <Features />
+      </div>
+
+      <div className="scroll-animate">
+        <Testimonials />
+      </div>
+
       <MapSection />
     </>
   );

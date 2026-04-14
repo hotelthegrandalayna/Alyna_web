@@ -37,10 +37,45 @@
   font-size: 0.95rem;
   font-weight: 500;
   transition: opacity 0.2s;
+  position: relative;
+}
+
+/* Hover-only animated underline */
+.nav-links a::after,
+.nav-parent::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  bottom: -6px;
+  height: 1.3px;
+  width: 60%;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 2px;
+  transform-origin: center;
+  transition:
+    transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity 180ms ease;
+  opacity: 0;
+}
+.nav-parent:hover {
+  font-weight: 500;
+}
+/* show underline only on hover/focus, not when item has .active (clicked) */
+.nav-links a:not(.active):hover::after,
+.nav-parent:not(.active):hover::after,
+.nav-links a:not(.active):focus-visible::after {
+  transform: translateX(-50%) scaleX(1);
+  opacity: 1;
+}
+
+/* Disable hover underline specifically for the Rooms parent item */
+.nav-parent::after {
+  display: none;
 }
 
 .nav-links a:hover {
-  opacity: 0.9;
+  opacity: 0.95;
 }
 
 .hamburger {
@@ -75,51 +110,80 @@
 }
 
 /* Submenu active state */
-.dropdown li a.active {
-  border: 2px solid #6547db;
-  border-radius: 4px;
-  padding: 4px 10px;
-}
 
 /* Dropdown hidden by default */
 .dropdown {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 10px);
   left: 0;
-  background: white;
+  background: #fff;
   list-style: none;
-  padding: 10px 0;
+  padding: 12px 0px;
   margin: 0;
-  min-width: 250px;
-  border-radius: 4px;
+  min-width: 260px;
+  /* border-radius: 8px; */
   display: none;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+  transform-origin: top left;
+  z-index: 40;
+}
+
+/* little pointer/triangle */
+/* The specific tail from the image */
+.dropdown::before {
+  content: "";
+  position: absolute;
+  top: -12px; /* Adjusted to sit perfectly on the top edge */
+  left: 0; /* Aligned to the far left like the image */
+  width: 40px; /* Width of the tail slope */
+  height: 25px;
+  background: #fff;
+  /* This clip-path creates the right-angled slope seen in your image */
+  clip-path: polygon(0 0, 0% 100%, 100% 100%);
+  z-index: 1;
 }
 
 /* Dropdown items */
-.dropdown li {
-  padding: 5px 15px;
-}
 
 .dropdown li a {
   text-decoration: none;
-  color: black;
+  color: #2f2f2f;
+  display: block;
+  /* padding: 10px 14px; */
+  /* border-radius: 2px; */
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    font-weight 140ms ease;
 }
 
-/* Show dropdown on hover */
-.nav-item:hover .dropdown {
+/* Hovered item: subtle grey band (center image) */
+.dropdown li a:hover {
+  background: #e4e4e4;
+  color: #475569;
+  /* font-weight: 600; */
+}
+
+/* Clicked / active item: purple highlight (right image) */
+.dropdown li a:active,
+.dropdown li a.active {
+  background: #f0edfb;
+  color: #6547db;
+  /* font-weight: 700; */
+}
+
+/* Keep dropdown open while hovering parent or dropdown itself; support keyboard with focus-within */
+/* .nav-item:hover .dropdown,
+.nav-item:focus-within .dropdown,
+.nav-item .dropdown:hover {
+  display: block;
+} */
+
+/* Allow JS to open dropdown via `.show` class (used by Header.jsx) */
+.dropdown.show {
   display: block;
 }
 
-/* .nav-parent {
-  cursor: pointer;
-  padding: 8px 12px;
-  text-decoration: none;
-}
-
-.nav-parent:hover {
-  border: 2px solid white;
-} */
 /* Mobile styles */
 @media (max-width: 768px) {
   .hamburger {
