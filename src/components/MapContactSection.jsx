@@ -34,14 +34,7 @@ const MapContactSection = () => {
               </div>
               <div className="text-box">
                 <h4>Location</h4>
-                <p
-                  style={{
-                    transform: "skew(-10deg)",
-                    display: "inline-block",
-                    fontWeight: "600",
-                  }}
-                  className="italicS"
-                >
+                <p className="italicS">
                   Ward No. 9, Shibpur, Palli Bidyut Road, Sitakund,
                   Chattogram-4310, Bangladesh.
                 </p>
