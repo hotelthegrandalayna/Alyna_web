@@ -10,19 +10,19 @@ export default function Hero() {
             alt="Lush green hills with mist"
           />
         </div>
-        <div className="hero-content">
+        <div className="hero-content scroll-animate">
           <h1>
-            Wake Up <br />
-            Where the Hills <br />
-            Meet the Sea
+            <span>Wake Up</span> <br />
+            <span>Where the Hills</span> <br />
+            <span>Meet the Sea</span>
           </h1>
           <p>
             <span className="hero-accent"></span>
-            Comfort for Every Traveler,
+            <span>Comfort for Every Traveler,</span>
             <br />
-            From Budget to Luxury at the
+            <span>From Budget to Luxury at the</span>
             <br />
-            heart of the Sitakund.
+            <span>heart of the Sitakund.</span>
           </p>
         </div>
       </section>

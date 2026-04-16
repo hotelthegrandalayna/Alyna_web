@@ -102,8 +102,8 @@
 }
 
 .btn-details {
-  background: #6547db;
-  color: white;
+  background: white;
+  color: #6547db;
   border: none;
   padding: 0.6rem 1.5rem;
   border-radius: 4px;
@@ -111,10 +111,19 @@
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s;
+  border: 2px solid #6547db;
 }
 
 .btn-details:hover {
   background: #7459df;
+  color: #ffffff;
+  border: 2px solid #7459df;
+}
+
+.btn-details:active {
+  background: #473299;
+  color: #ffffff;
+  border: 2px solid #473299;
 }
 .slider-controls {
   position: absolute;
