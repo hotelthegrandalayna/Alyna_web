@@ -1,3 +1,6 @@
+/* ============================================================
+   DESKTOP / BASE STYLES  (unchanged from original)
+   ============================================================ */
 .header {
   background: #6547db;
   position: sticky;
@@ -61,7 +64,6 @@
 .nav-parent:hover {
   font-weight: 500;
 }
-/* show underline only on hover/focus, not when item has .active (clicked) */
 .nav-links a:not(.active):hover::after,
 .nav-parent:not(.active):hover::after,
 .nav-links a:not(.active):focus-visible::after {
@@ -69,7 +71,7 @@
   opacity: 1;
 }
 
-/* Disable hover underline specifically for the Rooms parent item */
+/* Disable hover underline for the Rooms parent */
 .nav-parent::after {
   display: none;
 }
@@ -105,13 +107,12 @@
 .nav-links a.active {
   border: 2px solid rgb(255, 255, 255);
 }
+
 .nav-item {
   position: relative;
 }
 
-/* Submenu active state */
-
-/* Dropdown hidden by default */
+/* Desktop dropdown */
 .dropdown {
   position: absolute;
   top: calc(100% + 10px);
@@ -121,133 +122,299 @@
   padding: 12px 0px;
   margin: 0;
   min-width: 260px;
-  /* border-radius: 8px; */
   display: none;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
   transform-origin: top left;
   z-index: 40;
 }
 
-/* little pointer/triangle */
-/* The specific tail from the image */
 .dropdown::before {
   content: "";
   position: absolute;
-  top: -12px; /* Adjusted to sit perfectly on the top edge */
-  left: 0; /* Aligned to the far left like the image */
-  width: 40px; /* Width of the tail slope */
+  top: -12px;
+  left: 0;
+  width: 40px;
   height: 25px;
   background: #fff;
-  /* This clip-path creates the right-angled slope seen in your image */
   clip-path: polygon(0 0, 0% 100%, 100% 100%);
   z-index: 1;
 }
-
-/* Dropdown items */
 
 .dropdown li a {
   text-decoration: none;
   color: #2f2f2f;
   display: block;
-  /* padding: 10px 14px; */
-  /* border-radius: 2px; */
   transition:
     background 180ms ease,
     color 180ms ease,
     font-weight 140ms ease;
 }
 
-/* Hovered item: subtle grey band (center image) */
 .dropdown li a:hover {
   background: #e4e4e4;
   color: #475569;
-  /* font-weight: 600; */
 }
 
-/* Clicked / active item: purple highlight (right image) */
 .dropdown li a:active,
 .dropdown li a.active {
   background: #f0edfb;
   color: #6547db;
-  /* font-weight: 700; */
 }
 
-/* Keep dropdown open while hovering parent or dropdown itself; support keyboard with focus-within */
-/* .nav-item:hover .dropdown,
-.nav-item:focus-within .dropdown,
-.nav-item .dropdown:hover {
-  display: block;
-} */
-
-/* Allow JS to open dropdown via `.show` class (used by Header.jsx) */
 .dropdown.show {
   display: block;
 }
 
-/* Mobile styles */
+/* ── Hide all mobile-only elements on desktop ── */
+.nav-icon,
+.mobile-drawer-header,
+.mobile-close-btn,
+.mobile-drawer-title,
+.nav-parent-arrow,
+.mobile-overlay,
+.nav-label-mobile {
+  display: none;
+}
+
+/* ============================================================
+   MOBILE STYLES — centred panel drops from top
+   ============================================================ */
 @media (max-width: 768px) {
   .hamburger {
     display: flex;
   }
 
+  /* Dark scrim */
+  .mobile-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 998;
+  }
+  .mobile-overlay.open {
+    display: block;
+  }
+
+  /* Panel — slides in from right to left */
   .nav-links {
     position: fixed;
-    top: 78px;
-    left: 0;
+    top: 64px;
     right: 0;
-    background: #6547db;
+    width: 88vw;
+    max-width: 340px;
+    background: #ffffff;
     flex-direction: column;
-    padding: 2rem;
-    gap: 1.5rem;
-    transform: translateY(-100%);
+    padding: 17px;
+    gap: 0;
+    margin: 0;
+    transform: translateX(100%);
     opacity: 0;
     visibility: hidden;
     transition:
-      transform 0.3s,
-      opacity 0.3s,
-      visibility 0.3s;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.35s ease,
+      visibility 0.4s;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+    z-index: 999;
+    overflow-y: auto;
+    /* border-radius: 16px; */
+    max-height: 90vh;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    padding-bottom: 55px;
   }
 
   .nav-links.open {
-    transform: translateY(0);
+    transform: translateX(0);
     opacity: 1;
     visibility: visible;
   }
 
-  .nav-parent {
-    padding-left: 12px;
-  }
-  .nav-item {
-    width: 100%; /* Ensure items take full width in mobile */
+  /* ── Drawer header: × close btn + "Menu" title ── */
+  .mobile-drawer-header {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px 14px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    gap: 10px;
   }
 
-  .dropdown {
-    position: static; /* This makes it push other items down */
+  .mobile-close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 30px;
+    border: 1.8px solid #475569;
+    border-radius: 8px;
+    background: none;
+    cursor: pointer;
+    color: #475569;
+    font-size: 20px;
+    flex-shrink: 0;
+    transition: background 0.18s;
+  }
+  .mobile-close-btn:hover {
+    background: #f0edfb;
+  }
+
+  .mobile-drawer-title {
+    display: block;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #475569;
+    letter-spacing: 0.3px;
+    flex: 1;
+    text-align: center;
+    padding-right: 34px; /* balance close btn so "Menu" is visually centred */
+  }
+
+  /* ── Nav items ── */
+  .nav-item {
+    width: 100%;
+    border-bottom: 1px solid #f5f5f5;
+  }
+  .nav-item:last-child {
+    border-bottom: none;
+  }
+
+  /* Regular link rows */
+  .nav-links > .nav-item > a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 15px 20px;
+    color: #1a1a2e;
+    font-size: 0.97rem;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    transition: background 0.15s;
+  }
+  .nav-links > .nav-item > a:hover {
+    background: #f8f7ff;
+  }
+  .nav-links > .nav-item > a.active {
+    border: none;
+    color: #6547db;
+    font-weight: 600;
+    /* background: #f0edfb; */
+  }
+
+  /* Icon box — mobile only */
+  .nav-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    /* border: 1.6px solid #d1c8f7; */
+    border-radius: 8px;
+    flex-shrink: 0;
+    color: #475569;
+  }
+
+  /* Show mobile label, hide desktop label on mobile */
+  .nav-label-desktop {
     display: none;
-    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .nav-label-mobile {
+    display: inline;
+  }
+
+  /* Rooms parent row */
+  .nav-parent {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 15px 20px;
+    color: #1a1a2e;
+    font-size: 0.97rem;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .nav-parent.active {
+    color: #6547db;
+    font-weight: 700;
+    border: none;
+  }
+
+  /* ▲ / ▼ arrow */
+  .nav-parent-arrow {
+    display: inline;
+    margin-left: auto;
+    font-size: 0.65rem;
+    color: #6547db;
+  }
+
+  /* Mobile submenu */
+  .dropdown {
+    position: static;
+    display: none;
+    background: transparent;
     box-shadow: none;
     width: 100%;
-    border-radius: 5px;
-    padding-left: 1rem; /* Indent sub-items */
+    border-radius: 0;
+    padding: 4px 0 8px 0;
+    margin: 0;
   }
-
+  .dropdown::before {
+    display: none;
+  }
   .dropdown.show {
     display: block;
-    margin: 10px 10px 0px 10px;
   }
+
   .dropdown li {
-    padding: 5px 5px;
+    padding: 0;
   }
+
   .dropdown li a {
-    color: white; /* Match the mobile theme */
-    display: block;
-    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #3d3d3d;
+    padding: 11px 20px 11px 66px;
+    font-size: 0.92rem;
+    font-weight: 400;
+    text-decoration: none;
+    transition:
+      background 0.15s,
+      color 0.15s;
   }
-  /* Submenu active state */
+  .dropdown li a::before {
+    content: "▶";
+    font-size: 0.45rem;
+    color: #6547db;
+    flex-shrink: 0;
+  }
+  .dropdown li a:hover {
+    background: #f8f7ff;
+    color: #6547db;
+  }
   .dropdown li a.active {
-    border: 2px solid #ffffff;
-    border-radius: 4px;
-    padding: 4px 10px;
+    color: #475569;
+    /* font-weight: 600; */
+    background: #f0edfb;
+    border: none;
+    border-radius: 0;
+    padding: 11px 20px 11px 66px;
+  }
+}
+
+/* ── Desktop arrow hidden on mobile, mobile arrow hidden on desktop ── */
+.desktop-arrow {
+  display: inline;
+}
+
+@media (max-width: 768px) {
+  .desktop-arrow {
+    display: none;
   }
 }

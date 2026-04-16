@@ -67,7 +67,7 @@ export default function Features() {
         ))}
       </div>
       <div className="amenities-section">
-        <span className="section-label">AMENITIES</span>
+        <span className="section-label">FACILITIES</span>
         <h2>Explore Our Amenities for All</h2>
         <div className="amenity-list">
           {amenityItems.map((item) => (
