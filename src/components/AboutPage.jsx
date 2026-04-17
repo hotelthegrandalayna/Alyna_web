@@ -97,7 +97,10 @@ const AboutPage = () => {
         <div className="content-container scroll-animate">
           <div className="founder-layout">
             <div className="founder-info">
-              <h2>WHAT OUR FOUNDER HAS TO SAY!</h2>
+              <h2>
+                WHAT OUR
+                <br /> FOUNDER HAS TO SAY!
+              </h2>
               <p>
                 Attractively ornamented with complete marble & tiles and
                 luxurious fabrics, our two prominent Presidential suites are

@@ -27,8 +27,11 @@ export default function Features() {
     <section className="features" id="about">
       <div className="features-grid">
         <div className="features-content">
-          <span className="section-label">FACILITIES</span>
-          <h2>what special we offer to our guests</h2>
+          <span className="section-label-f">FACILITIES</span>
+          <h2>
+            what special
+            <br /> we offer to our guests
+          </h2>
           <p>
             Attractively ornamented with complete marble & tiles and luxurious
             fabrics, our two prominent Presidential suites are 1900 1800 sq ft.
@@ -67,7 +70,7 @@ export default function Features() {
         ))}
       </div>
       <div className="amenities-section">
-        <span className="section-label">FACILITIES</span>
+        <span className="section-label-f">FACILITIES</span>
         <h2>Explore Our Amenities for All</h2>
         <div className="amenity-list">
           {amenityItems.map((item) => (

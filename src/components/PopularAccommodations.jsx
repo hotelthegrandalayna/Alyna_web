@@ -59,7 +59,7 @@ export default function PopularAccommodations() {
   return (
     <section className="popular-accommodations" id="rooms">
       <div className="section-header-h">
-        <span className="section-label">POPULAR ACCOMMODATIONS</span>
+        <span className="section-label-p">POPULAR ACCOMMODATIONS</span>
         <h2>Explore Our Popular Stays</h2>
       </div>
 

@@ -10,19 +10,18 @@
   padding-top: 20px;
 }
 
-.section-label {
+.section-label-p {
   display: block;
-  font-size: 0.75rem;
-  font-weight: bold;
-  letter-spacing: 0.15em;
+  font-size: 20px;
+  font-weight: 600;
   color: #f27405;
   text-transform: uppercase;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.2rem;
 }
 
 .section-header-h h2 {
   color: #6547db;
-  font-size: 2rem;
+  font-size: 42px;
   font-weight: 700;
   margin: 0;
 }
@@ -31,6 +30,8 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
+  padding: 0 25px;
+  padding-bottom: 20px;
 }
 
 .accommodation-card {
@@ -186,23 +187,36 @@
 /* Mobile */
 @media (max-width: 768px) {
   .popular-accommodations {
-    padding: 1rem 1.5rem;
+    padding: 0rem 1.5rem;
   }
 
   .section-header-h h2 {
-    font-size: 1.5rem;
+    font-size: 20px;
+    font-weight: bolder;
   }
 
   .accommodation-cards {
     grid-template-columns: 1fr;
     gap: 1.5rem;
+    padding: 0 10px;
+    padding-bottom: 20px;
   }
 
   .btn-details {
     width: 100%;
+    background: #6547db;
+    color: #ffffff;
   }
   .section-header-h {
     text-align: left;
-    margin-bottom: 3rem;
+    margin-bottom: 1.5rem;
+  }
+  .section-label-p {
+    display: block;
+    font-size: 16px;
+    font-weight: 500;
+    color: #f27405;
+    text-transform: uppercase;
+    margin-bottom: 0.2rem;
   }
 }

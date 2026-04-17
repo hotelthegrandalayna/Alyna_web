@@ -38,7 +38,7 @@
 
 /* Section Styling */
 .content-block {
-  padding: 100px 0;
+  padding: 120px 0;
   position: relative;
 }
 
@@ -93,8 +93,9 @@
 
 /* Founder Section */
 .founder-section {
-  padding: 100px 0;
+  padding: 120px 0;
   background-color: #f8f9ff;
+  color: #475569;
 }
 
 .founder-layout {
@@ -106,9 +107,16 @@
 .founder-info {
   flex: 1.5;
 }
+.founder-info p {
+  line-height: 1.5;
+  font-size: 18px;
+  margin-top: 0px;
+  color: #475569;
+}
+
 .founder-info h2 {
-  color: #333;
-  font-size: 32px;
+  color: #475569;
+  font-size: 42px;
   margin-bottom: 25px;
 }
 
@@ -138,7 +146,7 @@
   }
 
   .title-col {
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
   }
 
   .founder-layout {
@@ -153,9 +161,33 @@
     height: 200px;
   }
   .content-block {
-    padding: 60px 0;
+    padding: 10px 0;
   }
   .content-container {
     padding: 0 20px;
+  }
+  .title-col h2 {
+    font-size: 20px;
+    font-weight: bolder;
+    color: #ffffff;
+    /* letter-spacing: 1px; */
+  }
+  .text-col p {
+    line-height: 1.8;
+    font-size: 16px;
+    margin-top: 0px;
+    color: #ffffff;
+  }
+  .founder-info h2 {
+    color: #475569;
+    font-size: 20px;
+    margin-bottom: 10px;
+    margin-top: 0px;
+    font-weight: 800;
+  }
+  .founder-section {
+    padding: 16px 0;
+    background-color: #f8f9ff;
+    color: #475569;
   }
 }

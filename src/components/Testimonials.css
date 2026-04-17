@@ -13,26 +13,27 @@
   padding: 0 2rem; /* same horizontal padding as Features */
 }
 
-.section-label {
+.section-label-t {
   display: inline-block;
-  letter-spacing: 0.18em;
-  font-size: 0.72rem;
+  font-size: 20px;
   font-weight: 500;
   color: #f27405;
   text-transform: uppercase;
-  margin-bottom: 0.75rem;
 }
 
 .testimonial-title {
-  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-  font-weight: 700;
+  font-size: 42px;
+  font-weight: bolder;
   color: #6547db;
-  line-height: 1.25;
   margin: 0;
 }
 
 .testimonial-title-mobile {
   display: none;
+  font-size: 16px;
+  font-weight: bolder;
+  color: #6547db;
+  margin: 0;
 }
 
 /* ── Stage ── */
@@ -166,15 +167,21 @@
 @media (max-width: 768px) {
   .testimonials {
     background: #ece6f8;
+    padding: 2rem 1.5rem 4rem;
   }
 
   .testimonial-title {
     display: none;
+    font-size: 20px;
+    font-weight: bolder;
+    color: #6547db;
+    margin: 0;
   }
 
   .testimonial-title-mobile {
     display: block;
-    font-size: 1.4rem;
+    font-size: 20px;
+    font-weight: bolder;
     color: #6547db;
     margin: 0;
   }
@@ -185,5 +192,21 @@
 
   .testimonial-card {
     width: 78vw;
+  }
+  .section-header {
+    text-align: left;
+    margin-bottom: 1.5rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 0;
+  }
+  .section-label-t {
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 500;
+    color: #f27405;
+    text-transform: uppercase;
+    margin-bottom: 0px;
   }
 }

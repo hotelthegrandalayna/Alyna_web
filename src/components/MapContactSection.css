@@ -115,7 +115,7 @@
 
 .social-line {
   width: 80px;
-  height: 2px;
+  height: 3px;
   background: rgba(0, 0, 0, 0.7);
   border-radius: 999px;
   display: inline-block;
@@ -123,6 +123,7 @@
 
 .follow-text {
   color: #333;
+  font-weight: 600;
 }
 
 .social-icons {
@@ -170,7 +171,7 @@
   width: 100%;
   position: relative;
   border: 10px solid #6c5ce7;
-  border-radius: 5px;
+  border-radius: 2px;
   overflow: hidden;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
@@ -188,14 +189,16 @@
   left: 15px;
   background-color: white;
   padding: 10px 15px;
-  border-radius: 5px;
+  border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  width: 12vw;
+  min-width: 10rem;
 }
 
 .map-overlay-card h3 {
   font-size: 16px;
   color: #475569;
-  margin: 0 0 3px 0;
+  margin: 0 0 0 0;
 }
 
 .map-link {
@@ -248,6 +251,7 @@
     width: 90%;
     margin: 0 auto;
     padding-top: 0;
+    padding-bottom: 40px;
   }
   .social-line {
     display: none;
@@ -258,5 +262,23 @@
     flex-direction: column;
     align-items: flex-start;
     padding-left: 14px;
+  }
+
+  .framed-map-box {
+    width: 100%;
+    position: relative;
+    border: 5px solid #6c5ce7;
+    border-radius: 2px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  .resort-title {
+    color: #475569;
+    font-size: 20px;
+    margin-bottom: 0px;
+  }
+  .follow-text {
+    color: #475569;
+    font-weight: 600;
   }
 }

@@ -77,7 +77,7 @@ export default function Testimonials() {
   return (
     <section className="testimonials">
       <div className="section-header">
-        <span className="section-label">Testimonial</span>
+        <span className="section-label-t">Testimonial</span>
         <h2 className="testimonial-title">
           What Our Satisfied Clients Have to Say!
         </h2>
