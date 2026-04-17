@@ -2,9 +2,25 @@ import React, { useState } from "react";
 import { db } from "./firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
 import { useCalendar } from "../context/CalendarContext";
+import "./Admin.css";
 
 const DOC_REF = doc(db, "calendar", "dates");
 const CATEGORIES = ["booked", "almost", "free"];
+
+const CATEGORY_META = {
+  booked: {
+    label: "Booked",
+    description: "Dates that are no longer available for guests.",
+  },
+  almost: {
+    label: "Almost booked",
+    description: "Dates with limited availability that need attention.",
+  },
+  free: {
+    label: "Free",
+    description: "Open dates ready to accept new reservations.",
+  },
+};
 
 export default function AdminCalendar() {
   const { booked, almostBooked, free, addDate, removeDate } = useCalendar();
@@ -19,18 +35,29 @@ export default function AdminCalendar() {
     free,
   };
 
+  const statusCounts = {
+    booked: booked.length,
+    almost: almostBooked.length,
+    free: free.length,
+  };
+
+  const activeMeta = CATEGORY_META[activeTab];
+  const sortedDates = [...(currentDates[activeTab] || [])].sort();
+
   const handleAdd = () => {
     if (!selectedDate) return;
-    // Remove from other categories first
+
     CATEGORIES.filter((c) => c !== activeTab).forEach((c) =>
       removeDate(c, selectedDate),
     );
+
     addDate(activeTab, selectedDate);
     setSelectedDate("");
   };
 
   const handleSave = async () => {
     setSaving(true);
+
     try {
       await setDoc(DOC_REF, {
         booked,
@@ -38,6 +65,7 @@ export default function AdminCalendar() {
         free,
         updatedAt: new Date().toISOString(),
       });
+
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
     } catch (err) {
@@ -49,123 +77,132 @@ export default function AdminCalendar() {
   };
 
   return (
-    <div style={{ maxWidth: 600, margin: "0 auto", padding: "2rem 1rem" }}>
-      <h1>Calendar admin</h1>
+    <section className="calendar-admin-shell">
+      <div className="calendar-admin-backdrop" />
 
-      {/* Tab switcher */}
-      <div style={{ display: "flex", gap: 8, margin: "1rem 0" }}>
-        {CATEGORIES.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setActiveTab(cat)}
-            style={{
-              padding: "6px 16px",
-              borderRadius: 8,
-              border: "1px solid",
-              borderColor: activeTab === cat ? "#888" : "#ccc",
-              background: activeTab === cat ? "#f5f5f5" : "white",
-              cursor: "pointer",
-              fontWeight: activeTab === cat ? 500 : 400,
-            }}
+      <div className="calendar-admin-layout">
+        <div className="calendar-admin-hero">
+          <p className="calendar-admin-eyebrow">Dashboard</p>
+          <h2>Calendar availability manager</h2>
+          {/* <p className="calendar-admin-copy">
+            Organize reservation dates, move availability between statuses, and
+            push the latest calendar state to Firebase.
+          </p> */}
+
+          <div className="calendar-admin-stats">
+            {CATEGORIES.map((cat) => (
+              <div
+                key={cat}
+                className={`calendar-admin-stat calendar-admin-stat--${cat}`}
+              >
+                <span>{CATEGORY_META[cat].label}</span>
+                <strong>{statusCounts[cat]}</strong>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="calendar-admin-card">
+          <div className="calendar-admin-card__header">
+            <div>
+              <p className="calendar-admin-card__label">
+                Availability controls
+              </p>
+              <h2>{activeMeta.label}</h2>
+              <p>{activeMeta.description}</p>
+            </div>
+          </div>
+
+          <div
+            className="calendar-admin-tabs"
+            role="tablist"
+            aria-label="Date status"
           >
-            {cat === "almost"
-              ? "Almost booked"
-              : cat.charAt(0).toUpperCase() + cat.slice(1)}
-          </button>
-        ))}
-      </div>
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                className={`calendar-admin-tab ${activeTab === cat ? "is-active" : ""}`}
+                onClick={() => setActiveTab(cat)}
+              >
+                <span>{CATEGORY_META[cat].label}</span>
+                <strong>{statusCounts[cat]}</strong>
+              </button>
+            ))}
+          </div>
 
-      {/* Add date */}
-      <div style={{ display: "flex", gap: 8, marginBottom: "1.5rem" }}>
-        <input
-          type="date"
-          value={selectedDate}
-          onChange={(e) => setSelectedDate(e.target.value)}
-          style={{
-            padding: "6px 10px",
-            borderRadius: 8,
-            border: "1px solid #ccc",
-          }}
-        />
-        <button
-          onClick={handleAdd}
-          disabled={!selectedDate}
-          style={{
-            padding: "6px 16px",
-            borderRadius: 8,
-            border: "1px solid #ccc",
-            cursor: selectedDate ? "pointer" : "not-allowed",
-          }}
-        >
-          Add to {activeTab}
-        </button>
-      </div>
+          <div className="calendar-admin-panel">
+            <div className="calendar-admin-add">
+              <label className="calendar-admin-field">
+                <span>Select a date</span>
+                <input
+                  type="date"
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                />
+              </label>
 
-      {/* Date list */}
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: 8,
-          marginBottom: "1.5rem",
-        }}
-      >
-        {(currentDates[activeTab] || []).length === 0 && (
-          <span style={{ color: "#999", fontSize: 14 }}>No dates yet</span>
-        )}
-        {[...(currentDates[activeTab] || [])].sort().map((date) => (
-          <span
-            key={date}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
-              padding: "4px 10px",
-              borderRadius: 8,
-              background:
-                activeTab === "booked"
-                  ? "#FCEBEB"
-                  : activeTab === "almost"
-                    ? "#FAEEDA"
-                    : "#EAF3DE",
-              fontSize: 13,
-            }}
-          >
-            {date}
-            <button
-              onClick={() => removeDate(activeTab, date)}
-              style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                fontSize: 14,
-              }}
-            >
-              ×
-            </button>
-          </span>
-        ))}
-      </div>
+              <button
+                type="button"
+                className="calendar-admin-add-button"
+                onClick={handleAdd}
+                disabled={!selectedDate}
+              >
+                Add to {activeMeta.label}
+              </button>
+            </div>
 
-      {/* Save */}
-      <button
-        onClick={handleSave}
-        disabled={saving}
-        style={{
-          padding: "8px 24px",
-          borderRadius: 8,
-          border: "1px solid #ccc",
-          cursor: "pointer",
-          fontWeight: 500,
-        }}
-      >
-        {saving ? "Saving..." : "Save to Firebase"}
-      </button>
-      {saved && (
-        <span style={{ marginLeft: 12, color: "green", fontSize: 13 }}>
-          Saved successfully!
-        </span>
-      )}
-    </div>
+            <div className="calendar-admin-list-wrap">
+              <div className="calendar-admin-list-header">
+                <h3>{activeMeta.label} dates</h3>
+                <span>{sortedDates.length} total</span>
+              </div>
+
+              <div className="calendar-admin-list">
+                {sortedDates.length === 0 && (
+                  <div className="calendar-admin-empty">
+                    No dates added in this category yet.
+                  </div>
+                )}
+
+                {sortedDates.map((date) => (
+                  <div
+                    key={date}
+                    className={`calendar-admin-chip calendar-admin-chip--${activeTab}`}
+                  >
+                    <span>{date}</span>
+                    <button
+                      type="button"
+                      aria-label={`Remove ${date}`}
+                      onClick={() => removeDate(activeTab, date)}
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="calendar-admin-savebar">
+              <div className="calendar-admin-savebar__actions">
+                {saved && (
+                  <span className="calendar-admin-saved">
+                    Saved successfully
+                  </span>
+                )}
+                <button
+                  type="button"
+                  className="calendar-admin-save-button"
+                  onClick={handleSave}
+                  disabled={saving}
+                >
+                  {saving ? "Saving..." : "Save to Firebase"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
