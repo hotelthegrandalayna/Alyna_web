@@ -6,6 +6,10 @@ import "./Admin.css";
 
 const DOC_REF = doc(db, "calendar", "dates");
 const CATEGORIES = ["booked", "almost", "free"];
+const ROOM_OPTIONS = [
+  { id: "room", label: "Room 1" },
+  { id: "room2", label: "Room 2" },
+];
 
 const CATEGORY_META = {
   booked: {
@@ -23,35 +27,40 @@ const CATEGORY_META = {
 };
 
 export default function AdminCalendar() {
-  const { booked, almostBooked, free, addDate, removeDate } = useCalendar();
+  const { rooms, getRoomCalendar, addDate, removeDate } = useCalendar();
+  const [activeRoom, setActiveRoom] = useState("room");
   const [activeTab, setActiveTab] = useState("booked");
   const [selectedDate, setSelectedDate] = useState("");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
+  const roomCalendar = getRoomCalendar(activeRoom);
+
   const currentDates = {
-    booked,
-    almost: almostBooked,
-    free,
+    booked: roomCalendar.booked,
+    almost: roomCalendar.almost,
+    free: roomCalendar.free,
   };
 
   const statusCounts = {
-    booked: booked.length,
-    almost: almostBooked.length,
-    free: free.length,
+    booked: roomCalendar.booked.length,
+    almost: roomCalendar.almost.length,
+    free: roomCalendar.free.length,
   };
 
   const activeMeta = CATEGORY_META[activeTab];
+  const activeRoomLabel =
+    ROOM_OPTIONS.find((room) => room.id === activeRoom)?.label || "Room";
   const sortedDates = [...(currentDates[activeTab] || [])].sort();
 
   const handleAdd = () => {
     if (!selectedDate) return;
 
-    CATEGORIES.filter((c) => c !== activeTab).forEach((c) =>
-      removeDate(c, selectedDate),
+    CATEGORIES.filter((c) => c !== activeTab).forEach((category) =>
+      removeDate(activeRoom, category, selectedDate),
     );
 
-    addDate(activeTab, selectedDate);
+    addDate(activeRoom, activeTab, selectedDate);
     setSelectedDate("");
   };
 
@@ -60,9 +69,7 @@ export default function AdminCalendar() {
 
     try {
       await setDoc(DOC_REF, {
-        booked,
-        almost: almostBooked,
-        free,
+        rooms,
         updatedAt: new Date().toISOString(),
       });
 
@@ -84,10 +91,6 @@ export default function AdminCalendar() {
         <div className="calendar-admin-hero">
           <p className="calendar-admin-eyebrow">Dashboard</p>
           <h2>Calendar availability manager</h2>
-          {/* <p className="calendar-admin-copy">
-            Organize reservation dates, move availability between statuses, and
-            push the latest calendar state to Firebase.
-          </p> */}
 
           <div className="calendar-admin-stats">
             {CATEGORIES.map((cat) => (
@@ -105,12 +108,31 @@ export default function AdminCalendar() {
         <div className="calendar-admin-card">
           <div className="calendar-admin-card__header">
             <div>
-              <p className="calendar-admin-card__label">
+              {/* <p className="calendar-admin-card__label">
                 Availability controls
-              </p>
+              </p> */}
               <h2>{activeMeta.label}</h2>
-              <p>{activeMeta.description}</p>
+              <p>
+                {activeRoomLabel}: {activeMeta.description}
+              </p>
             </div>
+          </div>
+
+          <div
+            className="calendar-admin-tabs"
+            role="tablist"
+            aria-label="Room selection"
+          >
+            {ROOM_OPTIONS.map((room) => (
+              <button
+                key={room.id}
+                type="button"
+                className={`calendar-admin-tab ${activeRoom === room.id ? "is-active" : ""}`}
+                onClick={() => setActiveRoom(room.id)}
+              >
+                <span>{room.label}</span>
+              </button>
+            ))}
           </div>
 
           <div
@@ -174,9 +196,9 @@ export default function AdminCalendar() {
                     <button
                       type="button"
                       aria-label={`Remove ${date}`}
-                      onClick={() => removeDate(activeTab, date)}
+                      onClick={() => removeDate(activeRoom, activeTab, date)}
                     >
-                      ×
+                      x
                     </button>
                   </div>
                 ))}

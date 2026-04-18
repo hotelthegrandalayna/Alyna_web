@@ -1,59 +1,128 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { db } from "../components/firebaseConfig";
-import { doc, getDoc, setDoc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 
 const CalendarContext = createContext(null);
-const DOC_REF = doc(db, "calendar", "dates"); // single document approach
+const DOC_REF = doc(db, "calendar", "dates");
+
+const EMPTY_ROOM_DATES = {
+  booked: [],
+  almost: [],
+  free: [],
+};
+
+const DEFAULT_ROOMS = {
+  room: { ...EMPTY_ROOM_DATES },
+  room2: { ...EMPTY_ROOM_DATES },
+};
+
+const normalizeRoomDates = (roomData = {}) => ({
+  booked: roomData.booked || [],
+  almost: roomData.almost || [],
+  free: roomData.free || [],
+});
+
+const normalizeCalendarData = (data = {}) => {
+  const hasNestedRooms = data.rooms && typeof data.rooms === "object";
+
+  if (hasNestedRooms) {
+    return {
+      room: normalizeRoomDates(data.rooms.room),
+      room2: normalizeRoomDates(data.rooms.room2),
+    };
+  }
+
+  return {
+    room: {
+      booked: data.booked || [],
+      almost: data.almost || [],
+      free: data.free || [],
+    },
+    room2: { ...EMPTY_ROOM_DATES },
+  };
+};
 
 export function CalendarProvider({ children }) {
-  const [booked, setBooked] = useState([]);
-  const [almostBooked, setAlmostBooked] = useState([]);
-  const [free, setFree] = useState([]);
+  const [rooms, setRooms] = useState(DEFAULT_ROOMS);
   const [loading, setLoading] = useState(true);
 
-  // Real-time listener — all clients update instantly when admin saves
   useEffect(() => {
     const unsub = onSnapshot(DOC_REF, (snap) => {
       if (snap.exists()) {
-        const data = snap.data();
-        setBooked(data.booked || []);
-        setAlmostBooked(data.almost || []);
-        setFree(data.free || []);
+        setRooms(normalizeCalendarData(snap.data()));
+      } else {
+        setRooms(DEFAULT_ROOMS);
       }
+
       setLoading(false);
     });
+
     return () => unsub();
   }, []);
 
-  const addDate = (category, date) => {
-    if (!date) return;
-    if (category === "booked")
-      setBooked((s) => Array.from(new Set([...s, date])));
-    if (category === "almost")
-      setAlmostBooked((s) => Array.from(new Set([...s, date])));
-    if (category === "free") setFree((s) => Array.from(new Set([...s, date])));
+  const getRoomCalendar = (roomId = "room") =>
+    rooms[roomId] || EMPTY_ROOM_DATES;
+
+  const addDate = (roomId, category, date) => {
+    if (!roomId || !category || !date) return;
+
+    setRooms((current) => {
+      const roomData = current[roomId] || EMPTY_ROOM_DATES;
+
+      return {
+        ...current,
+        [roomId]: {
+          ...roomData,
+          [category]: Array.from(new Set([...(roomData[category] || []), date])),
+        },
+      };
+    });
   };
 
-  const removeDate = (category, date) => {
-    if (category === "booked") setBooked((s) => s.filter((x) => x !== date));
-    if (category === "almost")
-      setAlmostBooked((s) => s.filter((x) => x !== date));
-    if (category === "free") setFree((s) => s.filter((x) => x !== date));
+  const removeDate = (roomId, category, date) => {
+    if (!roomId || !category || !date) return;
+
+    setRooms((current) => {
+      const roomData = current[roomId] || EMPTY_ROOM_DATES;
+
+      return {
+        ...current,
+        [roomId]: {
+          ...roomData,
+          [category]: (roomData[category] || []).filter((x) => x !== date),
+        },
+      };
+    });
   };
 
   return (
     <CalendarContext.Provider
-      value={{ booked, almostBooked, free, addDate, removeDate, loading }}
+      value={{ rooms, getRoomCalendar, addDate, removeDate, loading }}
     >
       {children}
     </CalendarContext.Provider>
   );
 }
 
-export function useCalendar() {
+export function useCalendar(roomId) {
   const ctx = useContext(CalendarContext);
-  if (!ctx) throw new Error("useCalendar must be used within CalendarProvider");
-  return ctx;
+
+  if (!ctx) {
+    throw new Error("useCalendar must be used within CalendarProvider");
+  }
+
+  if (!roomId) {
+    return ctx;
+  }
+
+  const roomData = ctx.getRoomCalendar(roomId);
+
+  return {
+    ...roomData,
+    addDate: (category, date) => ctx.addDate(roomId, category, date),
+    removeDate: (category, date) => ctx.removeDate(roomId, category, date),
+    loading: ctx.loading,
+  };
 }
 
 export default CalendarContext;

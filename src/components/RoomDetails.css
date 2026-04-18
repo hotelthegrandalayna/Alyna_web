@@ -1,6 +1,6 @@
 .room-page {
   background-color: #f6f5ff;
-  padding-bottom: 50px;
+  /* padding-bottom: 50px; */
 }
 
 .container {
@@ -34,6 +34,16 @@
   /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); */
 }
 
+.room-info {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.room-sidebar {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
 .main-room-img {
   width: 100%;
   border-radius: 8px;
@@ -57,16 +67,24 @@
 }
 
 .room-text {
-  margin-top: 25px;
+  margin-top: 20px;
 }
 .price-tag {
   color: #333;
   margin-bottom: 10px;
 }
 .room-text p {
-  color: #666;
-  line-height: 1.6;
+  color: #5c5b62;
+  line-height: 1.5;
   font-size: 14px;
+  margin: 0;
+}
+
+.check {
+  color: #6547db;
+  padding-top: 20px;
+  margin-bottom: 0;
+  font-size: 18px;
 }
 
 /* Sidebar Styles */
@@ -77,13 +95,18 @@
 }
 .complimentary-section ul {
   padding-left: 50px;
+  font-size: 18px;
+  color: #5c5b62;
+  font-weight: 500;
 }
 .complimentary-header {
   display: flex;
   align-items: center; /* This pulls the icon and text to the same center line */
   gap: 8px; /* Adds a nice space between the hat and the word */
   font-weight: bold;
-  font-size: 14px;
+  font-size: 24px;
+  color: #475569;
+  letter-spacing: -1px;
 }
 
 /* If the icon still feels 1px off due to the specific SVG design */
@@ -102,7 +125,7 @@
 .availability-card {
   background: #fff3e8;
   border-radius: 8px;
-  margin-top: 30px;
+  margin-top: 10px;
 }
 
 .calendar-ui {
@@ -217,6 +240,9 @@
   display: flex;
   justify-content: center;
   padding-top: 20px;
+  grid-column: 1;
+  grid-row: 2;
+  margin-top: -70px;
 }
 
 /* The faint thin purple border outline seen in the image */
@@ -359,10 +385,25 @@
   .booking-card-container {
     max-width: 66%;
     margin: 0 auto;
+    margin-bottom: 25px;
   }
   .room-grid {
+    display: grid;
     grid-template-columns: 1fr;
     padding: 57px 15px;
+  }
+  .room-info {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .room-sidebar {
+    grid-column: 1;
+    grid-row: 2;
+    margin-top: -40px;
+  }
+  .booking-card-container {
+    grid-column: 1;
+    grid-row: 3;
   }
   .breadcrumb-banner {
     padding-bottom: 60px;
@@ -397,5 +438,21 @@
   }
   .phone-number {
     font-size: 20px;
+  }
+
+  .complimentary-header {
+    display: flex;
+    align-items: center; /* This pulls the icon and text to the same center line */
+    gap: 8px; /* Adds a nice space between the hat and the word */
+    font-weight: bold;
+    font-size: 16px;
+    color: #475569;
+    letter-spacing: -1px;
+  }
+  .check {
+    color: #6547db;
+    padding-top: 20px;
+    margin-bottom: 0;
+    font-size: 16px;
   }
 }

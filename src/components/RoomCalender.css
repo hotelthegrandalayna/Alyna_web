@@ -1,6 +1,6 @@
 .calendar-wrapper {
   background: #fff3e8;
-  padding: 20px;
+  padding: 20px 42px;
   border-radius: 10px;
 }
 
@@ -58,21 +58,23 @@
   /* background: none; */
   border-radius: 6px;
   font-size: 16px;
+  min-height: 50px;
+  padding-block: 12px;
 }
 
 /* colored days */
 .day-red {
-  color: red !important;
+  color: #ff0000 !important;
   font-weight: bold;
 }
 
 .day-orange {
-  color: orange !important;
+  color: #ff8800 !important;
   font-weight: bold;
 }
 
 .day-green {
-  color: green !important;
+  color: #00ff40 !important;
   font-weight: bold;
 }
 
@@ -86,6 +88,9 @@
   display: flex;
   align-items: center;
   margin: 5px 0;
+  color: #475569;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .dot {
@@ -97,11 +102,16 @@
 }
 
 .red {
-  background: red;
+  background: #ff0000;
 }
 .orange {
-  background: orange;
+  background: #ff8800;
 }
 .green {
-  background: green;
+  background: #00ff40;
+}
+@media (max-width: 768px) {
+  .calendar-wrapper {
+    padding: 20px 25px;
+  }
 }

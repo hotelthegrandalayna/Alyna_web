@@ -4,15 +4,15 @@ import "react-calendar/dist/Calendar.css";
 import "./RoomCalender.css";
 import { useCalendar } from "../context/CalendarContext";
 
-export default function RoomCalendar() {
-  const [date, setDate] = useState(new Date(2026, 0, 1));
-  const { booked, almostBooked, free } = useCalendar();
+export default function RoomCalendar({ roomId = "room" }) {
+  const [date, setDate] = useState(new Date());
+  const { booked, almost, free } = useCalendar(roomId);
 
   const getClass = ({ date }) => {
     const d = date.toISOString().split("T")[0];
 
     if ((booked || []).includes(d)) return "day-red";
-    if ((almostBooked || []).includes(d)) return "day-orange";
+    if ((almost || []).includes(d)) return "day-orange";
     if ((free || []).includes(d)) return "day-green";
   };
 

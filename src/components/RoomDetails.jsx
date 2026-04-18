@@ -58,26 +58,6 @@ const RoomDetails = () => {
                 overlooking the sea.
               </p>
             </div>
-
-            <div className="booking-card-container">
-              <div className="outer-glow-border"></div>
-
-              <div className="main-booking-box">
-                <div className="content-left">
-                  <div className="phone-icon-box">
-                    <FaPhone fontSize={"40px"} color="#f27c07" />
-                  </div>
-
-                  <div className="cta-and-number">
-                    <p className="cta-text">CALL TO CONFIRM BOOKING !</p>
-
-                    <div className="floating-number-box">
-                      <span className="phone-number">01878150350</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Right Column */}
@@ -98,10 +78,30 @@ const RoomDetails = () => {
               </ul>
             </div>
 
-            <h5 style={{ color: "#6547DB" }}>CHECK AVAILABILITY</h5>
+            <h5 className="check">CHECK AVAILABILITY</h5>
 
             <div className="availability-card">
-              <RoomCalendar />
+              <RoomCalendar roomId="room" />
+            </div>
+          </div>
+
+          <div className="booking-card-container">
+            <div className="outer-glow-border"></div>
+
+            <div className="main-booking-box">
+              <div className="content-left">
+                <div className="phone-icon-box">
+                  <FaPhone fontSize={"40px"} color="#f27c07" />
+                </div>
+
+                <div className="cta-and-number">
+                  <p className="cta-text">CALL TO CONFIRM BOOKING !</p>
+
+                  <div className="floating-number-box">
+                    <span className="phone-number">01878150350</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -33,29 +33,9 @@ export default function Admin() {
       <section className="admin-auth-shell">
         <div className="admin-auth-backdrop" />
         <div className="admin-auth-layout">
-          <div className="admin-auth-intro">
-            <p className="admin-auth-eyebrow">Secure Access</p>
-            <h1>Admin control panel login</h1>
-            {/* <p className="admin-auth-copy">
-              Sign in to manage the booking calendar and keep room availability
-              updated in real time.
-            </p>
-
-            <div className="admin-auth-highlights">
-              <div className="admin-highlight-card">
-                <span>Live updates</span>
-                <strong>Sync changes directly to Firebase</strong>
-              </div>
-              <div className="admin-highlight-card">
-                <span>Protected route</span>
-                <strong>Username and password required</strong>
-              </div>
-            </div> */}
-          </div>
-
           <form className="admin-login-card" onSubmit={handleLogin}>
             <div className="admin-login-card__header">
-              <h2>Administrator Sign In</h2>
+              <h2 style={{ textAlign: "center" }}>Log In</h2>
               <p>Use your admin credentials to continue.</p>
             </div>
 
@@ -91,9 +71,9 @@ export default function Admin() {
               Login to Dashboard
             </button>
 
-            <p className="admin-login-hint">
+            {/* <p className="admin-login-hint">
               Authorized username: <strong>{ADMIN_USERNAME}</strong>
-            </p>
+            </p> */}
           </form>
         </div>
       </section>
