@@ -4,12 +4,20 @@ import "react-calendar/dist/Calendar.css";
 import "./RoomCalender.css";
 import { useCalendar } from "../context/CalendarContext";
 
+const formatLocalDate = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+};
+
 export default function RoomCalendar({ roomId = "room" }) {
   const [date, setDate] = useState(new Date());
   const { booked, almost, free } = useCalendar(roomId);
 
   const getClass = ({ date }) => {
-    const d = date.toISOString().split("T")[0];
+    const d = formatLocalDate(date);
 
     if ((booked || []).includes(d)) return "day-red";
     if ((almost || []).includes(d)) return "day-orange";
