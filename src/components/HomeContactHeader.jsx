@@ -1,4 +1,5 @@
 import "./HomeContactHeader.css";
+import { Link } from "react-router-dom";
 
 const HomeContactHeader = ({ title }) => {
   // Online Dummy Images
@@ -13,7 +14,10 @@ const HomeContactHeader = ({ title }) => {
         style={{ backgroundImage: `url(${heroImage})` }}
       >
         <div className="breadcrumb-nav">
-          <span>Home</span>/ <span className="active-link">{title}</span>
+          <Link className="homeLink" to="/">
+            Home
+          </Link>
+          / <span className="active-link">{title}</span>
         </div>
       </section>
     </div>

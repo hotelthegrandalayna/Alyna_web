@@ -18,7 +18,15 @@
 .breadcrumb-nav .active-link {
   font-weight: bold;
 }
+.homeLink {
+  color: white;
+  text-decoration: none;
+  display: inline-block;
+}
 
+.homeLink:hover {
+  text-decoration: underline;
+}
 @media (max-width: 768px) {
   .about-hero {
     height: 200px;
