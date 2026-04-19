@@ -2,15 +2,10 @@ import { useState, useRef, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import "./Header.css";
 import { RiHome2Line } from "react-icons/ri";
-import { MdOutlineCancelPresentation } from "react-icons/md";
 import { RiDoorOpenLine } from "react-icons/ri";
 import { BsImage } from "react-icons/bs";
 import { RiInformationLine } from "react-icons/ri";
 import { RiContactsBookLine } from "react-icons/ri";
-
-{
-  /* <MdOutlineCancelPresentation /> */
-}
 
 /* ── Icons used only in the mobile drawer ── */
 const Icons = {
@@ -43,20 +38,23 @@ export default function Header() {
     { label: "Contact Us", href: "/contact" },
   ];
 
+  // ✅ Detect if any room route is active
+  const isRoomsActive = navLinks
+    .find((l) => l.label === "Rooms")
+    ?.submenu?.some((sub) => location.pathname === sub.href);
+
   // Close on route change
   useEffect(() => {
     setRoomOpen(false);
     setMenuOpen(false);
   }, [location]);
 
-  // Cleanup hover timer
   useEffect(() => {
     return () => {
       if (hoverTimer.current) clearTimeout(hoverTimer.current);
     };
   }, []);
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => {
@@ -64,12 +62,8 @@ export default function Header() {
     };
   }, [menuOpen]);
 
-  /* Desktop hover handlers — untouched */
   const handleRoomsMouseEnter = () => {
-    if (hoverTimer.current) {
-      clearTimeout(hoverTimer.current);
-      hoverTimer.current = null;
-    }
+    if (hoverTimer.current) clearTimeout(hoverTimer.current);
     setRoomOpen(true);
   };
 
@@ -90,24 +84,15 @@ export default function Header() {
             Alyna&apos;s <br /> Resort
           </NavLink>
 
-          <button
-            className="hamburger"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Open navigation menu"
-          >
+          <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
             <span></span>
             <span></span>
             <span></span>
           </button>
 
           <ul className={`nav-links ${menuOpen ? "open" : ""}`}>
-            {/* Mobile-only header row — hidden on desktop via CSS */}
             <div className="mobile-drawer-header">
-              <button
-                className="mobile-close-btn"
-                onClick={closeAll}
-                aria-label="Close menu"
-              >
+              <button className="mobile-close-btn" onClick={closeAll}>
                 ✕
               </button>
               <span className="mobile-drawer-title">Menu</span>
@@ -123,26 +108,26 @@ export default function Header() {
                 {link.submenu ? (
                   <>
                     <div
-                      className={`nav-parent ${roomOpen ? "active" : ""}`}
+                      className={`nav-parent ${isRoomsActive ? "active" : ""}`}
                       onClick={() => setRoomOpen(!roomOpen)}
                     >
-                      {/* Icon — visible only on mobile via CSS */}
                       <span className="nav-icon">{Icons.Rooms}</span>
 
                       <span className="nav-label-desktop">{link.label}</span>
-                      <span className="nav-label-mobile">{link.mobileLabel}</span>
+                      <span className="nav-label-mobile">
+                        {link.mobileLabel}
+                      </span>
 
-                      {/* Arrow — visible only on mobile via CSS */}
                       <span className="nav-parent-arrow">
                         {roomOpen ? "▲" : "▼"}
                       </span>
 
-                      {/* Desktop arrow — always shown, hidden on mobile via CSS would need
-                          a separate span; the original used ▾ inline text */}
                       <span className="desktop-arrow"> ▾</span>
                     </div>
 
-                    <ul className={`dropdown ${roomOpen ? "show" : ""}`}>
+                    <ul
+                      className={`dropdown ${isRoomsActive ? "dropdown-room-active" : "dropdown-offset"} ${roomOpen ? "show" : ""}`}
+                    >
                       {link.submenu.map((sub) => (
                         <li key={sub.label}>
                           <NavLink
@@ -164,9 +149,7 @@ export default function Header() {
                     className={({ isActive }) => (isActive ? "active" : "")}
                     onClick={() => setMenuOpen(false)}
                   >
-                    {/* Icon — visible only on mobile via CSS */}
                     <span className="nav-icon">{Icons[link.label]}</span>
-
                     {link.label}
                   </NavLink>
                 )}
@@ -176,11 +159,9 @@ export default function Header() {
         </nav>
       </header>
 
-      {/* Scrim — mobile only, closes menu on tap */}
       <div
         className={`mobile-overlay ${menuOpen ? "open" : ""}`}
         onClick={closeAll}
-        aria-hidden="true"
       />
     </>
   );

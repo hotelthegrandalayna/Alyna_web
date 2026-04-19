@@ -4,7 +4,6 @@ import { LuChefHat } from "react-icons/lu";
 import HomeContactHeader from "./HomeContactHeader";
 import { FaPhone } from "react-icons/fa6";
 import RoomCalendar from "./RoomCalendar";
-import { useEffect } from "react";
 import phoneIcon from "../assets/room-service.png";
 
 const RoomDetails = () => {
@@ -16,11 +15,6 @@ const RoomDetails = () => {
 
   const [mainImage, setMainImage] = useState(images[0]);
 
-  // Scroll to top when page loads
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   return (
     <div className="room-page">
       <HomeContactHeader title="The Serene Suite" />
@@ -28,7 +22,7 @@ const RoomDetails = () => {
       <div className="container main-content">
         <div className="room-grid">
           {/* Left Column */}
-          <div className="room-info">
+          <div className="room-info scroll-animate">
             <div className="main-image-container">
               <img
                 src={mainImage}
@@ -61,7 +55,7 @@ const RoomDetails = () => {
           </div>
 
           {/* Right Column */}
-          <div className="room-sidebar">
+          <div className="room-sidebar scroll-animate">
             <div className="complimentary-section">
               <div className="complimentary-header">
                 <LuChefHat size="24px" />
@@ -85,7 +79,7 @@ const RoomDetails = () => {
             </div>
           </div>
 
-          <div className="booking-card-container">
+          <div className="booking-card-container scroll-animate">
             <div className="outer-glow-border"></div>
 
             <div className="main-booking-box">

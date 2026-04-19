@@ -6,6 +6,7 @@ import AboutPage from "./components/AboutPage";
 import "./App.css";
 import "./styles/scroll-animate.css";
 import ScrollReveal from "./components/ScrollReveal";
+import ScrollToTop from "./components/ScrollToTop";
 import MapContactSection from "./components/MapContactSection";
 import Gallery from "./components/Gallery";
 import RoomDetails from "./components/RoomDetails";
@@ -19,6 +20,7 @@ function App() {
     <Router>
       <CalendarProvider>
         <div className="app">
+          <ScrollToTop />
           <ScrollReveal />
           <Header />
           <main>
