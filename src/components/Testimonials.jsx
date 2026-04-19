@@ -132,7 +132,7 @@ export default function Testimonials() {
           {testimonials.map((_, i) => (
             <button
               key={i}
-              className={`dott${i === activeIndex ? " active" : ""}`}
+              className={`dott${i === activeIndex ? " active-t" : ""}`}
               onClick={() => goTo(i)}
               aria-label={`Go to testimonial ${i + 1}`}
             />

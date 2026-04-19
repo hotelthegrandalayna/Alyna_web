@@ -133,6 +133,9 @@
   transform-origin: top left;
   z-index: 40;
 }
+.active {
+  font-weight: 400 !important;
+}
 
 .dropdown.dropdown-room-active {
   left: 0;
@@ -158,17 +161,20 @@
     background 180ms ease,
     color 180ms ease,
     font-weight 140ms ease;
+  font-weight: 400;
 }
 
 .dropdown li a:hover {
   background: #e4e4e4;
   color: #475569;
+  font-weight: 500;
 }
 
 .dropdown li a:active,
 .dropdown li a.active {
   background: #f0edfb;
   color: #6547db;
+  font-weight: 500 !important;
 }
 
 .dropdown.show {
