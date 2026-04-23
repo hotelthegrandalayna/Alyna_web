@@ -24,6 +24,10 @@
   display: inline-block;
 }
 
+.logo {
+  font-weight: 700 !important;
+}
+
 .homeLink:hover {
   text-decoration: underline;
 }
