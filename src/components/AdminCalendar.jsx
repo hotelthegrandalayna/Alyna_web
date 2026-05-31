@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-import { db } from "./firebaseConfig";
-import { doc, setDoc } from "firebase/firestore";
+import { supabase } from "../lib/supabaseClient";
 import { useCalendar } from "../context/CalendarContext";
 import "./Admin.css";
-
-const DOC_REF = doc(db, "calendar", "dates");
 const CATEGORIES = ["booked", "almost", "free"];
 const ROOM_OPTIONS = [
   { id: "room", label: "Room 1" },
@@ -28,6 +25,7 @@ const CATEGORY_META = {
 
 export default function AdminCalendar() {
   const { rooms, getRoomCalendar, addDate, removeDate } = useCalendar();
+  const [pendingStatuses, setPendingStatuses] = useState({});
   const [activeRoom, setActiveRoom] = useState("room");
   const [activeTab, setActiveTab] = useState("booked");
   const [selectedDate, setSelectedDate] = useState("");
@@ -64,20 +62,85 @@ export default function AdminCalendar() {
     setSelectedDate("");
   };
 
+  const updateDateStatus = (roomId, date, newStatus) => {
+    if (!roomId || !date || !newStatus) return;
+
+    // remove from all categories then add to newStatus
+    CATEGORIES.forEach((cat) => removeDate(roomId, cat, date));
+    addDate(roomId, newStatus, date);
+  };
+
+  const handleDbUpsert = async (roomId, date, status) => {
+    if (!roomId || !date || !status) return;
+    setSaving(true);
+    try {
+      const { error } = await supabase.from("calendar_dates").upsert([{ room: roomId, date, status }], { onConflict: ["room", "date"] });
+      if (error) throw error;
+      // keep local state in sync
+      updateDateStatus(roomId, date, status);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+      // clear pending
+      setPendingStatuses((p) => ({ ...p, [date]: undefined }));
+    } catch (err) {
+      console.error("DB upsert failed", err);
+      alert("Failed to update calendar row in DB");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDbDelete = async (roomId, date) => {
+    if (!roomId || !date) return;
+    setSaving(true);
+    try {
+      const { error } = await supabase.from("calendar_dates").delete().eq("room", roomId).eq("date", date);
+      if (error) throw error;
+      // remove locally from all categories
+      CATEGORIES.forEach((cat) => removeDate(roomId, cat, date));
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (err) {
+      console.error("DB delete failed", err);
+      alert("Failed to remove calendar row from DB");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const combinedDates = Array.from(
+    new Set([
+      ...((roomCalendar && roomCalendar.booked) || []),
+      ...((roomCalendar && roomCalendar.almost) || []),
+      ...((roomCalendar && roomCalendar.free) || []),
+    ]),
+  ).sort();
+
   const handleSave = async () => {
     setSaving(true);
 
     try {
-      await setDoc(DOC_REF, {
-        rooms,
-        updatedAt: new Date().toISOString(),
+      // remove existing rows for rooms
+      await supabase.from("calendar_dates").delete().in("room", ["room", "room2"]);
+
+      // build inserts
+      const inserts = [];
+      Object.entries(rooms).forEach(([roomId, dateObj]) => {
+        Object.entries(dateObj).forEach(([status, arr]) => {
+          (arr || []).forEach((d) => inserts.push({ room: roomId, date: d, status }));
+        });
       });
+
+      if (inserts.length > 0) {
+        const { error } = await supabase.from("calendar_dates").insert(inserts);
+        if (error) throw error;
+      }
 
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
     } catch (err) {
       console.error("Save failed:", err);
-      alert("Failed to save. Check Firebase config.");
+      alert("Failed to save calendar to Supabase. Check console for details.");
     } finally {
       setSaving(false);
     }
@@ -205,6 +268,50 @@ export default function AdminCalendar() {
               </div>
             </div>
 
+            <div className="calendar-admin-edit">
+              <h3>Edit dates for {activeRoomLabel}</h3>
+              {combinedDates.length === 0 && <div className="calendar-admin-empty">No dates to edit.</div>}
+
+              {combinedDates.map((date) => {
+                const currentStatus = roomCalendar.booked.includes(date)
+                  ? "booked"
+                  : roomCalendar.almost.includes(date)
+                  ? "almost"
+                  : "free";
+
+                const pending = pendingStatuses[date] || currentStatus;
+
+                return (
+                  <div key={date} className="calendar-admin-edit-row">
+                    <span className="calendar-admin-edit-date">{date}</span>
+                    <select
+                      value={pending}
+                      onChange={(e) => setPendingStatuses((p) => ({ ...p, [date]: e.target.value }))}
+                    >
+                      {CATEGORIES.map((c) => (
+                        <option key={c} value={c}>{c}</option>
+                      ))}
+                    </select>
+                    <button type="button" className="calendar-admin-update-button" onClick={() => handleDbUpsert(activeRoom, date, pending)}>Update DB</button>
+                    <button type="button" className="calendar-admin-chip-remove" onClick={() => handleDbDelete(activeRoom, date)}>Remove DB</button>
+                  </div>
+                );
+              })}
+
+              <div style={{ marginTop: 12 }}>
+                <h4>Insert date</h4>
+                <label className="calendar-admin-field" style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                  <input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} />
+                  <select value={activeTab} onChange={(e) => setActiveTab(e.target.value)}>
+                    {CATEGORIES.map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                  <button type="button" className="calendar-admin-add-button" onClick={() => { updateDateStatus(activeRoom, selectedDate, activeTab); setSelectedDate(""); }}>Set</button>
+                </label>
+              </div>
+            </div>
+
             <div className="calendar-admin-savebar">
               <div className="calendar-admin-savebar__actions">
                 {saved && (
@@ -218,7 +325,7 @@ export default function AdminCalendar() {
                   onClick={handleSave}
                   disabled={saving}
                 >
-                  {saving ? "Saving..." : "Save to Firebase"}
+                  {saving ? "Saving..." : "Save to Supabase"}
                 </button>
               </div>
             </div>

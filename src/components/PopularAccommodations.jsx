@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./PopularAccommodations.css";
 import { FaWifi } from "react-icons/fa";
 import { MdOutlineBreakfastDining, MdVerifiedUser } from "react-icons/md";
@@ -6,7 +6,10 @@ import { TbAirConditioning } from "react-icons/tb";
 import { FiMonitor } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 
-const accommodations = [
+import { supabase } from "../lib/supabaseClient";
+
+// fallback/static data used when DB fetch fails
+const staticAccommodations = [
   {
     id: 1,
     title: "The Serena Suite",
@@ -35,6 +38,57 @@ const accommodations = [
 
 export default function PopularAccommodations() {
   const [activeImages, setActiveImages] = useState({});
+  const [accommodations, setAccommodations] = useState(staticAccommodations);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadAccommodations() {
+      try {
+        const { data, error } = await supabase.from("accommodations").select("*");
+        if (error) {
+          console.error("Error loading accommodations:", error.message || error);
+          return;
+        }
+
+        if (!mounted || !data) return;
+
+        // map DB rows into the UI shape and resolve storage paths to public URLs
+        const mapped = data.map((row, idx) => {
+          const rawImages = row.images && row.images.length ? row.images : staticAccommodations[idx % staticAccommodations.length].images;
+          const images = (rawImages || []).map((img) => {
+            if (!img) return img;
+            if (img.startsWith("http")) return img;
+            try {
+              const { data: urlData } = supabase.storage.from("images").getPublicUrl(img);
+              return (urlData && (urlData.publicUrl || urlData.public_url)) || img;
+            } catch (e) {
+              return img;
+            }
+          });
+
+          return {
+            id: row.id || idx + 1,
+            title: row.title,
+            description: row.description,
+            tags: row.tags || [],
+            images,
+            links: row.links || "/",
+          };
+        });
+
+        setAccommodations(mapped);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    loadAccommodations();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const nextImage = (id, total) => {
     setActiveImages((prev) => {

@@ -1,30 +1,42 @@
 import React, { useState } from "react";
-import AdminCalendar from "./AdminCalendar";
+import AdminDashboard from "./AdminDashboard";
+import { supabase } from "../lib/supabaseClient";
 import "./Admin.css";
-
-const ADMIN_USERNAME = "Admin";
-const ADMIN_PASSWORD = "Admin1234@";
 
 export default function Admin() {
   const [auth, setAuth] = useState(false);
-  const [username, setUsername] = useState("");
+  const [currentUser, setCurrentUser] = useState(null);
+  const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError("");
 
-    if (username !== ADMIN_USERNAME) {
-      setError("Incorrect username. Use the authorized admin account.");
+    const { data, error: dbError } = await supabase.rpc("login_user", {
+      p_email: email,
+      p_password: pwd,
+    });
+
+    setLoading(false);
+
+    if (dbError || !data || data.length === 0) {
+      setError("Incorrect email or password. Please try again.");
       return;
     }
 
-    if (pwd !== ADMIN_PASSWORD) {
-      setError("Incorrect password. Please try again.");
+    const user = data[0];
+
+    if (user.role !== "admin" && user.role !== "moderator") {
+      setError("You are not authorized to access the dashboard.");
       return;
     }
 
     setError("");
+    setCurrentUser(user);
     setAuth(true);
   };
 
@@ -40,13 +52,13 @@ export default function Admin() {
             </div>
 
             <label className="admin-field">
-              <span>Username</span>
+              <span>Email</span>
               <input
-                type="text"
-                placeholder="Enter username"
-                value={username}
+                type="email"
+                placeholder="Enter email"
+                value={email}
                 onChange={(e) => {
-                  setUsername(e.target.value);
+                  setEmail(e.target.value);
                   if (error) setError("");
                 }}
               />
@@ -67,18 +79,18 @@ export default function Admin() {
 
             {error && <p className="admin-login-error">{error}</p>}
 
-            <button className="admin-login-button" type="submit">
-              Login to Dashboard
+            <button
+              className="admin-login-button"
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? "Verifying..." : "Login to Dashboard"}
             </button>
-
-            {/* <p className="admin-login-hint">
-              Authorized username: <strong>{ADMIN_USERNAME}</strong>
-            </p> */}
           </form>
         </div>
       </section>
     );
   }
 
-  return <AdminCalendar />;
+  return <AdminDashboard user={currentUser} />;
 }

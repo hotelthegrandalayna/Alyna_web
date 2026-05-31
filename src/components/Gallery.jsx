@@ -1,42 +1,87 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Gallery.css";
 import HomeContactHeader from "./HomeContactHeader";
 import ScrollReveal from "./ScrollReveal";
+import { supabase } from "../lib/supabaseClient";
 
 const Gallery = () => {
-  // Dummy data for the gallery
-  const images = [
-    {
-      id: 1,
-      label: "Lobby",
-      url: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600",
-    },
-    {
-      id: 2,
-      label: "Bedroom",
-      url: "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600",
-    },
-    {
-      id: 3,
-      label: "Garden",
-      url: "https://images.unsplash.com/photo-1551882547-ff43c6382636?auto=format&fit=crop&w=600",
-    },
-    {
-      id: 4,
-      label: "Lobby",
-      url: "https://images.unsplash.com/photo-1582719478250-c89cae4df85b?auto=format&fit=crop&w=600",
-    },
-    {
-      id: 5,
-      label: "Bedroom",
-      url: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600",
-    },
-    // {
-    //   id: 6,
-    //   label: "Garden",
-    //   url: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=600",
-    // },
-  ];
+  const [images, setImages] = useState([]);
+  const [videoUrl, setVideoUrl] = useState(null);
+
+  // normalize common video links to embed-friendly URLs
+  const getEmbedUrl = (url) => {
+    if (!url || typeof url !== "string") return null;
+    const trimmed = url.trim();
+
+    // YouTube: handle watch URLs, short youtu.be, and already-embed URLs
+    const ytMatch = trimmed.match(
+      /(?:youtube\.com\/.*v=|youtu\.be\/|youtube\.com\/embed\/)([A-Za-z0-9_-]{11})/,
+    );
+    if (ytMatch && ytMatch[1]) {
+      return `https://www.youtube.com/embed/${ytMatch[1]}?rel=0&modestbranding=1`;
+    }
+
+    // If it's already an embed URL (vimeo or youtube) return as-is
+    if (
+      trimmed.includes("youtube.com/embed") ||
+      trimmed.includes("player.vimeo.com")
+    )
+      return trimmed;
+
+    return null;
+  };
+
+  useEffect(() => {
+    let mounted = true;
+    async function load() {
+      try {
+        const { data, error } = await supabase
+          .from("gallery_images")
+          .select("*")
+          .order("id", { ascending: true });
+        if (error) throw error;
+        if (!mounted) return;
+        const mapped = (data || []).map((r) => {
+          const url = r.url;
+          if (url && url.startsWith("http")) return { ...r, url };
+          try {
+            const { data: urlData } = supabase.storage
+              .from("images")
+              .getPublicUrl(url);
+            return {
+              ...r,
+              url:
+                (urlData && (urlData.publicUrl || urlData.public_url)) || url,
+            };
+          } catch (e) {
+            return r;
+          }
+        });
+        setImages(mapped);
+
+        // load gallery page row for video_url
+        try {
+          const { data: page } = await supabase
+            .from("pages")
+            .select("*")
+            .eq("slug", "gallery")
+            .maybeSingle();
+          if (page) {
+            const v = page.video_url || page.content?.video_url || null;
+            setVideoUrl(v);
+          }
+        } catch (e) {
+          console.error("Failed to load gallery video_url:", e);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    load();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   return (
     <section className="gallery-section">
@@ -49,13 +94,30 @@ const Gallery = () => {
         <div className="gallery-group scroll-animate">
           <h3 className="group-title">VIDEO</h3>
           <div className="video-container">
-            <iframe
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-              title="Resort Video"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
+            {(() => {
+              const embed = getEmbedUrl(videoUrl);
+              if (embed) {
+                return (
+                  <iframe
+                    src={embed}
+                    title="Resort Video"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                );
+              }
+              // fallback: default embed
+              // return (
+              //   <iframe
+              //     src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+              //     title="Resort Video"
+              //     frameBorder="0"
+              //     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              //     allowFullScreen
+              //   />
+              // );
+            })()}
           </div>
         </div>
 

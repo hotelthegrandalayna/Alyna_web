@@ -1,8 +1,8 @@
 import "./HomeContactHeader.css";
 import { Link } from "react-router-dom";
 
-const HomeContactHeader = ({ title }) => {
-  // Online Dummy Images
+const HomeContactHeader = ({ title, loading = false, image }) => {
+  // Fallback hero image if none provided
   const heroImage =
     "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80";
 
@@ -17,7 +17,12 @@ const HomeContactHeader = ({ title }) => {
           <Link className="homeLink" to="/">
             Home
           </Link>
-          / <span className="active-link">{title}</span>
+          /{" "}
+          {loading ? (
+            <span className="breadcrumb-skeleton" />
+          ) : (
+            <span className="active-link">{title}</span>
+          )}
         </div>
       </section>
     </div>

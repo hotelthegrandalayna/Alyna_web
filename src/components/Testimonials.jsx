@@ -1,34 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import "./Testimonials.css";
+import { supabase } from "../lib/supabaseClient";
 
-const testimonials = [
-  {
-    id: 1,
-    quote:
-      "Wake up where the hills meet the sea. Comfort for every traveler from budget to luxury at the top of Sitakund.",
-    name: "Babilik Ahmed",
-    role: "Designer, SEO Agency",
-    avatar:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
-  },
-  {
-    id: 2,
-    quote:
-      "An unforgettable experience. The views, the service, everything was perfect. We will definitely be back!",
-    name: "Sarun Ahmad",
-    role: "Travel Blogger",
-    avatar: null,
-  },
-  {
-    id: 3,
-    quote:
-      "The best resort we have stayed at. Family-friendly and the staff went above and beyond.",
-    name: "Maria Johnson",
-    role: "Family Traveler",
-    avatar: null,
-  },
-];
-
+// testimonials are loaded from Supabase `testimonials` table
 function getCardStyle(offset) {
   const abs = Math.abs(offset);
 
@@ -53,10 +27,10 @@ function getCardStyle(offset) {
 export default function Testimonials() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const autoRef = useRef(null);
-
+  const [testimonials, setTestimonials] = useState([]);
   const advance = () => {
     if (isTransitioning) return;
+    if (!testimonials || testimonials.length === 0) return;
     setIsTransitioning(true);
     setActiveIndex((prev) => (prev + 1) % testimonials.length);
     setTimeout(() => setIsTransitioning(false), 750);
@@ -70,9 +44,42 @@ export default function Testimonials() {
   };
 
   useEffect(() => {
-    autoRef.current = setInterval(advance, 3800);
-    return () => clearInterval(autoRef.current);
-  }, [isTransitioning]);
+    if (!testimonials || testimonials.length === 0) return;
+    const id = setInterval(() => {
+      if (isTransitioning) return;
+      setActiveIndex((prev) => (prev + 1) % testimonials.length);
+      setTimeout(() => setIsTransitioning(false), 750);
+    }, 3800);
+    return () => clearInterval(id);
+  }, [testimonials.length, isTransitioning]);
+
+  useEffect(() => {
+    let mounted = true;
+    async function load() {
+      try {
+        const { data, error } = await supabase.from("testimonials").select("*").order("id", { ascending: true });
+        if (error) throw error;
+        if (!mounted) return;
+        const mapped = (data || []).map((r) => {
+          const avatar = r.avatar;
+          if (avatar && avatar.startsWith("http")) return r;
+          try {
+            const { data: urlData } = supabase.storage.from("images").getPublicUrl(avatar);
+            return { ...r, avatar: (urlData && (urlData.publicUrl || urlData.public_url)) || avatar };
+          } catch (e) {
+            return r;
+          }
+        });
+        setTestimonials(mapped);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    load();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   return (
     <section className="testimonials">
@@ -132,7 +139,7 @@ export default function Testimonials() {
           {testimonials.map((_, i) => (
             <button
               key={i}
-              className={`dott${i === activeIndex ? " active-t" : ""}`}
+              className={`dott${i === activeIndex ? " active" : ""}`}
               onClick={() => goTo(i)}
               aria-label={`Go to testimonial ${i + 1}`}
             />

@@ -15,7 +15,21 @@ import Admin from "./components/Admin";
 import { CalendarProvider } from "./context/CalendarContext";
 import { Analytics } from "@vercel/analytics/react";
 
+import { supabase } from "./lib/supabaseClient";
+import { useEffect } from "react";
+
 function App() {
+  useEffect(() => {
+    const testSupabase = async () => {
+      const { data, error } = await supabase.auth.getSession();
+
+      console.log("Supabase session:", data);
+      console.log("Supabase error:", error);
+    };
+
+    testSupabase();
+  }, []);
+
   return (
     <Router>
       <CalendarProvider>

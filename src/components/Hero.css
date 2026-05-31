@@ -39,6 +39,45 @@
   display: block;
 }
 
+.hero-image img {
+  opacity: 0;
+  transition: opacity 320ms ease-in;
+}
+
+.hero-image img.loaded {
+  opacity: 1;
+}
+
+/* Skeleton loaders */
+.skeleton {
+  background: linear-gradient(90deg, rgba(255,255,255,0.06) 25%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.06) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s linear infinite;
+  border-radius: 6px;
+}
+
+.skeleton-image {
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+}
+
+.skeleton-title {
+  width: 70%;
+  height: 36px;
+  margin-bottom: 12px;
+}
+
+.skeleton-sub {
+  width: 90%;
+  height: 18px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 .hero-content h1 {
   color: white;
   font-size: 2.4rem;

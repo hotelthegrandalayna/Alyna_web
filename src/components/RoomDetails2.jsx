@@ -1,40 +1,63 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./RoomDetails.css";
 import { LuChefHat } from "react-icons/lu";
 import HomeContactHeader from "./HomeContactHeader";
 import { FaPhone } from "react-icons/fa6";
 import RoomCalendar from "./RoomCalendar";
+import { supabase } from "../lib/supabaseClient";
 
 const RoomDetails2 = () => {
-  const images = [
-    "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80",
-    "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=80",
-    "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=600&q=80",
-  ];
+  const [acc, setAcc] = useState(null);
+  const [page, setPage] = useState(null);
+  const [mainImage, setMainImage] = useState(null);
 
-  const [mainImage, setMainImage] = useState(images[0]);
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const { data: row, error } = await supabase
+          .from("accommodations")
+          .select("*")
+          .eq("slug", "room2")
+          .maybeSingle();
+        if (error) throw error;
+        setAcc(row || {});
+        const imgs = (row && row.images) || [];
+        setMainImage(imgs[0] || "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80");
+      } catch (e) {
+        console.error("Failed to load accommodation", e);
+      }
+    };
+    const loadPage = async () => {
+      try {
+        const { data: prow, error: perr } = await supabase.from("pages").select("*").eq("slug", "room2-detail").maybeSingle();
+        if (perr) throw perr;
+        setPage(prow || {});
+      } catch (e) {
+        console.error("Failed to load page content", e);
+      }
+    };
+
+    load();
+    loadPage();
+  }, []);
 
   return (
     <div className="room-page">
-      <HomeContactHeader title="Explorer Base Camp" />
+      <HomeContactHeader title={acc?.title || "Explorer Base Camp"} />
 
       <div className="container main-content">
         <div className="room-grid">
           {/* Left Column */}
           <div className="room-info scroll-animate">
             <div className="main-image-container">
-              <img
-                src={mainImage}
-                alt="Superior Room"
-                className="main-room-img"
-              />
+              <img src={mainImage} alt={acc?.title || "Superior Room"} className="main-room-img" />
 
               <div className="thumbnails">
-                {images.map((img, index) => (
+                {((acc && acc.images) || []).map((img, index) => (
                   <img
                     key={index}
                     src={img}
-                    alt="thumb"
+                    alt={`thumb-${index}`}
                     onClick={() => setMainImage(img)}
                     className={mainImage === img ? "selected-thumb" : ""}
                   />
@@ -43,13 +66,7 @@ const RoomDetails2 = () => {
             </div>
 
             <div className="room-text">
-              <p>
-                Attractively ornamented with complete marble & tiles and
-                luxurious fabrics, our two prominent Presidential suites are
-                1900 & 1800 sq ft. These two unique suites boast an octagonal
-                living area, the sides of which are fitted with windows
-                overlooking the sea.
-              </p>
+              <p>{(page && page.content && page.content.description) || acc?.description || "Attractively ornamented with complete marble & tiles and luxurious fabrics."}</p>
             </div>
           </div>
 
@@ -58,19 +75,17 @@ const RoomDetails2 = () => {
             <div className="complimentary-section">
               <div className="complimentary-header">
                 <LuChefHat size="24px" />
-                <span>COMPLIMENTARY</span>
+                <span>{acc?.complimentary && acc.complimentary.length ? "COMPLIMENTARY" : "COMPLIMENTARY"}</span>
               </div>
 
               <ul>
-                <li>Breakfast for 4 pax</li>
-                <li>Welcome drink (on arrival)</li>
-                <li>Bus-stop pick-up (on demand)</li>
-                <li>Mineral water 500ml x 2 bottles</li>
-                <li>Internet in the rooms & lobby</li>
+                {((page && page.content && page.content.complimentary) || (acc && acc.complimentary) || ["Breakfast for 4 pax", "Welcome drink (on arrival)", "Bus-stop pick-up (on demand)", "Mineral water 500ml x 2 bottles", "Internet in the rooms & lobby"]).map((it, i) => (
+                  <li key={i}>{it}</li>
+                ))}
               </ul>
             </div>
 
-            <h5 className="check">CHECK AVAILABILITY</h5>
+            <h5 className="check">{(page && page.content && page.content.availability_heading) || acc?.availability_heading || "CHECK AVAILABILITY"}</h5>
 
             <div className="availability-card">
               <RoomCalendar roomId="room2" />

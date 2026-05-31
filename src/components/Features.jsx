@@ -1,85 +1,153 @@
 import "./Features.css";
-
-const features = [
-  { icon: "📶", label: "Free Internet Access" },
-  { icon: "📱", label: "Digital Check-In" },
-  { icon: "🅿️", label: "Free Parking" },
-  { icon: "🏊", label: "Swimming" },
-  { icon: "🎬", label: "Outdoor movie" },
-  { icon: "📶", label: "Free Internet Access" },
-  { icon: "📱", label: "Digital Check-in" },
-  { icon: "🅿️", label: "Free Parking" },
-];
-
-const amenityItems = [
-  { icon: "📶", label: "Free Internet Access" },
-  { icon: "📱", label: "Digital Check-in" },
-  { icon: "🅿️", label: "Free Parking" },
-  { icon: "🚶", label: "Outdoor Activity" },
-  { icon: "🍽️", label: "Restaurant On-Site" },
-  { icon: "📶", label: "Free Internet Access" },
-  { icon: "📱", label: "Digital Check-in" },
-  { icon: "🅿️", label: "Free Parking" },
-];
+import { useEffect, useState } from "react";
+import { supabase } from "../lib/supabaseClient";
 
 export default function Features() {
+  const normalizeNewlines = (s) => {
+    if (!s) return s;
+    return String(s).replace(/\\n/g, "\n").replace(/\/n/g, "\n");
+  };
+  const [features, setFeatures] = useState([]);
+  const [featureImages, setFeatureImages] = useState([]);
+  const [facilities, setFacilities] = useState([]);
+
+  useEffect(() => {
+    let mounted = true;
+    async function load() {
+      try {
+        const { data: feats } = await supabase
+          .from("features")
+          .select("*")
+          .order("id", { ascending: true });
+        // load the home page row for facilities and feature images
+        const { data: page } = await supabase
+          .from("pages")
+          .select("*")
+          .eq("slug", "home")
+          .maybeSingle();
+        if (!mounted) return;
+        setFeatures(feats || []);
+
+        const imgs = (page?.content?.feature_images || []).map((img) => {
+          if (!img) return img;
+          if (img.startsWith("http")) return img;
+          try {
+            const { data: urlData } = supabase.storage
+              .from("images")
+              .getPublicUrl(img);
+            return (
+              (urlData && (urlData.publicUrl || urlData.public_url)) || img
+            );
+          } catch (e) {
+            return img;
+          }
+        });
+        setFeatureImages(imgs || []);
+
+        // load facilities for the home page (if any)
+        try {
+          if (page && page.id) {
+            const { data: facs, error: facErr } = await supabase
+              .from("facilities")
+              .select("*")
+              .eq("page_id", page.id)
+              .order("id", { ascending: true });
+
+            if (!facErr) {
+              const mapped = (facs || []).map((f) => ({
+                ...f,
+                title: normalizeNewlines(f.title),
+                description: normalizeNewlines(f.description),
+                images: (f.images || []).map((img) => {
+                  if (!img) return img;
+                  if (img.startsWith("http")) return img;
+                  try {
+                    const { data: urlData } = supabase.storage
+                      .from("images")
+                      .getPublicUrl(img);
+                    return (
+                      (urlData && (urlData.publicUrl || urlData.public_url)) ||
+                      img
+                    );
+                  } catch (e) {
+                    return img;
+                  }
+                }),
+              }));
+              setFacilities(mapped);
+            }
+          }
+        } catch (e) {
+          console.error("Failed to load facilities:", e);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    load();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
   return (
     <section className="features" id="about">
+      {/* Mobile header: show title/description from DB without line-break rendering */}
+      <div className="features-mobile-header">
+        <span className="section-label-f">FACILITIES</span>
+        <h2 className="mobile-title">Explore Our Amenities for All</h2>
+      </div>
       <div className="features-grid">
         <div className="features-content">
           <span className="section-label-f">FACILITIES</span>
           <h2>
-            what special
-            <br /> we offer to our guests
+            {String(facilities?.[0]?.title || "")
+              .split("\n")
+              .map((line, i) => (
+                <span key={i}>
+                  {line}
+                  <br />
+                </span>
+              ))}
           </h2>
           <p>
-            Attractively ornamented with complete marble & tiles and luxurious
-            fabrics, our two prominent Presidential suites are 1900 1800 sq ft.
-            These two unique suites boast an octagonal living area, the sides of
-            which are fitted with windows overlooking the sea, the Bay of Bengal
-            for the best views in the city.
+            {String(facilities?.[0]?.description || "")
+              .split("\n")
+              .map((line, i) => (
+                <span key={i}>
+                  {line}
+                  <br />
+                </span>
+              ))}
           </p>
           <div className="feature-images">
-            <img
-              src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=150&q=80"
-              alt="Outdoor"
-            />
-            <img
-              src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=150&q=80"
-              alt="Pathway"
-            />
-            <img
-              src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=150&q=80"
-              alt="Light"
-            />
+            {(facilities?.[0]?.images?.slice(1)?.length
+              ? facilities[0].images.slice(1)
+              : featureImages
+            )
+              .slice(0, 3)
+              .map((src, i) => (
+                <img key={i} src={src} alt={`Feature ${i + 1}`} />
+              ))}
           </div>
         </div>
         <div className="features-image">
-          <img
-            src="https://images.unsplash.com/photo-1558030006-450675393462?w=600&q=80"
-            alt="BBQ and dining"
-          />
+          {facilities?.[0]?.images?.[0] ? (
+            <img src={facilities[0].images[0]} alt={facilities[0].title} />
+          ) : featureImages[0] ? (
+            <img src={featureImages[0]} alt="BBQ and dining" />
+          ) : (
+            <div style={{ height: 200, background: "#f4f4f4" }} />
+          )}
         </div>
       </div>
       <div className="feature-icons">
         {features.map((f) => (
-          <div key={f.label} className="feature-item">
+          <div key={f.id || f.label} className="feature-item">
             <span className="feature-icon">{f.icon}</span>
             <span>{f.label}</span>
           </div>
         ))}
-      </div>
-      <div className="amenities-section">
-        <span className="section-label-f">FACILITIES</span>
-        <h2>Explore Our Amenities for All</h2>
-        <div className="amenity-list">
-          {amenityItems.map((item) => (
-            <div key={item.label} className="amenity-item">
-              <span className="amenity-icon">{item.icon}</span>
-              <span>{item.label}</span>
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   );
