@@ -45,9 +45,14 @@ export default function PopularAccommodations() {
 
     async function loadAccommodations() {
       try {
-        const { data, error } = await supabase.from("accommodations").select("*");
+        const { data, error } = await supabase
+          .from("accommodations")
+          .select("*");
         if (error) {
-          console.error("Error loading accommodations:", error.message || error);
+          console.error(
+            "Error loading accommodations:",
+            error.message || error,
+          );
           return;
         }
 
@@ -55,13 +60,20 @@ export default function PopularAccommodations() {
 
         // map DB rows into the UI shape and resolve storage paths to public URLs
         const mapped = data.map((row, idx) => {
-          const rawImages = row.images && row.images.length ? row.images : staticAccommodations[idx % staticAccommodations.length].images;
+          const rawImages =
+            row.images && row.images.length
+              ? row.images
+              : staticAccommodations[idx % staticAccommodations.length].images;
           const images = (rawImages || []).map((img) => {
             if (!img) return img;
             if (img.startsWith("http")) return img;
             try {
-              const { data: urlData } = supabase.storage.from("images").getPublicUrl(img);
-              return (urlData && (urlData.publicUrl || urlData.public_url)) || img;
+              const { data: urlData } = supabase.storage
+                .from("images")
+                .getPublicUrl(img);
+              return (
+                (urlData && (urlData.publicUrl || urlData.public_url)) || img
+              );
             } catch (e) {
               return img;
             }
@@ -108,6 +120,17 @@ export default function PopularAccommodations() {
         [id]: (current - 1 + total) % total,
       };
     });
+  };
+
+  const truncateDescription = (html, words = 6) => {
+    const text = new DOMParser().parseFromString(html || "", "text/html").body
+      .textContent;
+
+    const wordArray = text.trim().split(/\s+/);
+
+    return wordArray.length > words
+      ? wordArray.slice(0, words).join(" ") + "..."
+      : text;
   };
 
   return (
@@ -171,7 +194,7 @@ export default function PopularAccommodations() {
                 </div>
 
                 <h3>{item.title}</h3>
-                <p>{item.description}</p>
+                <p>{truncateDescription(item.description, 6)}</p>
                 {/* 
                 <button className="btn-details">See Details</button> */}
 
