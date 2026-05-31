@@ -737,6 +737,46 @@
   min-height: 400px;
 }
 
+/* Prevent right-side admin content from overflowing the viewport */
+.admin-dashboard-layout,
+.calendar-admin-layout {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+/* Allow grid/flex children to shrink properly inside constrained containers */
+.admin-dashboard-layout > *,
+.calendar-admin-layout > *,
+.admin-main-area,
+.calendar-admin-card,
+.calendar-admin-list-wrap {
+  min-width: 0;
+}
+
+/* Ensure long words/URLs wrap instead of expanding layout */
+.calendar-admin-list-wrap,
+.calendar-admin-list,
+.calendar-admin-card,
+.calendar-admin-field,
+.calendar-admin-copy,
+.calendar-admin-tab {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Constrain images inside admin panes */
+.calendar-admin-card img,
+.calendar-admin-list-wrap img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Add horizontal scroll fallback for narrow viewports */
+.admin-main-area {
+  overflow-x: auto;
+}
+
 /* Reservations small styles */
 .reservation-form label {
   display: block;
