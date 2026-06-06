@@ -161,7 +161,7 @@ VALUES (
   'Alyna''s Resort',
   'Ward No. 9, Shibpur, Palli Bidyut Road, Sitakund, Chattogram-4310, Bangladesh.',
   ARRAY['+8801878150350', '+8801878150350'],
-  'alynasresort@gmail.com',
+  'info@hotelthegrandalayna.com',
   'https://maps.app.goo.gl/fYQViFEFsVq5GEmb9',
   '{"facebook": "#", "whatsapp": "#", "instagram": "#", "youtube": "#"}'::jsonb
 )

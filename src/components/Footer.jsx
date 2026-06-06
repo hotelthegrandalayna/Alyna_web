@@ -39,7 +39,7 @@ export default function Footer() {
               <MdEmail />
             </div>
             <div className="contact-label">Email Support</div>
-            <div className="contact-value">alynasresort@gmail.com</div>
+            <div className="contact-value">info@hotelthegrandalayna.com</div>
           </div>
 
           <div className="social-section-2">
