@@ -66,11 +66,27 @@
   width: 42%;
   padding-right: 2rem;
   z-index: 2;
+  /* keep container visible so skeletons show; inner content will fade */
+}
+
+/* Skeletons visible by default, fade out when real content appears */
+.hero-content .skeleton {
+  opacity: 1;
+  transition: opacity 320ms ease-out;
+}
+
+.hero-content.content-visible .skeleton {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Real content fades in when content-visible is present */
+.hero-content .content-real {
   opacity: 0;
   transition: opacity 320ms ease-in;
 }
 
-.hero-content.content-visible {
+.hero-content.content-visible .content-real {
   opacity: 1;
 }
 
