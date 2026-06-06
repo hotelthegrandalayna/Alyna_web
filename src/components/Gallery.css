@@ -41,15 +41,42 @@
 .image-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 3 columns on desktop */
+  grid-auto-rows: 220px; /* base row height — items will align to this */
   gap: 20px;
 }
 
 .grid-item {
   position: relative;
-  aspect-ratio: 3 / 4; /* Matches the tall rectangles in your image */
   background-color: #4a5a6a;
   border-radius: 4px;
   overflow: hidden;
+}
+
+/* Mosaic layout requested:
+   Row 1: [1 wide (col 1-2)] [2]
+   Row 2: [3] [4] [5]
+   Row 3: [6] [7 wide (col 2-3)]
+   We apply column spans to specific items using nth-child selectors. */
+.image-grid .grid-item:nth-child(1) {
+  grid-column: 1 / span 2;
+}
+.image-grid .grid-item:nth-child(2) {
+  grid-column: 3 / 4;
+}
+.image-grid .grid-item:nth-child(3) {
+  grid-column: 1 / 2;
+}
+.image-grid .grid-item:nth-child(4) {
+  grid-column: 2 / 3;
+}
+.image-grid .grid-item:nth-child(5) {
+  grid-column: 3 / 4;
+}
+.image-grid .grid-item:nth-child(6) {
+  grid-column: 1 / 2;
+}
+.image-grid .grid-item:nth-child(7) {
+  grid-column: 2 / span 2;
 }
 
 .grid-item img {
@@ -69,18 +96,30 @@
   text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
 }
 
-/* Responsive Mobile Styling */
 @media (max-width: 768px) {
   .image-grid {
-    grid-template-columns: repeat(2, 1fr); /* 2 columns on mobile */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
+    grid-auto-rows: auto; /* let rows size naturally */
   }
 
   .group-title {
     font-size: 12px;
   }
 
+  /* Reset ALL nth-child column spans for mobile */
+  .image-grid .grid-item:nth-child(1),
+  .image-grid .grid-item:nth-child(2),
+  .image-grid .grid-item:nth-child(3),
+  .image-grid .grid-item:nth-child(4),
+  .image-grid .grid-item:nth-child(5),
+  .image-grid .grid-item:nth-child(6),
+  .image-grid .grid-item:nth-child(7) {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
   .grid-item {
-    aspect-ratio: 1 / 1; /* Squares look better on smaller mobile grids */
+    aspect-ratio: 4 / 3; /* consistent proportional height */
   }
 }

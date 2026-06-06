@@ -2,6 +2,7 @@ import React from "react";
 import "./AboutPage.css";
 import HomeContactHeader from "./HomeContactHeader";
 import ScrollReveal from "./ScrollReveal";
+import OptimizedImage from "./OptimizedImage";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 
@@ -157,7 +158,7 @@ const AboutPage = () => {
             </div>
             <div className="founder-photo-box">
               <div className="photo-accent">
-                <img src={founderImage} alt="Founder" />
+                <OptimizedImage src={founderImage} alt="Founder" />
               </div>
             </div>
           </div>

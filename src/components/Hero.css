@@ -1,6 +1,5 @@
 .hero-wrapper {
   position: relative;
-  /* background: #f5f5f5; */
   padding-bottom: 80px;
 }
 
@@ -15,42 +14,74 @@
   overflow: visible;
 }
 
-.hero-content {
-  width: 42%;
-  padding-right: 2rem;
-  z-index: 2;
-}
-
 .hero-image {
   position: absolute;
   left: 190px;
-  top: -36px;
+  top: 0;
   width: calc(54% - 190px);
-  height: calc(100% + 100px);
+  height: 100%;
   z-index: 3;
-  padding-top: 75px;
+  padding-top: 0;
 }
 
-.hero-image img {
+/* Skeleton and img occupy the same space and crossfade */
+.hero-image img,
+.hero-image .hero-skeleton {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
   border-radius: 6px;
   display: block;
 }
 
+/* Image starts invisible, fades in over skeleton */
 .hero-image img {
+  object-fit: contain;
+  object-position: top center;
+  opacity: 0;
+  transition: opacity 200ms linear;
+  z-index: 2;
+}
+
+/* Once loaded (either via onLoad or via the cached-url fast path), show immediately */
+.hero-image img.loaded {
+  opacity: 1;
+}
+
+/* Skeleton starts visible, fades out when image is ready */
+.hero-image .hero-skeleton {
+  z-index: 1;
+  opacity: 1;
+  transition: opacity 320ms ease-out;
+  min-height: unset;
+}
+
+.hero-image .hero-skeleton.skeleton-hidden {
+  opacity: 0;
+}
+
+/* Content fades in once image is ready */
+.hero-content {
+  width: 42%;
+  padding-right: 2rem;
+  z-index: 2;
   opacity: 0;
   transition: opacity 320ms ease-in;
 }
 
-.hero-image img.loaded {
+.hero-content.content-visible {
   opacity: 1;
 }
 
 /* Skeleton loaders */
 .skeleton {
-  background: linear-gradient(90deg, rgba(255,255,255,0.06) 25%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.06) 75%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.06) 25%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.06) 75%
+  );
   background-size: 200% 100%;
   animation: shimmer 1.2s linear infinite;
   border-radius: 6px;
@@ -74,8 +105,12 @@
 }
 
 @keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 .hero-content h1 {
@@ -126,6 +161,21 @@
   }
 }
 
+/* Desktop: fix hero image to 650x508 */
+@media (min-width: 992px) {
+  .hero-image {
+    width: 650px;
+    height: 508px;
+    left: 190px;
+    top: 0;
+  }
+
+  .hero-image img {
+    object-fit: cover;
+    object-position: center top;
+  }
+}
+
 /* Mobile */
 @media (max-width: 768px) {
   .hero-wrapper {
@@ -137,28 +187,34 @@
     grid-template-columns: 1fr;
     min-height: 400px;
     position: relative;
-    padding: 0%;
+    padding-top: 64px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 0;
     justify-content: flex-start;
     align-items: flex-end;
   }
 
-  /* RESET desktop positioning */
   .hero-image {
     position: absolute;
     inset: 0;
     width: 100%;
-    height: 119%;
+    height: 100%;
     left: auto;
-    top: auto;
+    top: 0;
     z-index: 1;
+    padding-top: 0;
+  }
+
+  .hero-image img,
+  .hero-image .hero-skeleton {
+    border-radius: 0;
+    min-height: 400px;
   }
 
   .hero-image img {
-    width: 100%;
-    height: 100%;
     min-height: 400px;
     object-fit: cover;
-    border-radius: 0;
   }
 
   .hero-content {
@@ -168,11 +224,9 @@
     padding: 2rem 1.5rem;
     max-width: 100%;
     width: 100%;
-
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-
     background: linear-gradient(
       to top,
       rgba(101, 71, 219, 0.9) 0%,

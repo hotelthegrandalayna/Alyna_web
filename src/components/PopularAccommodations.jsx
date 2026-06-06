@@ -7,6 +7,7 @@ import { FiMonitor } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 
 import { supabase } from "../lib/supabaseClient";
+import OptimizedImage from "./OptimizedImage";
 
 // fallback/static data used when DB fetch fails
 const staticAccommodations = [
@@ -147,7 +148,7 @@ export default function PopularAccommodations() {
           return (
             <article key={item.id} className="accommodation-card">
               <div className="card-image">
-                <img src={item.images[activeIndex]} alt={item.title} />
+                <OptimizedImage src={item.images[activeIndex]} alt={item.title} />
 
                 <div className="top-buttons">
                   <button className="img-btn">

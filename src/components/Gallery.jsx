@@ -3,6 +3,7 @@ import "./Gallery.css";
 import HomeContactHeader from "./HomeContactHeader";
 import ScrollReveal from "./ScrollReveal";
 import { supabase } from "../lib/supabaseClient";
+import OptimizedImage from "./OptimizedImage";
 
 const Gallery = () => {
   const [images, setImages] = useState([]);
@@ -127,7 +128,7 @@ const Gallery = () => {
           <div className="image-grid">
             {images.map((img) => (
               <div key={img.id} className="grid-item">
-                <img src={img.url} alt={img.label} />
+                <OptimizedImage src={img.url} alt={img.label} />
                 <span className="image-label">{img.label}</span>
               </div>
             ))}

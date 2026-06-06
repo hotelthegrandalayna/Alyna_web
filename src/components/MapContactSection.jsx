@@ -1,6 +1,7 @@
 import "./MapContactSection.css";
 import HomeContactHeader from "./HomeContactHeader";
 import ScrollReveal from "./ScrollReveal";
+import OptimizedImage from "./OptimizedImage";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import {
@@ -119,7 +120,7 @@ const MapContactSection = () => {
         {/* Right Column (Map Image Box) */}
         <div className="map-image-col scroll-animate">
           <div className="framed-map-box">
-            <img src={mapImageUrl} alt="Location Map with Pins" />
+            <OptimizedImage src={mapImageUrl} alt="Location Map with Pins" />
             <div className="map-overlay-card">
               <h3>{!loading ? (info?.resort_name || "Ayna's Resort") : ""}</h3>
               {!loading && (

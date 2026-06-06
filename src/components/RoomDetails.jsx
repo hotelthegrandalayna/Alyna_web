@@ -6,6 +6,7 @@ import { FaPhone } from "react-icons/fa6";
 import RoomCalendar from "./RoomCalendar";
 import phoneIcon from "../assets/room-service.png";
 import { supabase } from "../lib/supabaseClient";
+import OptimizedImage from "./OptimizedImage";
 
 const RoomDetails = () => {
   const [acc, setAcc] = useState(null);
@@ -56,11 +57,11 @@ const RoomDetails = () => {
           {/* Left Column */}
           <div className="room-info scroll-animate">
             <div className="main-image-container">
-              <img src={mainImage} alt={acc?.title || "Superior Room"} className="main-room-img" />
+              <OptimizedImage src={mainImage} alt={acc?.title || "Superior Room"} className="main-room-img" />
 
               <div className="thumbnails">
                 {((acc && acc.images) || []).map((img, index) => (
-                  <img
+                  <OptimizedImage
                     key={index}
                     src={img}
                     alt={`thumb-${index}`}
