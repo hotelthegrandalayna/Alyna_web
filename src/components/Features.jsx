@@ -1,6 +1,7 @@
 import "./Features.css";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
+import OptimizedImage from "./OptimizedImage";
 
 export default function Features() {
   const normalizeNewlines = (s) => {
@@ -127,15 +128,15 @@ export default function Features() {
             )
               .slice(0, 3)
               .map((src, i) => (
-                <img key={i} src={src} alt={`Feature ${i + 1}`} />
-              ))}
+                  <OptimizedImage key={i} src={src} alt={`Feature ${i + 1}`} />
+                ))}
           </div>
         </div>
         <div className="features-image">
           {facilities?.[0]?.images?.[0] ? (
-            <img src={facilities[0].images[0]} alt={facilities[0].title} />
+            <OptimizedImage src={facilities[0].images[0]} alt={facilities[0].title} />
           ) : featureImages[0] ? (
-            <img src={featureImages[0]} alt="BBQ and dining" />
+            <OptimizedImage src={featureImages[0]} alt="BBQ and dining" />
           ) : (
             <div style={{ height: 200, background: "#f4f4f4" }} />
           )}

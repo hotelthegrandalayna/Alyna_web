@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { supabase } from "../lib/supabaseClient";
+import OptimizedImage from "./OptimizedImage";
 import "./SupabaseImageUploader.css";
 
 export default function SupabaseImageUploader({ value, onChange, label, bucket = "images", showPreview = true }) {
@@ -61,7 +62,7 @@ export default function SupabaseImageUploader({ value, onChange, label, bucket =
       {message && <p className="uploader-message">{message}</p>}
       {showPreview && value && (
         <div style={{ marginTop: 8 }}>
-          <img src={value} alt="preview" style={{ maxWidth: 240, maxHeight: 160, display: "block" }} />
+          <OptimizedImage src={value} alt="preview" style={{ maxWidth: 240, maxHeight: 160 }} />
         </div>
       )}
     </div>

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import OptimizedImage from "./OptimizedImage";
 import "./Testimonials.css";
 import { supabase } from "../lib/supabaseClient";
 
@@ -120,7 +121,7 @@ export default function Testimonials() {
                 <div className="testimonial-author">
                   <div className="avatar">
                     {t.avatar ? (
-                      <img src={t.avatar} alt={t.name} />
+                      <OptimizedImage src={t.avatar} alt={t.name} />
                     ) : (
                       <div className="avatar-placeholder" />
                     )}

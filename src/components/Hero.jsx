@@ -113,22 +113,26 @@ export default function Hero() {
 
             <div ref={contentRef} className="hero-content scroll-animate">
               <h1>
-                {String(heading || "").split("\n").map((line, i) => (
-                  <span key={i}>
-                    {line}
-                    <br />
-                  </span>
-                ))}
+                {String(heading || "")
+                  .split("\n")
+                  .map((line, i) => (
+                    <span key={i}>
+                      {line}
+                      <br />
+                    </span>
+                  ))}
               </h1>
 
               <p>
                 <span className="hero-accent"></span>
-                {String(subtext || "").split("\n").map((line, i) => (
-                  <span key={i}>
-                    {line}
-                    <br />
-                  </span>
-                ))}
+                {String(subtext || "")
+                  .split("\n")
+                  .map((line, i) => (
+                    <span key={i}>
+                      {line}
+                      <br />
+                    </span>
+                  ))}
               </p>
             </div>
           </>
