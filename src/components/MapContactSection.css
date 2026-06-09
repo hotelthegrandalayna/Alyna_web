@@ -4,7 +4,7 @@
 }
 
 .about-hero {
-  height: 320px;
+  height: 237px !important;
   background-size: cover;
   background-position: center;
   position: relative;
@@ -170,7 +170,7 @@
 .framed-map-box {
   width: 100%;
   position: relative;
-  border: 10px solid #6c5ce7;
+  /* border: 10px solid #6c5ce7; */
   border-radius: 2px;
   overflow: hidden;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
@@ -267,7 +267,7 @@
   .framed-map-box {
     width: 100%;
     position: relative;
-    border: 5px solid #6c5ce7;
+    /* border: 5px solid #6c5ce7; */
     border-radius: 2px;
     overflow: hidden;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);

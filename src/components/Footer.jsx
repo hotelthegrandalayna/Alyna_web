@@ -12,7 +12,8 @@ export default function Footer() {
     <footer className="footer" id="contact">
       <div className="footer-content">
         <div className="footer-logo">
-          Alyna&apos;s <br /> Resort
+          <img src="../public/Svg/Frame.svg" alt="Logo" />
+          {/* Alyna&apos;s <br /> Resort */}
         </div>
         <div className="footer-info">
           <div className="contact-row">
@@ -22,7 +23,7 @@ export default function Footer() {
             <div className="contact-label">Location</div>
             <div className="contact-value">
               Ward No. 9, Shibpur, Palli Bidyut Road, Sitakund, Chattogram-4310,
-              Bangladesh.
+              Bangladesh
             </div>
           </div>
           <div className="contact-row">
@@ -30,16 +31,14 @@ export default function Footer() {
               <FaPhoneAlt />
             </div>
             <div className="contact-label">Phone</div>
-            <div className="contact-value">
-              +8801878150350 &nbsp;&nbsp; +8801878150350
-            </div>
+            <div className="contact-value">+8801883352526</div>
           </div>
           <div className="contact-row">
             <div className="contact-icon">
               <MdEmail />
             </div>
             <div className="contact-label">Email Support</div>
-            <div className="contact-value">alynasresort@gmail.com</div>
+            <div className="contact-value">info@hotelthegrandalayna.com</div>
           </div>
 
           <div className="social-section-2">
@@ -48,16 +47,28 @@ export default function Footer() {
               <span className="follow-text-2">Follow us</span>
             </div>
             <div className="social-icons">
-              <a href="#" aria-label="Facebook" className="facebook">
+              <a
+                href="https://www.facebook.com/HotelTheGrandAlayna"
+                aria-label="Facebook"
+                className="facebook"
+              >
                 <FaFacebook />
               </a>
-              <a href="#" aria-label="WhatsApp" className="whatsapp">
+              <a
+                href="https://wa.me/8801883352526"
+                aria-label="WhatsApp"
+                className="whatsapp"
+              >
                 <FaWhatsapp />
               </a>
               <a href="#" aria-label="Instagram" className="instagram">
                 <FaInstagram />
               </a>
-              <a href="#" aria-label="YouTube" className="youtube">
+              <a
+                href="https://www.youtube.com/@GrandAlayna"
+                aria-label="YouTube"
+                className="youtube"
+              >
                 <FaYoutube />
               </a>
             </div>

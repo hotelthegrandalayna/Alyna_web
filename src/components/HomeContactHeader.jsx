@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 
 const HomeContactHeader = ({ title, loading = false, image }) => {
   // Fallback hero image if none provided
-  const heroImage =
-    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80";
+  const heroImage = "../public/images/navbar.png";
 
   return (
     <div className="about-wrapper">

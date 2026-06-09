@@ -81,7 +81,8 @@ export default function Header() {
       <header className="header">
         <nav className="navbar">
           <NavLink to="/" className="logo">
-            Alyna&apos;s <br /> Resort
+            <img src="../public/Svg/header_logo.svg" alt="Logo" />
+            {/* Alyna&apos;s <br /> Resort */}
           </NavLink>
 
           <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
