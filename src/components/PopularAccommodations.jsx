@@ -150,9 +150,9 @@ export default function PopularAccommodations() {
                     <button className="img-btn">
                       <MdVerifiedUser />
                     </button>
-                    <button className="img-btn">
+                    {/* <button className="img-btn">
                       <MdOutlineBreakfastDining />
-                    </button>
+                    </button> */}
                     <button className="img-btn">
                       <TbAirConditioning />
                     </button>
