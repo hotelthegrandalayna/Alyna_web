@@ -109,7 +109,9 @@ const MapContactSection = () => {
               <div className="text-box">
                 <h4>Email Support</h4>
                 <p className="italicS">
-                  {!loading ? info?.email || "alynasresort@gmail.com" : ""}
+                  {!loading
+                    ? info?.email || "info@hotelthegrandalayna.com"
+                    : ""}
                 </p>
               </div>
             </div>
