@@ -9,37 +9,19 @@ import { NavLink } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
 import OptimizedImage from "./OptimizedImage";
 
-// fallback/static data used when DB fetch fails
-const staticAccommodations = [
-  {
-    id: 1,
-    title: "The Serena Suite",
-    description: "Retro-spacious. For a smooth family retreat.",
-    tags: ["Luxury", "Comfort"],
-    images: [
-      "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80",
-      "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=600&q=80",
-      "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600&q=80",
-    ],
-    links: "/room",
-  },
-  {
-    id: 2,
-    title: "The Explorer's Hideaway",
-    description: "Save on stay with comfort.",
-    tags: ["Standard", "Budget"],
-    images: [
-      "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=600&q=80",
-      "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=600&q=80",
-      "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600&q=80",
-    ],
-    links: "/room2",
-  },
-];
+function slugify(text) {
+  if (!text) return null;
+  return String(text)
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
 
 export default function PopularAccommodations() {
   const [activeImages, setActiveImages] = useState({});
-  const [accommodations, setAccommodations] = useState(staticAccommodations);
+  const [accommodations, setAccommodations] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let mounted = true;
@@ -48,25 +30,22 @@ export default function PopularAccommodations() {
       try {
         const { data, error } = await supabase
           .from("accommodations")
-          .select("*");
+          .select("*")
+          .order("created_at", { ascending: false });
         if (error) {
           console.error(
             "Error loading accommodations:",
             error.message || error,
           );
-          return;
         }
 
-        if (!mounted || !data) return;
+        const rows = data || [];
 
-        // map DB rows into the UI shape and resolve storage paths to public URLs
-        const mapped = data.map((row, idx) => {
+        const mapped = rows.map((row, idx) => {
           const rawImages =
-            row.images && row.images.length
-              ? row.images
-              : staticAccommodations[idx % staticAccommodations.length].images;
+            Array.isArray(row.images) && row.images.length ? row.images : [];
           const images = (rawImages || []).map((img) => {
-            if (!img) return img;
+            if (!img) return "";
             if (img.startsWith("http")) return img;
             try {
               const { data: urlData } = supabase.storage
@@ -80,19 +59,27 @@ export default function PopularAccommodations() {
             }
           });
 
+          const genSlug =
+            row.slug ||
+            slugify(row.title) ||
+            (row.id ? String(row.id) : `room-${Date.now()}`);
+
           return {
             id: row.id || idx + 1,
-            title: row.title,
-            description: row.description,
+            slug: genSlug,
+            title: row.title || "Untitled",
+            description: row.description || "",
             tags: row.tags || [],
             images,
-            links: row.links || "/",
+            links: `/rooms/${genSlug}`,
           };
         });
 
-        setAccommodations(mapped);
+        if (mounted) setAccommodations(mapped);
       } catch (e) {
         console.error(e);
+      } finally {
+        if (mounted) setLoading(false);
       }
     }
 
@@ -108,7 +95,7 @@ export default function PopularAccommodations() {
       const current = prev[id] || 0;
       return {
         ...prev,
-        [id]: (current + 1) % total,
+        [id]: (current + 1) % Math.max(total, 1),
       };
     });
   };
@@ -118,17 +105,16 @@ export default function PopularAccommodations() {
       const current = prev[id] || 0;
       return {
         ...prev,
-        [id]: (current - 1 + total) % total,
+        [id]: (current - 1 + Math.max(total, 1)) % Math.max(total, 1),
       };
     });
   };
 
   const truncateDescription = (html, words = 6) => {
-    const text = new DOMParser().parseFromString(html || "", "text/html").body
-      .textContent;
-
+    const text =
+      new DOMParser().parseFromString(html || "", "text/html").body
+        .textContent || "";
     const wordArray = text.trim().split(/\s+/);
-
     return wordArray.length > words
       ? wordArray.slice(0, words).join(" ") + "..."
       : text;
@@ -142,70 +128,76 @@ export default function PopularAccommodations() {
       </div>
 
       <div className="accommodation-cards">
-        {accommodations.map((item) => {
-          const activeIndex = activeImages[item.id] || 0;
+        {loading ? (
+          <div style={{ padding: 24 }}>Loading accommodations…</div>
+        ) : accommodations.length === 0 ? (
+          <div style={{ padding: 24 }}>No accommodations available.</div>
+        ) : (
+          accommodations.map((item) => {
+            const activeIndex = activeImages[item.id] || 0;
+            const imageSrc =
+              item.images && item.images.length ? item.images[activeIndex] : "";
 
-          return (
-            <article key={item.id} className="accommodation-card">
-              <div className="card-image">
-                <OptimizedImage src={item.images[activeIndex]} alt={item.title} />
+            return (
+              <article key={item.id} className="accommodation-card">
+                <div className="card-image">
+                  <OptimizedImage src={imageSrc} alt={item.title} />
 
-                <div className="top-buttons">
-                  <button className="img-btn">
-                    <FaWifi />
-                  </button>
-                  <button className="img-btn">
-                    <MdVerifiedUser />
-                  </button>
-                  <button className="img-btn">
-                    <MdOutlineBreakfastDining />
-                  </button>
-                  <button className="img-btn">
-                    <TbAirConditioning />
-                  </button>
-                  <button className="img-btn">
-                    <FiMonitor />
-                  </button>
+                  <div className="top-buttons">
+                    <button className="img-btn">
+                      <FaWifi />
+                    </button>
+                    <button className="img-btn">
+                      <MdVerifiedUser />
+                    </button>
+                    <button className="img-btn">
+                      <MdOutlineBreakfastDining />
+                    </button>
+                    <button className="img-btn">
+                      <TbAirConditioning />
+                    </button>
+                    <button className="img-btn">
+                      <FiMonitor />
+                    </button>
+                  </div>
+
+                  <div className="slider-controls">
+                    <button
+                      className="slider-btn"
+                      onClick={() => prevImage(item.id, item.images.length)}
+                    >
+                      ←
+                    </button>
+
+                    <button
+                      className="slider-btn"
+                      onClick={() => nextImage(item.id, item.images.length)}
+                    >
+                      →
+                    </button>
+                  </div>
                 </div>
 
-                <div className="slider-controls">
-                  <button
-                    className="slider-btn"
-                    onClick={() => prevImage(item.id, item.images.length)}
-                  >
-                    ←
-                  </button>
+                <div className="card-content">
+                  <div className="card-tags">
+                    {item.tags.map((tag) => (
+                      <span key={tag} className="tag">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
 
-                  <button
-                    className="slider-btn"
-                    onClick={() => nextImage(item.id, item.images.length)}
-                  >
-                    →
-                  </button>
+                  <h3>{item.title}</h3>
+                  <p>{truncateDescription(item.description, 6)}</p>
+
+                  <NavLink to={item.links} className="details-link">
+                    <button className="btn-details">See Details</button>
+                  </NavLink>
                 </div>
-              </div>
-
-              <div className="card-content">
-                <div className="card-tags">
-                  {item.tags.map((tag) => (
-                    <span key={tag} className="tag">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                <h3>{item.title}</h3>
-                <p>{truncateDescription(item.description, 6)}</p>
-                {/* 
-                <button className="btn-details">See Details</button> */}
-
-                <NavLink to={item.links} className="details-link">
-                  <button className="btn-details">See Details</button>
-                </NavLink>
-              </div>
-            </article>
-          );
-        })}
+              </article>
+            );
+          })
+        )}
       </div>
     </section>
   );

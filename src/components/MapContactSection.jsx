@@ -94,9 +94,7 @@ const MapContactSection = () => {
                       </p>
                     ))
                   ) : (
-                    <p className="italicS">
-                      {info?.phones || "+8801878150350"}
-                    </p>
+                    <p className="italicS">{info?.phones || "01883352526"}</p>
                   ))}
               </div>
             </div>

@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./Home";
@@ -10,7 +15,6 @@ import ScrollToTop from "./components/ScrollToTop";
 import MapContactSection from "./components/MapContactSection";
 import Gallery from "./components/Gallery";
 import RoomDetails from "./components/RoomDetails";
-import RoomDetails2 from "./components/RoomDetails2";
 import Admin from "./components/Admin";
 import { CalendarProvider } from "./context/CalendarContext";
 import { Analytics } from "@vercel/analytics/react";
@@ -43,8 +47,10 @@ function App() {
               <Route path="/about" element={<AboutPage />} />
               <Route path="/contact" element={<MapContactSection />} />
               <Route path="/gallery" element={<Gallery />} />
-              <Route path="/room" element={<RoomDetails />} />
-              <Route path="/room2" element={<RoomDetails2 />} />
+              <Route path="/rooms/:slug" element={<RoomDetails />} />
+              {/* legacy single-room paths redirect to rooms listing */}
+              <Route path="/room" element={<Navigate to="/" replace />} />
+              <Route path="/room2" element={<Navigate to="/" replace />} />
               <Route path="/admin" element={<Admin />} />
             </Routes>
           </main>

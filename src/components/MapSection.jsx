@@ -1,8 +1,11 @@
-import './MapSection.css';
+import "./MapSection.css";
 
 export default function MapSection() {
-  const mapLink = 'https://maps.app.goo.gl/fzs7K4xhSoEAsMto9';
-  const embedUrl = 'https://www.google.com/maps?q=22.625363,91.6411512&output=embed';
+  const mapLink =
+    "https://www.google.com/maps/place/Hotel+The+Grand+Alayna/@22.625429,91.6410396,202m/data=!3m2!1e3!4b1!4m6!3m5!1s0x375333a364aee56f:0x583f7e86bd721c51!8m2!3d22.625429!4d91.6416833!16s%2Fg%2F11npd8b8d9?entry=ttu&g_ep=EgoyMDI2MDYwMy4xIKXMDSoASAFQAw%3D%3D";
+
+  const embedUrl =
+    "https://www.google.com/maps?q=22.625429,91.6416833&output=embed";
 
   return (
     <section className="map-section">
@@ -15,7 +18,7 @@ export default function MapSection() {
           allowFullScreen=""
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
-          title="Alyna&apos;s Resort Location"
+          title="Alyna's Resort Location"
         />
         <div className="map-overlay">
           <div className="map-pin">
@@ -28,6 +31,7 @@ export default function MapSection() {
             target="_blank"
             rel="noopener noreferrer"
             className="map-btn"
+            style={{ backgroundColor: "#6547DB" }}
           >
             View large map
           </a>

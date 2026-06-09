@@ -3,6 +3,16 @@ import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import OptimizedImage from "./OptimizedImage";
 
+import {
+  MdOutlineNetworkCheck,
+  MdOutlineSupportAgent,
+  MdOutdoorGrill,
+} from "react-icons/md";
+import { FaParking, FaWalking, FaCarSide } from "react-icons/fa";
+import { SiNetflix } from "react-icons/si";
+import { IoFastFoodOutline } from "react-icons/io5";
+import { RiDrinks2Fill, RiCustomerService2Fill } from "react-icons/ri";
+
 export default function Features() {
   const normalizeNewlines = (s) => {
     if (!s) return s;
@@ -11,6 +21,19 @@ export default function Features() {
   const [features, setFeatures] = useState([]);
   const [featureImages, setFeatureImages] = useState([]);
   const [facilities, setFacilities] = useState([]);
+
+  const featureIcons = {
+    "Free Internet Access": <MdOutlineNetworkCheck />,
+    "Free Parking": <FaParking />,
+    "Digital check-in": <MdOutlineSupportAgent />,
+    "Movies on Projector": <SiNetflix />,
+    "Outdoor activity": <FaWalking />,
+    "On Order Food service": <IoFastFoodOutline />,
+    "Bar.B.Q facility": <MdOutdoorGrill />,
+    "Cooling Corner": <RiDrinks2Fill />,
+    "On station arrival Receive Service": <FaCarSide />,
+    "24/7 Reception service": <RiCustomerService2Fill />,
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -128,13 +151,16 @@ export default function Features() {
             )
               .slice(0, 3)
               .map((src, i) => (
-                  <OptimizedImage key={i} src={src} alt={`Feature ${i + 1}`} />
-                ))}
+                <OptimizedImage key={i} src={src} alt={`Feature ${i + 1}`} />
+              ))}
           </div>
         </div>
         <div className="features-image">
           {facilities?.[0]?.images?.[0] ? (
-            <OptimizedImage src={facilities[0].images[0]} alt={facilities[0].title} />
+            <OptimizedImage
+              src={facilities[0].images[0]}
+              alt={facilities[0].title}
+            />
           ) : featureImages[0] ? (
             <OptimizedImage src={featureImages[0]} alt="BBQ and dining" />
           ) : (
@@ -142,10 +168,11 @@ export default function Features() {
           )}
         </div>
       </div>
+
       <div className="feature-icons">
         {features.map((f) => (
           <div key={f.id || f.label} className="feature-item">
-            <span className="feature-icon">{f.icon}</span>
+            <span className="feature-icon">{featureIcons[f.label]}</span>
             <span>{f.label}</span>
           </div>
         ))}

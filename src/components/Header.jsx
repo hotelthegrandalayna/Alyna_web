@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
+import { supabase } from "../lib/supabaseClient";
 import "./Header.css";
 import { RiHome2Line } from "react-icons/ri";
 import { RiDoorOpenLine } from "react-icons/ri";
@@ -23,25 +24,19 @@ export default function Header() {
   const location = useLocation();
   const hoverTimer = useRef(null);
 
-  const navLinks = [
+  const defaultNavLinks = [
     { label: "Home", href: "/" },
-    {
-      label: "Rooms",
-      mobileLabel: "Room Categories",
-      submenu: [
-        { label: "The Serene Suite", href: "/room" },
-        { label: "The Explorer's Basecamp", href: "/room2" },
-      ],
-    },
+    { label: "Rooms", mobileLabel: "Room Categories", submenu: [] },
     { label: "Gallery", href: "/gallery" },
     { label: "About", href: "/about" },
     { label: "Contact Us", href: "/contact" },
   ];
 
-  // ✅ Detect if any room route is active
-  const isRoomsActive = navLinks
-    .find((l) => l.label === "Rooms")
-    ?.submenu?.some((sub) => location.pathname === sub.href);
+  const [navLinks, setNavLinks] = useState(defaultNavLinks);
+
+  // ✅ Detect if any rooms route is active — check first path segment is `rooms`
+  const getFirstSegment = (p) => (p || "").split("/").filter(Boolean)[0] || "";
+  const isRoomsActive = getFirstSegment(location.pathname) === "rooms";
 
   // Close on route change
   useEffect(() => {
@@ -52,6 +47,46 @@ export default function Header() {
   useEffect(() => {
     return () => {
       if (hoverTimer.current) clearTimeout(hoverTimer.current);
+    };
+  }, []);
+
+  // Load rooms/accommodations from Supabase and populate the Rooms submenu
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadRooms() {
+      try {
+        const { data, error } = await supabase
+          .from("accommodations")
+          .select("id,title,links,slug")
+          .order("id", { ascending: true });
+
+        if (error) {
+          console.error("Failed to load rooms for navbar:", error);
+          return;
+        }
+
+        if (!mounted || !data) return;
+
+        const roomsSubmenu = data.map((r) => ({
+          label: r.title || `Room ${r.id}`,
+          href: `/rooms/${r.slug || r.id}`,
+        }));
+
+        setNavLinks((prev) =>
+          prev.map((l) =>
+            l.label === "Rooms" ? { ...l, submenu: roomsSubmenu } : l,
+          ),
+        );
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    loadRooms();
+
+    return () => {
+      mounted = false;
     };
   }, []);
 
@@ -129,19 +164,33 @@ export default function Header() {
                     <ul
                       className={`dropdown ${isRoomsActive ? "dropdown-room-active" : "dropdown-offset"} ${roomOpen ? "show" : ""}`}
                     >
-                      {link.submenu.map((sub) => (
-                        <li key={sub.label}>
-                          <NavLink
-                            to={sub.href}
-                            className={({ isActive }) =>
-                              isActive ? "active" : ""
-                            }
-                            onClick={closeAll}
-                          >
-                            {sub.label}
-                          </NavLink>
-                        </li>
-                      ))}
+                      {link.submenu.map((sub) => {
+                        const normalize = (p = "") =>
+                          `/${(p || "").replace(/^\/+|\/+$/g, "")}`;
+                        const loc = normalize(location.pathname);
+                        const subPath = normalize(sub.href);
+
+                        const locParts = loc.split("/").filter(Boolean);
+                        const subParts = subPath.split("/").filter(Boolean);
+
+                        const isSubActive =
+                          loc === subPath ||
+                          (locParts[0] === "rooms" &&
+                            subParts[0] === "rooms" &&
+                            (locParts[1] || "") === (subParts[1] || ""));
+
+                        return (
+                          <li key={sub.href}>
+                            <NavLink
+                              to={sub.href}
+                              className={() => (isSubActive ? "active" : "")}
+                              onClick={closeAll}
+                            >
+                              {sub.label}
+                            </NavLink>
+                          </li>
+                        );
+                      })}
                     </ul>
                   </>
                 ) : (

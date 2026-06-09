@@ -1,12 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { useCalendar } from "../context/CalendarContext";
 import "./Admin.css";
 const CATEGORIES = ["booked", "almost", "free"];
-const ROOM_OPTIONS = [
-  { id: "room", label: "Room 1" },
-  { id: "room2", label: "Room 2" },
-];
 
 const CATEGORY_META = {
   booked: {
@@ -32,6 +28,12 @@ export default function AdminCalendar() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
+  useEffect(() => {
+    // ensure activeRoom defaults to first available key when rooms load
+    const keys = Object.keys(rooms || {});
+    if (keys.length && !keys.includes(activeRoom)) setActiveRoom(keys[0]);
+  }, [rooms]);
+
   const roomCalendar = getRoomCalendar(activeRoom);
 
   const currentDates = {
@@ -47,8 +49,11 @@ export default function AdminCalendar() {
   };
 
   const activeMeta = CATEGORY_META[activeTab];
+  const roomOptions = Object.keys(rooms || {}).map((id) => ({ id, label: id }));
   const activeRoomLabel =
-    ROOM_OPTIONS.find((room) => room.id === activeRoom)?.label || "Room";
+    roomOptions.find((room) => room.id === activeRoom)?.label ||
+    activeRoom ||
+    "Room";
   const sortedDates = [...(currentDates[activeTab] || [])].sort();
 
   const handleAdd = () => {
@@ -74,7 +79,11 @@ export default function AdminCalendar() {
     if (!roomId || !date || !status) return;
     setSaving(true);
     try {
-      const { error } = await supabase.from("calendar_dates").upsert([{ room: roomId, date, status }], { onConflict: ["room", "date"] });
+      const { error } = await supabase
+        .from("calendar_dates")
+        .upsert([{ room: roomId, date, status }], {
+          onConflict: ["room", "date"],
+        });
       if (error) throw error;
       // keep local state in sync
       updateDateStatus(roomId, date, status);
@@ -94,7 +103,11 @@ export default function AdminCalendar() {
     if (!roomId || !date) return;
     setSaving(true);
     try {
-      const { error } = await supabase.from("calendar_dates").delete().eq("room", roomId).eq("date", date);
+      const { error } = await supabase
+        .from("calendar_dates")
+        .delete()
+        .eq("room", roomId)
+        .eq("date", date);
       if (error) throw error;
       // remove locally from all categories
       CATEGORIES.forEach((cat) => removeDate(roomId, cat, date));
@@ -120,14 +133,19 @@ export default function AdminCalendar() {
     setSaving(true);
 
     try {
-      // remove existing rows for rooms
-      await supabase.from("calendar_dates").delete().in("room", ["room", "room2"]);
+      // remove existing rows for current rooms set
+      const keys = Object.keys(rooms || {});
+      if (keys.length) {
+        await supabase.from("calendar_dates").delete().in("room", keys);
+      }
 
       // build inserts
       const inserts = [];
       Object.entries(rooms).forEach(([roomId, dateObj]) => {
         Object.entries(dateObj).forEach(([status, arr]) => {
-          (arr || []).forEach((d) => inserts.push({ room: roomId, date: d, status }));
+          (arr || []).forEach((d) =>
+            inserts.push({ room: roomId, date: d, status }),
+          );
         });
       });
 
@@ -186,7 +204,7 @@ export default function AdminCalendar() {
             role="tablist"
             aria-label="Room selection"
           >
-            {ROOM_OPTIONS.map((room) => (
+            {roomOptions.map((room) => (
               <button
                 key={room.id}
                 type="button"
@@ -270,14 +288,16 @@ export default function AdminCalendar() {
 
             <div className="calendar-admin-edit">
               <h3>Edit dates for {activeRoomLabel}</h3>
-              {combinedDates.length === 0 && <div className="calendar-admin-empty">No dates to edit.</div>}
+              {combinedDates.length === 0 && (
+                <div className="calendar-admin-empty">No dates to edit.</div>
+              )}
 
               {combinedDates.map((date) => {
                 const currentStatus = roomCalendar.booked.includes(date)
                   ? "booked"
                   : roomCalendar.almost.includes(date)
-                  ? "almost"
-                  : "free";
+                    ? "almost"
+                    : "free";
 
                 const pending = pendingStatuses[date] || currentStatus;
 
@@ -286,28 +306,68 @@ export default function AdminCalendar() {
                     <span className="calendar-admin-edit-date">{date}</span>
                     <select
                       value={pending}
-                      onChange={(e) => setPendingStatuses((p) => ({ ...p, [date]: e.target.value }))}
+                      onChange={(e) =>
+                        setPendingStatuses((p) => ({
+                          ...p,
+                          [date]: e.target.value,
+                        }))
+                      }
                     >
                       {CATEGORIES.map((c) => (
-                        <option key={c} value={c}>{c}</option>
+                        <option key={c} value={c}>
+                          {c}
+                        </option>
                       ))}
                     </select>
-                    <button type="button" className="calendar-admin-update-button" onClick={() => handleDbUpsert(activeRoom, date, pending)}>Update DB</button>
-                    <button type="button" className="calendar-admin-chip-remove" onClick={() => handleDbDelete(activeRoom, date)}>Remove DB</button>
+                    <button
+                      type="button"
+                      className="calendar-admin-update-button"
+                      onClick={() => handleDbUpsert(activeRoom, date, pending)}
+                    >
+                      Update DB
+                    </button>
+                    <button
+                      type="button"
+                      className="calendar-admin-chip-remove"
+                      onClick={() => handleDbDelete(activeRoom, date)}
+                    >
+                      Remove DB
+                    </button>
                   </div>
                 );
               })}
 
               <div style={{ marginTop: 12 }}>
                 <h4>Insert date</h4>
-                <label className="calendar-admin-field" style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                  <input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} />
-                  <select value={activeTab} onChange={(e) => setActiveTab(e.target.value)}>
+                <label
+                  className="calendar-admin-field"
+                  style={{ display: "flex", gap: 8, alignItems: "center" }}
+                >
+                  <input
+                    type="date"
+                    value={selectedDate}
+                    onChange={(e) => setSelectedDate(e.target.value)}
+                  />
+                  <select
+                    value={activeTab}
+                    onChange={(e) => setActiveTab(e.target.value)}
+                  >
                     {CATEGORIES.map((c) => (
-                      <option key={c} value={c}>{c}</option>
+                      <option key={c} value={c}>
+                        {c}
+                      </option>
                     ))}
                   </select>
-                  <button type="button" className="calendar-admin-add-button" onClick={() => { updateDateStatus(activeRoom, selectedDate, activeTab); setSelectedDate(""); }}>Set</button>
+                  <button
+                    type="button"
+                    className="calendar-admin-add-button"
+                    onClick={() => {
+                      updateDateStatus(activeRoom, selectedDate, activeTab);
+                      setSelectedDate("");
+                    }}
+                  >
+                    Set
+                  </button>
                 </label>
               </div>
             </div>

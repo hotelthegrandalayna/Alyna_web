@@ -50,20 +50,28 @@ export function CalendarProvider({ children }) {
 
     const fetchCalendar = async () => {
       try {
-        const { data, error } = await supabase.from("calendar_dates").select("room,date,status");
+        const { data, error } = await supabase
+          .from("calendar_dates")
+          .select("room,date,status");
         if (error) throw error;
 
         if (!mounted) return;
 
         // build rooms structure
-        const roomsShape = { room: { booked: [], almost: [], free: [] }, room2: { booked: [], almost: [], free: [] } };
+        const roomsShape = {
+          room: { booked: [], almost: [], free: [] },
+          room2: { booked: [], almost: [], free: [] },
+        };
 
         (data || []).forEach((r) => {
           const roomId = r.room || "room";
           const status = r.status || "booked";
-          const dateStr = typeof r.date === "string" ? r.date : r.date && r.date.toString();
-          if (!roomsShape[roomId]) roomsShape[roomId] = { booked: [], almost: [], free: [] };
-          if (roomsShape[roomId][status]) roomsShape[roomId][status].push(dateStr);
+          const dateStr =
+            typeof r.date === "string" ? r.date : r.date && r.date.toString();
+          if (!roomsShape[roomId])
+            roomsShape[roomId] = { booked: [], almost: [], free: [] };
+          if (roomsShape[roomId][status])
+            roomsShape[roomId][status].push(dateStr);
         });
 
         setRooms(roomsShape);
@@ -80,9 +88,13 @@ export function CalendarProvider({ children }) {
     // subscribe to realtime changes and refetch on change
     const channel = supabase
       .channel("public:calendar_dates")
-      .on("postgres_changes", { event: "*", schema: "public", table: "calendar_dates" }, () => {
-        fetchCalendar();
-      })
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "calendar_dates" },
+        () => {
+          fetchCalendar();
+        },
+      )
       .subscribe();
 
     return () => {
@@ -96,7 +108,10 @@ export function CalendarProvider({ children }) {
 
     const fetchReservations = async () => {
       try {
-        const { data, error } = await supabase.from("reservations").select("*").order("created_at", { ascending: false });
+        const { data, error } = await supabase
+          .from("reservations")
+          .select("*")
+          .order("created_at", { ascending: false });
         if (error) throw error;
         if (!mounted) return;
         setReservations(data || []);
@@ -110,9 +125,13 @@ export function CalendarProvider({ children }) {
 
     const channel = supabase
       .channel("public:reservations")
-      .on("postgres_changes", { event: "*", schema: "public", table: "reservations" }, () => {
-        fetchReservations();
-      })
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "reservations" },
+        () => {
+          fetchReservations();
+        },
+      )
       .subscribe();
 
     return () => {
@@ -121,8 +140,32 @@ export function CalendarProvider({ children }) {
     };
   }, []);
 
-  const getRoomCalendar = (roomId = "room") =>
-    rooms[roomId] || EMPTY_ROOM_DATES;
+  const getRoomCalendar = (roomId = "room") => {
+    // flexible lookup: try exact, numeric, and prefixed variants so stored DB keys match
+    if (!roomId) return EMPTY_ROOM_DATES;
+
+    const asStr = String(roomId);
+    const candidates = new Set();
+    candidates.add(asStr);
+
+    // if looks like 'room123' try '123' and vice-versa
+    if (asStr.startsWith("room")) {
+      const tail = asStr.slice(4);
+      if (tail) candidates.add(tail);
+      candidates.add(`room${tail}`);
+    } else if (/^\d+$/.test(asStr)) {
+      candidates.add(`room${asStr}`);
+    }
+
+    // also try removing any 'room-' or 'room_' prefixes
+    candidates.add(asStr.replace(/^room[-_]?/, "room"));
+
+    for (const k of candidates) {
+      if (rooms[k]) return rooms[k];
+    }
+
+    return EMPTY_ROOM_DATES;
+  };
 
   const addDate = (roomId, category, date) => {
     if (!roomId || !category || !date) return;
@@ -134,7 +177,9 @@ export function CalendarProvider({ children }) {
         ...current,
         [roomId]: {
           ...roomData,
-          [category]: Array.from(new Set([...(roomData[category] || []), date])),
+          [category]: Array.from(
+            new Set([...(roomData[category] || []), date]),
+          ),
         },
       };
     });
@@ -164,7 +209,11 @@ export function CalendarProvider({ children }) {
     };
 
     try {
-      const { data, error } = await supabase.from("reservations").insert([payload]).select("id").single();
+      const { data, error } = await supabase
+        .from("reservations")
+        .insert([payload])
+        .select("id")
+        .single();
       if (error) throw error;
 
       const start = reservation.startDate || reservation.start_date;
@@ -184,8 +233,14 @@ export function CalendarProvider({ children }) {
         }
 
         if (inserts.length) {
-          const { error: upsertErr } = await supabase.from("calendar_dates").upsert(inserts, { onConflict: ["room", "date"] });
-          if (upsertErr) console.error("Failed to upsert calendar dates for reservation", upsertErr);
+          const { error: upsertErr } = await supabase
+            .from("calendar_dates")
+            .upsert(inserts, { onConflict: ["room", "date"] });
+          if (upsertErr)
+            console.error(
+              "Failed to upsert calendar dates for reservation",
+              upsertErr,
+            );
         }
       }
 
@@ -199,14 +254,21 @@ export function CalendarProvider({ children }) {
   const removeReservation = async (id) => {
     if (!id) return;
     try {
-      const { data: res, error: fetchErr } = await supabase.from("reservations").select("*").eq("id", id).maybeSingle();
+      const { data: res, error: fetchErr } = await supabase
+        .from("reservations")
+        .select("*")
+        .eq("id", id)
+        .maybeSingle();
       if (fetchErr) throw fetchErr;
 
       const start = res?.startDate || res?.start_date;
       const end = res?.endDate || res?.end_date;
       const roomIdVal = res?.roomId || res?.room || "room";
 
-      const { error } = await supabase.from("reservations").delete().eq("id", id);
+      const { error } = await supabase
+        .from("reservations")
+        .delete()
+        .eq("id", id);
       if (error) throw error;
 
       if (start && end) {
@@ -217,7 +279,11 @@ export function CalendarProvider({ children }) {
           const mm = String(d.getMonth() + 1).padStart(2, "0");
           const dd = String(d.getDate()).padStart(2, "0");
           const dateStr = `${yyyy}-${mm}-${dd}`;
-          const { error: delErr } = await supabase.from("calendar_dates").delete().eq("room", roomIdVal).eq("date", dateStr);
+          const { error: delErr } = await supabase
+            .from("calendar_dates")
+            .delete()
+            .eq("room", roomIdVal)
+            .eq("date", dateStr);
           if (delErr) console.error("Failed to delete calendar date", delErr);
         }
       }

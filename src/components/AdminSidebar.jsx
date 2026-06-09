@@ -1,7 +1,11 @@
 import React from "react";
 import "./Admin.css";
 
-export default function AdminSidebar({ activeView, setActiveView }) {
+export default function AdminSidebar({
+  activeView,
+  setActiveView,
+  accommodations = [],
+}) {
   return (
     <aside className="admin-left-panel">
       <nav className="admin-nav" aria-label="Admin navigation">
@@ -21,21 +25,29 @@ export default function AdminSidebar({ activeView, setActiveView }) {
           Gallery
         </button>
 
-        <button
-          type="button"
-          className={`admin-nav-item ${activeView === "room1" ? "is-active" : ""}`}
-          onClick={() => setActiveView("room1")}
+        <div
+          style={{
+            marginTop: 12,
+            padding: "0 8px",
+            fontSize: 12,
+            color: "#777",
+          }}
         >
-          Room 1
-        </button>
-
-        <button
-          type="button"
-          className={`admin-nav-item ${activeView === "room2" ? "is-active" : ""}`}
-          onClick={() => setActiveView("room2")}
-        >
-          Room 2
-        </button>
+          Rooms
+        </div>
+        {(accommodations || []).map((a) => {
+          const key = `room-${a.id}`;
+          return (
+            <button
+              key={key}
+              type="button"
+              className={`admin-nav-item ${activeView === key ? "is-active" : ""}`}
+              onClick={() => setActiveView(key)}
+            >
+              {a.title || `Room ${a.id}`}
+            </button>
+          );
+        })}
 
         <button
           type="button"
