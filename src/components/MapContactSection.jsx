@@ -19,7 +19,7 @@ const MapContactSection = () => {
   const [info, setInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   // Placeholder image - REPLACE WITH YOUR MAP IMAGE ASSET PATH
-  const mapImageUrl = "../public/images/map logger.png";
+  const mapImageUrl = "/images/map logger.png";
 
   useEffect(() => {
     let mounted = true;

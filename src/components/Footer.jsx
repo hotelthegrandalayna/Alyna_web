@@ -12,7 +12,7 @@ export default function Footer() {
     <footer className="footer" id="contact">
       <div className="footer-content">
         <div className="footer-logo">
-          <img src="../public/Svg/Frame.svg" alt="Logo" />
+          <img src="/Svg/Frame.svg" alt="Logo" />
           {/* Alyna&apos;s <br /> Resort */}
         </div>
         <div className="footer-info">
