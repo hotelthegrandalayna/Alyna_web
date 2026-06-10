@@ -30,15 +30,17 @@ export default function RoomCalendar({ roomId = "room" }) {
 
       <div className="legend">
         <p>
-          <span className="dot red"></span> All serene rooms are booked this day
+          <span className="dot red"></span> All booked
         </p>
         <p>
-          <span className="dot orange"></span> Most of the serene rooms are
-          booked
+          <span className="dot orange"></span> Few available
         </p>
         <p>
-          <span className="dot green"></span> Most of the serene rooms are free
-          to book
+          <span className="dot green"></span> Mostly available
+        </p>
+        <p style={{ color: "#6547DB" }}>
+          Note: This calendar is only applicable for this particular room
+          category
         </p>
       </div>
     </div>

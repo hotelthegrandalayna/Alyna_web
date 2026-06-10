@@ -218,7 +218,8 @@
 /* --- Mobile Responsive --- */
 @media screen and (max-width: 768px) {
   .about-hero {
-    height: 220px;
+    /* height: 220px; */
+    height: 17vh !important;
   }
 
   .breadcrumb-nav {
