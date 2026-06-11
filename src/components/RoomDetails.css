@@ -16,8 +16,6 @@
   font-size: 14px;
 }
 
-
-
 .main-content {
   margin-top: -60px; /* Overlap effect */
 }
@@ -44,7 +42,7 @@
 
 .main-room-img {
   width: 100%;
-  height: 390px;
+  /* height: 390px; */
   border-radius: 8px;
 }
 
