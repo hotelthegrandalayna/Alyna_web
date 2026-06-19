@@ -25,7 +25,7 @@ export default function Features() {
   const featureIcons = {
     "Free Internet Access": <MdOutlineNetworkCheck />,
     "Free Parking": <FaParking />,
-    "Digital check-in": <MdOutlineSupportAgent />,
+    "Online book-in": <MdOutlineSupportAgent />,
     "Movies on Projector": <SiNetflix />,
     "Outdoor activity": <FaWalking />,
     "On Order Food service": <IoFastFoodOutline />,
@@ -172,7 +172,9 @@ export default function Features() {
       <div className="feature-icons">
         {features.map((f) => (
           <div key={f.id || f.label} className="feature-item">
-            <span className="feature-icon">{featureIcons[f.label]}</span>
+            <span style={{ color: "#6547db" }} className="feature-icon">
+              {featureIcons[f.label]}
+            </span>
             <span>{f.label}</span>
           </div>
         ))}

@@ -239,14 +239,14 @@
   padding-top: 20px;
   grid-column: 1;
   grid-row: 2;
-  margin-top: -70px;
+  margin-top: 40px;
 }
 
 /* The faint thin purple border outline seen in the image */
 .outer-glow-border {
   position: absolute;
   top: 10px;
-  left: 115px;
+  left: 92px;
   width: 54%;
   height: 100px;
   border: 2px solid #6547db;
@@ -317,7 +317,7 @@
 .floating-number-box {
   position: absolute;
   background-color: #f27c07;
-  top: -15px;
+  top: -9px;
   left: 15px;
   width: 248px;
   height: 38px;
@@ -381,7 +381,7 @@
 @media (max-width: 768px) {
   .booking-card-container {
     max-width: 66%;
-    margin: 0 auto;
+    margin: 10px auto;
     margin-bottom: 25px;
   }
   .room-grid {

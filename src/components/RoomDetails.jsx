@@ -4,11 +4,11 @@ import { LuChefHat } from "react-icons/lu";
 import HomeContactHeader from "./HomeContactHeader";
 import { FaPhone } from "react-icons/fa6";
 import RoomCalendar from "./RoomCalendar";
-import phoneIcon from "../assets/room-service.png";
 import { supabase } from "../lib/supabaseClient";
 import { getRoomKeyFromAcc } from "../lib/roomKey";
 import { useParams } from "react-router-dom";
 import OptimizedImage from "./OptimizedImage";
+import BookingCard from "./BookingCard";
 
 const RoomDetails = () => {
   const { slug } = useParams();
@@ -16,6 +16,7 @@ const RoomDetails = () => {
   const [acc, setAcc] = useState(null);
   const [page, setPage] = useState(null);
   const [mainImage, setMainImage] = useState(null);
+  const roomPrice = acc?.price ?? page?.content?.price ?? 2000;
 
   useEffect(() => {
     let mounted = true;
@@ -51,7 +52,7 @@ const RoomDetails = () => {
               return (
                 (urlData && (urlData.publicUrl || urlData.public_url)) || img
               );
-            } catch (e) {
+            } catch (_e) {
               return img;
             }
           }),
@@ -65,7 +66,6 @@ const RoomDetails = () => {
             "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80",
         );
         // ensure room calendar uses stable key
-        const rk = getRoomKeyFromAcc(accWithUrls) || slug;
         // nothing to set here; RoomCalendar reads roomId prop from caller
 
         // try to load related page content if slug exists
@@ -79,11 +79,11 @@ const RoomDetails = () => {
             .eq("slug", pageSlug)
             .maybeSingle();
           if (!perr) setPage(prow || {});
-        } catch (e) {
-          console.error("Failed to load page content", e);
+        } catch (_e) {
+          console.error("Failed to load page content", _e);
         }
-      } catch (e) {
-        console.error("Failed to load accommodation", e);
+      } catch (_e) {
+        console.error("Failed to load accommodation", _e);
       }
     };
 
@@ -133,6 +133,7 @@ const RoomDetails = () => {
 
           {/* Right Column */}
           <div className="room-sidebar scroll-animate">
+            {/* <BookingCard price={roomPrice} onBookNow={() => {}} /> */}
             <div className="complimentary-section">
               <div className="complimentary-header">
                 <LuChefHat size="24px" />
@@ -169,22 +170,21 @@ const RoomDetails = () => {
             <div className="availability-card">
               <RoomCalendar roomId={getRoomKeyFromAcc(acc) || slug} />
             </div>
-          </div>
+            <div className="booking-card-container scroll-animate">
+              <div className="outer-glow-border"></div>
 
-          <div className="booking-card-container scroll-animate">
-            <div className="outer-glow-border"></div>
+              <div className="main-booking-box">
+                <div className="content-left">
+                  <div className="phone-icon-box">
+                    <FaPhone fontSize={"40px"} color="#f27c07" />
+                  </div>
 
-            <div className="main-booking-box">
-              <div className="content-left">
-                <div className="phone-icon-box">
-                  <FaPhone fontSize={"40px"} color="#f27c07" />
-                </div>
+                  <div className="cta-and-number">
+                    <p className="cta-text">CALL TO CONFIRM BOOKING !</p>
 
-                <div className="cta-and-number">
-                  <p className="cta-text">CALL TO CONFIRM BOOKING !</p>
-
-                  <div className="floating-number-box">
-                    <span className="phone-number">01883352526</span>
+                    <div className="floating-number-box">
+                      <span className="phone-number">01883352526</span>
+                    </div>
                   </div>
                 </div>
               </div>

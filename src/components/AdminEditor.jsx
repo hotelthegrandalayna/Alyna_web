@@ -63,6 +63,12 @@ export default function AdminEditor({ view }) {
       .map((t) => t.trim())
       .filter(Boolean);
 
+  const normalizePrice = (value) => {
+    if (value === "" || value === null || value === undefined) return null;
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : null;
+  };
+
   async function loadData(viewKey) {
     setLoading(true);
     try {
@@ -225,6 +231,7 @@ export default function AdminEditor({ view }) {
               description: content.description || row.description,
               images: content.images || row.images,
               complimentary: content.complimentary || row.complimentary || [],
+              price: content.price ?? row.price ?? null,
               availability_heading:
                 content.availability_heading ||
                 row.availability_heading ||
@@ -523,6 +530,8 @@ export default function AdminEditor({ view }) {
             const payloadA = {
               title: item.title || null,
               description: item.description || null,
+              extended_title: item.extended_title || item.extendedTitle || null,
+              price: normalizePrice(item.price),
               tags: item.tags || null,
               images: item.images || null,
             };
@@ -552,6 +561,7 @@ export default function AdminEditor({ view }) {
               const contentObj = {
                 description: a.description || null,
                 images: a.images || null,
+                price: a.price ?? null,
               };
 
               const { data: existingPage } = await supabase
@@ -717,7 +727,9 @@ export default function AdminEditor({ view }) {
         // support dynamic views like 'room-<id>' or 'accom-<id>'
         const payload = {
           title: data.title || null,
+          extended_title: data.extended_title || data.extendedTitle || null,
           description: data.description || null,
+          price: normalizePrice(data.price),
           tags: data.tags || null,
           images: data.images || null,
         };
@@ -767,6 +779,7 @@ export default function AdminEditor({ view }) {
               description: data.description || null,
               images: data.images || null,
               complimentary: data.complimentary || null,
+              price: normalizePrice(data.price),
               availability_heading: data.availability_heading || null,
             };
 
@@ -974,6 +987,8 @@ export default function AdminEditor({ view }) {
                     handleAddList("accommodations", {
                       title: "",
                       description: "",
+                      extended_title: "",
+                      price: "",
                       tags: [],
                       images: [],
                     })
@@ -1010,6 +1025,37 @@ export default function AdminEditor({ view }) {
                           "accommodations",
                           i,
                           "description",
+                          e.target.value,
+                        )
+                      }
+                    />
+                  </label>
+                  <label className="calendar-admin-field">
+                    <span>Extended title</span>
+                    <input
+                      value={acc.extended_title || acc.extendedTitle || ""}
+                      onChange={(e) =>
+                        handleListChange(
+                          "accommodations",
+                          i,
+                          "extended_title",
+                          e.target.value,
+                        )
+                      }
+                    />
+                  </label>
+                  <label className="calendar-admin-field">
+                    <span>Price</span>
+                    <input
+                      type="number"
+                      min="0"
+                      step="1"
+                      value={acc.price ?? ""}
+                      onChange={(e) =>
+                        handleListChange(
+                          "accommodations",
+                          i,
+                          "price",
                           e.target.value,
                         )
                       }
@@ -1599,10 +1645,29 @@ export default function AdminEditor({ view }) {
             </label>
 
             <label className="calendar-admin-field">
+              <span>Extended title</span>
+              <input
+                value={data.extended_title || data.extendedTitle || ""}
+                onChange={(e) => handleChange("extended_title", e.target.value)}
+              />
+            </label>
+
+            <label className="calendar-admin-field">
               <span>Description</span>
               <input
                 value={data.description || ""}
                 onChange={(e) => handleChange("description", e.target.value)}
+              />
+            </label>
+
+            <label className="calendar-admin-field">
+              <span>Price</span>
+              <input
+                type="number"
+                min="0"
+                step="1"
+                value={data.price ?? ""}
+                onChange={(e) => handleChange("price", e.target.value)}
               />
             </label>
 

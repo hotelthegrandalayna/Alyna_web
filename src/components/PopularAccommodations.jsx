@@ -54,7 +54,7 @@ export default function PopularAccommodations() {
               return (
                 (urlData && (urlData.publicUrl || urlData.public_url)) || img
               );
-            } catch (e) {
+            } catch (_e) {
               return img;
             }
           });
@@ -69,15 +69,21 @@ export default function PopularAccommodations() {
             slug: genSlug,
             title: row.title || "Untitled",
             description: row.description || "",
+            extendedTitle:
+              row.extended_title ||
+              row.extended_titel ||
+              row.extendedTitle ||
+              "",
             tags: row.tags || [],
             images,
             links: `/rooms/${genSlug}`,
+            price: row.price ?? 2000,
           };
         });
 
         if (mounted) setAccommodations(mapped);
-      } catch (e) {
-        console.error(e);
+      } catch (_e) {
+        console.error(_e);
       } finally {
         if (mounted) setLoading(false);
       }
@@ -142,7 +148,14 @@ export default function PopularAccommodations() {
               <article key={item.id} className="accommodation-card">
                 <div className="card-image">
                   <OptimizedImage src={imageSrc} alt={item.title} />
-
+                  {item.price !== null &&
+                    item.price !== undefined &&
+                    item.price !== "" && (
+                      <div className="price-badge">
+                        <span className="p-amount">৳{item.price}</span>
+                        <span className="p-label">/night</span>
+                      </div>
+                    )}
                   <div className="top-buttons">
                     <button className="img-btn">
                       <FaWifi />
@@ -153,9 +166,11 @@ export default function PopularAccommodations() {
                     {/* <button className="img-btn">
                       <MdOutlineBreakfastDining />
                     </button> */}
-                    <button className="img-btn">
-                      <TbAirConditioning />
-                    </button>
+                    {item.title !== "The Explorer Dune " && (
+                      <button className="img-btn">
+                        <TbAirConditioning />
+                      </button>
+                    )}
                     <button className="img-btn">
                       <FiMonitor />
                     </button>
@@ -188,7 +203,11 @@ export default function PopularAccommodations() {
                   </div>
 
                   <h3>{item.title}</h3>
-                  <p>{truncateDescription(item.description, 6)}</p>
+                  <p>
+                    {item.extendedTitle
+                      ? item.extendedTitle
+                      : truncateDescription(item.description, 6)}
+                  </p>
 
                   <NavLink to={item.links} className="details-link">
                     <button className="btn-details">See Details</button>

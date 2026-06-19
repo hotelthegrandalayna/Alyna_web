@@ -8,6 +8,8 @@ import OptimizedImage from "./OptimizedImage";
 const Gallery = () => {
   const [images, setImages] = useState([]);
   const [videoUrl, setVideoUrl] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalImage, setModalImage] = useState(null);
 
   // normalize common video links to embed-friendly URLs
   const getEmbedUrl = (url) => {
@@ -84,6 +86,25 @@ const Gallery = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (!modalOpen) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") setModalOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [modalOpen]);
+
+  const openModal = (img) => {
+    setModalImage(img);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setTimeout(() => setModalImage(null), 200);
+  };
+
   return (
     <section className="gallery-section">
       <HomeContactHeader title="Gallery" />
@@ -128,13 +149,24 @@ const Gallery = () => {
           <div className="image-grid">
             {images.map((img) => (
               <div key={img.id} className="grid-item">
-                <OptimizedImage src={img.url} alt={img.label} />
+                <OptimizedImage src={img.url} alt={img.label} onClick={() => openModal(img)} />
                 <span className="image-label">{img.label}</span>
               </div>
             ))}
           </div>
         </div>
       </div>
+
+      {modalOpen && (
+        <div className="modal-overlay" onClick={closeModal} role="dialog" aria-modal="true">
+          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={closeModal} aria-label="Close image">×</button>
+            {modalImage && (
+              <img src={modalImage.url} alt={modalImage.label || "Gallery image"} />
+            )}
+          </div>
+        </div>
+      )}
     </section>
   );
 };

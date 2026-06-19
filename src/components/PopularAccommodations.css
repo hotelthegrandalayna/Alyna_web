@@ -192,6 +192,32 @@
   text-decoration: none;
 }
 
+.price-badge {
+  position: absolute;
+  top: 12px;
+  left: 0px;
+  background: #ffffffc7;
+  backdrop-filter: blur(4px);
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  padding: 6px 12px;
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  z-index: 1;
+}
+
+.p-amount {
+  color: #6547db;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.p-label {
+  color: #6547db;
+  font-size: 20px;
+  font-weight: 600;
+}
 /* Mobile */
 @media (max-width: 768px) {
   .popular-accommodations {

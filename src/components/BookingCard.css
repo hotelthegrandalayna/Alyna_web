@@ -1,0 +1,65 @@
+.booking-card {
+  background-color: #6342e7;
+  padding: 2rem;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  max-width: 800px;
+  font-family: sans-serif;
+}
+
+.booking-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.booking-title {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.booking-price {
+  color: #ffffff;
+  font-size: 1.5rem;
+}
+
+.price-amount {
+  font-weight: 700;
+  font-size: 1.75rem;
+}
+
+.book-now-btn {
+  background-color: #f27405;
+  color: #ffffff;
+  border: none;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  width: 100%;
+}
+
+.book-now-btn:hover {
+  background-color: #d66300;
+}
+
+/* Responsive Layout */
+/* @media (min-width: 640px) {
+  .booking-card {
+    flex-direction: row;
+  }
+  .book-now-btn {
+    width: auto;
+  }
+} */

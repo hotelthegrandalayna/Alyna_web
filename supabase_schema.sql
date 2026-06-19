@@ -18,11 +18,15 @@ CREATE TABLE IF NOT EXISTS accommodations (
   slug TEXT UNIQUE NOT NULL,
   title TEXT NOT NULL,
   description TEXT,
+  price NUMERIC(12,2),
   tags TEXT[],
   images TEXT[],
   links TEXT,
   created_at TIMESTAMPTZ DEFAULT now()
 );
+
+ALTER TABLE accommodations
+  ADD COLUMN IF NOT EXISTS price NUMERIC(12,2);
 
 -- Features / facilities
 CREATE TABLE IF NOT EXISTS features (
@@ -112,10 +116,10 @@ VALUES (
 ON CONFLICT (slug) DO NOTHING;
 
 -- Accommodations (seed from PopularAccommodations)
-INSERT INTO accommodations (slug, title, description, tags, images, links)
+INSERT INTO accommodations (slug, title, description, price, tags, images, links)
 VALUES
-('room1', 'The Serena Suite', 'Retro-spacious. For a smooth family retreat.', ARRAY['Luxury','Comfort'], ARRAY['https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80','https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=600&q=80','https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600&q=80'], '/room'),
-('room2', 'The Explorer''s Hideaway', 'Save on stay with comfort.', ARRAY['Standard','Budget'], ARRAY['https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=600&q=80','https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=600&q=80','https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600&q=80'], '/room2')
+('room1', 'The Serena Suite', 'Retro-spacious. For a smooth family retreat.', 4500, ARRAY['Luxury','Comfort'], ARRAY['https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80','https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=600&q=80','https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600&q=80'], '/room'),
+('room2', 'The Explorer''s Hideaway', 'Save on stay with comfort.', 2800, ARRAY['Standard','Budget'], ARRAY['https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=600&q=80','https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=600&q=80','https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600&q=80'], '/room2')
 ON CONFLICT (slug) DO NOTHING;
 
 -- Rooms detailed pages (RoomDetails and RoomDetails2)
