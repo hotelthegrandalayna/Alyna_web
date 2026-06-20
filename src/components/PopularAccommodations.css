@@ -253,4 +253,13 @@
     text-transform: uppercase;
     margin-bottom: 0.2rem;
   }
+
+  .price-badge {
+    width: 35vw;
+  }
+
+  .p-amount,
+  .p-label {
+    font-size: 16px;
+  }
 }
