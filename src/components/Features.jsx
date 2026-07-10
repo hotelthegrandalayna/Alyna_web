@@ -151,7 +151,7 @@ export default function Features() {
             )
               .slice(0, 3)
               .map((src, i) => (
-                <OptimizedImage key={i} src={src} alt={`Feature ${i + 1}`} />
+                <OptimizedImage key={i} src={src} alt={`${facilities?.[0]?.title || "Hotel facility"} photo ${i + 1}`} />
               ))}
           </div>
         </div>

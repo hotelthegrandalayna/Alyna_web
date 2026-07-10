@@ -1,5 +1,6 @@
 import React from "react";
 import "./AboutPage.css";
+import SEO from "./SEO";
 import HomeContactHeader from "./HomeContactHeader";
 import ScrollReveal from "./ScrollReveal";
 import OptimizedImage from "./OptimizedImage";
@@ -97,6 +98,11 @@ const AboutPage = () => {
 
   return (
     <div className="about-wrapper">
+      <SEO
+        title="About Us"
+        description="Learn about Hotel The Grand Alayna in Sitakund, Chittagong — our story, our vision, and our commitment to warm hospitality and spotless comfort."
+        path="/about"
+      />
       {/* Hero Section */}
       <HomeContactHeader title="About" loading={loading} image={heroImage} />
 

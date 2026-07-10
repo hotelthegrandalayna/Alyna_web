@@ -1,4 +1,5 @@
 import "./MapContactSection.css";
+import SEO from "./SEO";
 import HomeContactHeader from "./HomeContactHeader";
 import ScrollReveal from "./ScrollReveal";
 import OptimizedImage from "./OptimizedImage";
@@ -49,6 +50,11 @@ const MapContactSection = () => {
 
   return (
     <div>
+      <SEO
+        title="Contact & Location"
+        description="Contact Hotel The Grand Alayna in Sitakund, Chittagong. Find our address, phone, WhatsApp and map location, or book your stay directly."
+        path="/contact"
+      />
       <HomeContactHeader
         title="Contact"
         loading={loading}

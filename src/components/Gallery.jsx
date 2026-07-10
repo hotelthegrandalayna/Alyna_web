@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Gallery.css";
+import SEO from "./SEO";
 import HomeContactHeader from "./HomeContactHeader";
 import ScrollReveal from "./ScrollReveal";
 import { supabase } from "../lib/supabaseClient";
@@ -107,6 +108,11 @@ const Gallery = () => {
 
   return (
     <section className="gallery-section">
+      <SEO
+        title="Photo & Video Gallery"
+        description="Browse photos and videos of Hotel The Grand Alayna's rooms, facilities and surroundings in Sitakund, Chittagong."
+        path="/gallery"
+      />
       <HomeContactHeader title="Gallery" />
 
       <ScrollReveal />

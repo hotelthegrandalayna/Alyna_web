@@ -4,6 +4,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./Home";
@@ -35,6 +36,7 @@ function App() {
   }, []);
 
   return (
+    <HelmetProvider>
     <Router>
       <CalendarProvider>
         <div className="app">
@@ -59,6 +61,7 @@ function App() {
         </div>
       </CalendarProvider>
     </Router>
+    </HelmetProvider>
   );
 }
 

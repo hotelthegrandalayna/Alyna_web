@@ -116,7 +116,7 @@ export default function Header() {
       <header className="header">
         <nav className="navbar">
           <NavLink to="/" className="logo">
-            <img src="/Svg/header_logo.svg" alt="Logo" />
+            <img src="/Svg/header_logo.svg" alt="Hotel The Grand Alayna logo" />
             {/* Alyna&apos;s <br /> Resort */}
           </NavLink>
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import SEO from "./components/SEO";
 import Hero from "./components/Hero";
 import PopularAccommodations from "./components/PopularAccommodations";
 import Features from "./components/Features";
@@ -41,6 +42,11 @@ const Home = () => {
 
   return (
     <>
+      <SEO
+        title="Hotel in Sitakund, Chittagong"
+        description="Hotel The Grand Alayna is a boutique hotel in Sitakund, Chittagong offering spotless rooms, warm hospitality and 24/7 reception. Minutes from Chandranath Temple, Guliakhali Beach and Eco Park. Book on WhatsApp +880 1883-352526."
+        path="/"
+      />
       <ScrollReveal />
 
       <Hero key={`hero-${reloadKey}`} />

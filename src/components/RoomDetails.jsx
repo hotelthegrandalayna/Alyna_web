@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./RoomDetails.css";
 import { LuChefHat } from "react-icons/lu";
+import SEO from "./SEO";
 import HomeContactHeader from "./HomeContactHeader";
 import { FaPhone } from "react-icons/fa6";
 import RoomCalendar from "./RoomCalendar";
@@ -96,6 +97,15 @@ const RoomDetails = () => {
 
   return (
     <div className="room-page">
+      <SEO
+        title={acc?.title ? `${acc.title} Room` : "Room Details"}
+        description={
+          acc?.description
+            ? String(acc.description).slice(0, 155)
+            : "View room details, amenities and availability at Hotel The Grand Alayna in Sitakund, Chittagong."
+        }
+        path={`/rooms/${slug}`}
+      />
       <HomeContactHeader title={acc?.title || "The Serene Suite"} />
 
       <div className="container main-content">
@@ -114,7 +124,7 @@ const RoomDetails = () => {
                   <OptimizedImage
                     key={index}
                     src={img}
-                    alt={`thumb-${index}`}
+                    alt={`${acc?.title || "Room"} photo ${index + 1}`}
                     onClick={() => setMainImage(img)}
                     className={mainImage === img ? "selected-thumb" : ""}
                   />

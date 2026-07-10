@@ -47,7 +47,7 @@ export default function Footer() {
     <footer className="footer" id="contact">
       <div className="footer-content">
         <div className="footer-logo">
-          <img src="/Svg/Frame.svg" alt="Logo" />
+          <img src="/Svg/Frame.svg" alt="Hotel The Grand Alayna logo" />
         </div>
         <div className="footer-info">
           <div className="contact-row">
