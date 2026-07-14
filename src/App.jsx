@@ -16,6 +16,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import MapContactSection from "./components/MapContactSection";
 import Gallery from "./components/Gallery";
 import RoomDetails from "./components/RoomDetails";
+import RoomsPage from "./components/RoomsPage";
 import Admin from "./components/Admin";
 import { CalendarProvider } from "./context/CalendarContext";
 import { Analytics } from "@vercel/analytics/react";
@@ -49,10 +50,11 @@ function App() {
               <Route path="/about" element={<AboutPage />} />
               <Route path="/contact" element={<MapContactSection />} />
               <Route path="/gallery" element={<Gallery />} />
+              <Route path="/rooms" element={<RoomsPage />} />
               <Route path="/rooms/:slug" element={<RoomDetails />} />
               {/* legacy single-room paths redirect to rooms listing */}
-              <Route path="/room" element={<Navigate to="/" replace />} />
-              <Route path="/room2" element={<Navigate to="/" replace />} />
+              <Route path="/room" element={<Navigate to="/rooms" replace />} />
+              <Route path="/room2" element={<Navigate to="/rooms" replace />} />
               <Route path="/admin" element={<Admin />} />
             </Routes>
           </main>

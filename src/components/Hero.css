@@ -6,67 +6,65 @@
 .hero {
   position: relative;
   background: #6547db;
-  min-height: 420px;
+  /* Band takes the wide banner's exact 3:1 shape — no crop */
+  aspect-ratio: 2172 / 724;
+  height: auto;
   padding: 3rem 3rem 3rem 109px;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  overflow: visible;
+  justify-content: flex-start;
+  overflow: hidden;
 }
 
+/* Full-bleed background image */
 .hero-image {
-  position: absolute;
-  left: 190px;
-  top: 0;
-  width: calc(54% - 190px);
-  height: 100%;
-  z-index: 3;
-  padding-top: 0;
-}
-
-/* Skeleton and img occupy the same space and crossfade */
-.hero-image img,
-.hero-image .hero-skeleton {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  border-radius: 6px;
-  display: block;
+  z-index: 1;
 }
 
-/* Image starts invisible, fades in over skeleton */
 .hero-image img {
-  object-fit: contain;
-  object-position: top center;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* Band matches the image shape, so this fits exactly */
+  object-fit: cover;
+  object-position: center;
+  display: block;
   opacity: 0;
-  transition: opacity 200ms linear;
-  z-index: 2;
+  transition: opacity 300ms linear;
 }
 
-/* Once loaded (either via onLoad or via the cached-url fast path), show immediately */
+/* Once loaded, show immediately */
 .hero-image img.loaded {
   opacity: 1;
 }
 
-/* Skeleton starts visible, fades out when image is ready */
-.hero-image .hero-skeleton {
-  z-index: 1;
-  opacity: 1;
-  transition: opacity 320ms ease-out;
-  min-height: unset;
+/* Purple fades from the left into the photo — one merged banner */
+.hero-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  /* Lighter veil: keeps the headline readable without hiding the waterfall */
+  background: linear-gradient(
+    to right,
+    rgba(76, 52, 170, 0.72) 0%,
+    rgba(84, 58, 185, 0.5) 16%,
+    rgba(90, 62, 195, 0.24) 32%,
+    rgba(90, 62, 195, 0) 50%
+  );
 }
 
-.hero-image .hero-skeleton.skeleton-hidden {
-  opacity: 0;
-}
-
-/* Content fades in once image is ready */
+/* Content sits above the image */
 .hero-content {
+  position: relative;
   width: 42%;
   padding-right: 2rem;
   z-index: 2;
-  /* keep container visible so skeletons show; inner content will fade */
 }
 
 /* Skeletons visible by default, fade out when real content appears */
@@ -103,12 +101,6 @@
   border-radius: 6px;
 }
 
-.skeleton-image {
-  width: 100%;
-  height: 100%;
-  min-height: 320px;
-}
-
 .skeleton-title {
   width: 70%;
   height: 36px;
@@ -135,12 +127,14 @@
   font-weight: 700;
   line-height: 1.2;
   margin: 0 0 1.2rem 0;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
 }
 
 .hero-content p {
   position: relative;
   padding-left: 0px;
   color: #ffffff;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
 }
 
 .hero-accent {
@@ -155,11 +149,6 @@
   .hero {
     padding-left: 60px;
   }
-
-  .hero-image {
-    left: 60px;
-    width: calc(55% - 60px);
-  }
 }
 
 @media (max-width: 992px) {
@@ -167,32 +156,12 @@
     padding-left: 40px;
   }
 
-  .hero-image {
-    left: 40px;
-    width: calc(52% - 40px);
-  }
-
   .hero-content {
     width: 42%;
   }
 }
 
-/* Desktop: fix hero image to 650x508 */
-@media (min-width: 992px) {
-  .hero-image {
-    width: 650px;
-    height: 508px;
-    left: 190px;
-    top: 0;
-  }
-
-  .hero-image img {
-    object-fit: cover;
-    object-position: center top;
-  }
-}
-
-/* Mobile */
+/* Mobile: full photo at screen width, text below it on the purple band */
 @media (max-width: 768px) {
   .hero-wrapper {
     padding-bottom: 0;
@@ -200,63 +169,54 @@
   }
 
   .hero {
-    grid-template-columns: 1fr;
-    min-height: 400px;
+    aspect-ratio: auto;
     position: relative;
-    padding-top: 64px;
-    padding-left: 0;
-    padding-right: 0;
-    padding-bottom: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
     justify-content: flex-start;
-    align-items: flex-end;
+    align-items: stretch;
   }
 
+  /* Photo becomes a normal block: full width, own 3:2 shape, no crop */
   .hero-image {
-    position: absolute;
-    inset: 0;
+    position: relative;
+    inset: auto;
     width: 100%;
-    height: 100%;
-    left: auto;
-    top: 0;
-    z-index: 1;
-    padding-top: 0;
+    aspect-ratio: 1536 / 1024;
+    height: auto;
   }
 
-  .hero-image img,
-  .hero-image .hero-skeleton {
-    border-radius: 0;
-    min-height: 400px;
-  }
-
+  /* Show the whole photo when stacked */
   .hero-image img {
-    min-height: 400px;
     object-fit: cover;
+    object-position: center;
+  }
+
+  /* Text is not over the photo on mobile, so no darkening needed */
+  .hero-image::after {
+    display: none;
   }
 
   .hero-content {
     position: relative;
     z-index: 2;
-    min-height: 400px;
-    padding: 2rem 1.5rem;
+    padding: 1.75rem 1.5rem 2rem;
     max-width: 100%;
     width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    background: linear-gradient(
-      to top,
-      rgba(101, 71, 219, 0.9) 0%,
-      transparent 60%
-    );
   }
 
   .hero-content h1 {
     font-size: 1.75rem;
     margin-bottom: 0.75rem;
+    text-shadow: none;
   }
 
   .hero-content p {
     font-size: 0.9rem;
+    text-shadow: none;
   }
 
   .hero-accent {

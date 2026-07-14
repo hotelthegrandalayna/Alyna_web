@@ -18,7 +18,10 @@ function slugify(text) {
     .replace(/^-+|-+$/g, "");
 }
 
-export default function PopularAccommodations() {
+export default function PopularAccommodations({
+  label = "POPULAR ACCOMMODATIONS",
+  heading = "Explore Our Popular Stays",
+}) {
   const [activeImages, setActiveImages] = useState({});
   const [accommodations, setAccommodations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -129,8 +132,8 @@ export default function PopularAccommodations() {
   return (
     <section className="popular-accommodations" id="rooms">
       <div className="section-header-h">
-        <span className="section-label-p">POPULAR ACCOMMODATIONS</span>
-        <h2>Explore Our Popular Stays</h2>
+        <span className="section-label-p">{label}</span>
+        <h2>{heading}</h2>
       </div>
 
       <div className="accommodation-cards">
