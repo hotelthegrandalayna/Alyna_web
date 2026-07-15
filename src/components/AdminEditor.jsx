@@ -948,9 +948,22 @@ export default function AdminEditor({ view }) {
           <>
             <div style={{ marginTop: 8 }}>
               <SupabaseImageUploader
-                label="Hero image"
+                label="Hero image (wide banner, for computers — e.g. 3:1)"
                 value={data.hero_image || ""}
                 onChange={(v) => handleChange("hero_image", v)}
+              />
+            </div>
+
+            <div style={{ marginTop: 8 }}>
+              <SupabaseImageUploader
+                label="Hero image (mobile, taller — e.g. 3:2)"
+                value={data.content?.hero_image_mobile || ""}
+                onChange={(v) =>
+                  handleChange("content", {
+                    ...(data.content || {}),
+                    hero_image_mobile: v,
+                  })
+                }
               />
             </div>
 

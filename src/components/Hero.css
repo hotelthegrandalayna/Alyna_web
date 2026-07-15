@@ -6,8 +6,9 @@
 .hero {
   position: relative;
   background: #6547db;
-  /* Band takes the wide banner's exact 3:1 shape — no crop */
-  aspect-ratio: 2172 / 724;
+  /* Band takes the loaded banner's exact shape — no crop.
+     --hero-ar is set from the image's real dimensions at load time. */
+  aspect-ratio: var(--hero-ar, 2172 / 724);
   height: auto;
   padding: 3rem 3rem 3rem 109px;
   display: flex;
@@ -41,6 +42,24 @@
 /* Once loaded, show immediately */
 .hero-image img.loaded {
   opacity: 1;
+}
+
+/* Soft white fade at the bottom so the banner melts into the page */
+.hero-image::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 18%;
+  z-index: 4;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.45) 65%,
+    #ffffff 100%
+  );
 }
 
 /* Purple fades from the left into the photo — one merged banner */
@@ -178,12 +197,12 @@
     align-items: stretch;
   }
 
-  /* Photo becomes a normal block: full width, own 3:2 shape, no crop */
+  /* Photo becomes a normal block: full width, own shape, no crop */
   .hero-image {
     position: relative;
     inset: auto;
     width: 100%;
-    aspect-ratio: 1536 / 1024;
+    aspect-ratio: var(--hero-ar, 1536 / 1024);
     height: auto;
   }
 
@@ -195,6 +214,11 @@
 
   /* Text is not over the photo on mobile, so no darkening needed */
   .hero-image::after {
+    display: none;
+  }
+
+  /* On mobile the photo meets the purple band, not white — no fade */
+  .hero-image::before {
     display: none;
   }
 
