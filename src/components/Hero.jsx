@@ -11,8 +11,8 @@ const DEFAULT_TAGLINES = [
   "Adventure by day, comfort by night",
 ];
 
-/* Cinematic word reveal: each word floats in from a soft blur, the
-   whole line holds, then drifts up and dissolves into the next phrase */
+/* Luxury fade: the line appears with letters gently spread apart,
+   then they settle together into focus; holds, then softly fades out */
 function AnimatedTagline({ phrases }) {
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
@@ -23,15 +23,14 @@ function AnimatedTagline({ phrases }) {
   );
 
   const phrase = phrases[index % phrases.length];
-  const words = phrase.split(/\s+/).filter(Boolean);
 
   // hold long enough to read; a little longer for longer phrases
   useEffect(() => {
     if (reduced.current || phrases.length <= 1) return undefined;
-    const hold = 2600 + words.length * 260;
+    const hold = 3000 + phrase.length * 45;
     const timer = setTimeout(() => setLeaving(true), hold);
     return () => clearTimeout(timer);
-  }, [index, phrases.length, words.length]);
+  }, [index, phrases.length, phrase.length]);
 
   // once the exit animation finishes, bring in the next phrase
   useEffect(() => {
@@ -39,7 +38,7 @@ function AnimatedTagline({ phrases }) {
     const timer = setTimeout(() => {
       setLeaving(false);
       setIndex((i) => (i + 1) % phrases.length);
-    }, 700);
+    }, 900);
     return () => clearTimeout(timer);
   }, [leaving, phrases.length]);
 
@@ -49,20 +48,8 @@ function AnimatedTagline({ phrases }) {
   }
 
   return (
-    <span
-      key={index}
-      className={`tagline-phrase ${leaving ? "leaving" : ""}`}
-    >
-      {words.map((word, i) => (
-        <span
-          key={i}
-          className="tagline-word"
-          style={{ animationDelay: `${i * 0.11}s` }}
-        >
-          {word}
-          {i < words.length - 1 ? " " : ""}
-        </span>
-      ))}
+    <span key={index} className={`tagline-phrase ${leaving ? "leaving" : ""}`}>
+      {phrase}
     </span>
   );
 }
@@ -189,6 +176,21 @@ export default function Hero() {
                 className={imageLoaded ? "loaded" : ""}
               />
             </picture>
+
+            {taglines.length > 0 && (
+              <div
+                className="hero-tagline"
+                aria-label={taglines.join(". ")}
+                style={{
+                  ...(taglineColor ? { "--tagline-color": taglineColor } : {}),
+                  ...(taglineSize
+                    ? { "--tagline-size": `${taglineSize}px` }
+                    : {}),
+                }}
+              >
+                <AnimatedTagline phrases={taglines} />
+              </div>
+            )}
           </div>
         )}
 
@@ -221,24 +223,9 @@ export default function Hero() {
                   </span>
                 ))}
             </p>
-
           </div>
         )}
 
-        {!loading && taglines.length > 0 && (
-          <div
-            className="hero-tagline"
-            aria-label={taglines.join(". ")}
-            style={{
-              ...(taglineColor ? { "--tagline-color": taglineColor } : {}),
-              ...(taglineSize
-                ? { "--tagline-size": `${taglineSize}px` }
-                : {}),
-            }}
-          >
-            <AnimatedTagline phrases={taglines} />
-          </div>
-        )}
       </section>
     </div>
   );

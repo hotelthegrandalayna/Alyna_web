@@ -164,19 +164,18 @@
   height: 100%;
 }
 
-/* Animated tagline — over the open middle-right area of the banner,
-   starting after the headline block on the left.
+/* Animated tagline — centered near the bottom of the photo (it lives
+   inside .hero-image, so it anchors to the picture on every screen).
    Color and size come from the CMS via --tagline-color / --tagline-size. */
 .hero-tagline {
   position: absolute;
-  top: 34%;
-  left: 33%;
-  right: 5%;
-  z-index: 4;
+  bottom: 30%;
+  left: 8%;
+  right: 8%;
+  z-index: 5;
   text-align: center;
   font-size: var(--tagline-size, clamp(1.1rem, 1.9vw, 1.7rem));
   font-weight: 600;
-  letter-spacing: 0.05em;
   color: var(--tagline-color, #ffe2a0);
   text-shadow:
     0 1px 3px rgba(0, 0, 0, 0.55),
@@ -184,34 +183,34 @@
   pointer-events: none;
 }
 
+/* Luxury fade: letters start spread apart and softly settle together */
 .tagline-phrase {
   display: inline-block;
+  animation: tagline-settle 1.4s cubic-bezier(0.22, 0.7, 0.25, 1) forwards;
   transition:
-    opacity 0.65s ease,
-    transform 0.65s ease,
-    filter 0.65s ease;
+    opacity 0.85s ease,
+    letter-spacing 0.85s ease,
+    filter 0.85s ease;
 }
 
 .tagline-phrase.leaving {
   opacity: 0;
-  transform: translateY(-16px);
-  filter: blur(7px);
+  letter-spacing: 0.3em;
+  filter: blur(5px);
 }
 
-.tagline-word {
-  display: inline-block;
-  white-space: pre-wrap;
-  opacity: 0;
-  transform: translateY(16px);
-  filter: blur(9px);
-  animation: tagline-word-in 0.75s cubic-bezier(0.2, 0.65, 0.25, 1) forwards;
-}
-
-@keyframes tagline-word-in {
+@keyframes tagline-settle {
+  from {
+    opacity: 0;
+    letter-spacing: 0.42em;
+    filter: blur(6px);
+    transform: scale(1.03);
+  }
   to {
     opacity: 1;
-    transform: translateY(0);
+    letter-spacing: 0.08em;
     filter: blur(0);
+    transform: scale(1);
   }
 }
 
@@ -294,16 +293,13 @@
     text-shadow: none;
   }
 
-  /* On mobile the tagline flows below the text on the purple band;
+  /* On mobile the tagline sits on the photo too, near its bottom;
      the CMS size is capped so huge desktop sizes stay sensible here */
   .hero-tagline {
-    position: static;
-    max-width: 100%;
-    text-align: left;
-    padding: 0 1.5rem 1.75rem;
-    font-size: min(var(--tagline-size, 1rem), 1.2rem);
-    text-shadow: none;
-    min-height: 3.5em; /* two lines reserved so nothing jumps */
+    bottom: 7%;
+    left: 4%;
+    right: 4%;
+    font-size: min(var(--tagline-size, 1rem), 1.15rem);
   }
 
   .hero-accent {
