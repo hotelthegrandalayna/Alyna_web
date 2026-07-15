@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import AdminDashboard from "./AdminDashboard";
+import SEO from "./SEO";
 import { supabase } from "../lib/supabaseClient";
 import "./Admin.css";
 
@@ -43,6 +44,7 @@ export default function Admin() {
   if (!auth) {
     return (
       <section className="admin-auth-shell">
+        <SEO title="Admin" path="/admin" noindex />
         <div className="admin-auth-backdrop" />
         <div className="admin-auth-layout">
           <form className="admin-login-card" onSubmit={handleLogin}>
