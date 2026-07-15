@@ -983,6 +983,62 @@ export default function AdminEditor({ view }) {
               />
             </label>
 
+            <label className="calendar-admin-field">
+              <span>
+                Animated taglines — one per line, typed out on the homepage
+              </span>
+              <textarea
+                rows={4}
+                placeholder={"Sea, hills & waterfalls at your doorstep\nWake up to birdsong in the heart of Sitakund"}
+                value={
+                  Array.isArray(data.content?.hero_taglines)
+                    ? data.content.hero_taglines.join("\n")
+                    : data.content?.hero_taglines || ""
+                }
+                onChange={(e) =>
+                  handleChange("content", {
+                    ...(data.content || {}),
+                    hero_taglines: e.target.value,
+                  })
+                }
+              />
+            </label>
+
+            <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+              <label className="calendar-admin-field">
+                <span>Tagline color</span>
+                <input
+                  type="color"
+                  value={data.content?.hero_tagline_color || "#ffe2a0"}
+                  onChange={(e) =>
+                    handleChange("content", {
+                      ...(data.content || {}),
+                      hero_tagline_color: e.target.value,
+                    })
+                  }
+                  style={{ width: 64, height: 36, padding: 2 }}
+                />
+              </label>
+
+              <label className="calendar-admin-field">
+                <span>Tagline size (px, empty = automatic)</span>
+                <input
+                  type="number"
+                  min={12}
+                  max={64}
+                  placeholder="auto"
+                  value={data.content?.hero_tagline_size || ""}
+                  onChange={(e) =>
+                    handleChange("content", {
+                      ...(data.content || {}),
+                      hero_tagline_size: e.target.value,
+                    })
+                  }
+                  style={{ width: 110 }}
+                />
+              </label>
+            </div>
+
             <hr />
 
             <div>

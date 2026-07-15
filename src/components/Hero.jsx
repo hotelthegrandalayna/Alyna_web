@@ -4,11 +4,77 @@ import { supabase } from "../lib/supabaseClient";
 import heroBgFallback from "../assets/hero-bg.jpg";
 import heroBgWideFallback from "../assets/hero-bg-wide.jpg";
 
+// Shown when the CMS has no taglines yet (Admin → Home → Animated taglines)
+const DEFAULT_TAGLINES = [
+  "Sea, hills & waterfalls at your doorstep",
+  "Wake up to birdsong in the heart of Sitakund",
+  "Adventure by day, comfort by night",
+];
+
+/* Cinematic word reveal: each word floats in from a soft blur, the
+   whole line holds, then drifts up and dissolves into the next phrase */
+function AnimatedTagline({ phrases }) {
+  const [index, setIndex] = useState(0);
+  const [leaving, setLeaving] = useState(false);
+  const reduced = useRef(
+    typeof window !== "undefined" &&
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
+
+  const phrase = phrases[index % phrases.length];
+  const words = phrase.split(/\s+/).filter(Boolean);
+
+  // hold long enough to read; a little longer for longer phrases
+  useEffect(() => {
+    if (reduced.current || phrases.length <= 1) return undefined;
+    const hold = 2600 + words.length * 260;
+    const timer = setTimeout(() => setLeaving(true), hold);
+    return () => clearTimeout(timer);
+  }, [index, phrases.length, words.length]);
+
+  // once the exit animation finishes, bring in the next phrase
+  useEffect(() => {
+    if (!leaving) return undefined;
+    const timer = setTimeout(() => {
+      setLeaving(false);
+      setIndex((i) => (i + 1) % phrases.length);
+    }, 700);
+    return () => clearTimeout(timer);
+  }, [leaving, phrases.length]);
+
+  if (!phrases.length) return null;
+  if (reduced.current) {
+    return <span className="tagline-phrase">{phrases[0]}</span>;
+  }
+
+  return (
+    <span
+      key={index}
+      className={`tagline-phrase ${leaving ? "leaving" : ""}`}
+    >
+      {words.map((word, i) => (
+        <span
+          key={i}
+          className="tagline-word"
+          style={{ animationDelay: `${i * 0.11}s` }}
+        >
+          {word}
+          {i < words.length - 1 ? " " : ""}
+        </span>
+      ))}
+    </span>
+  );
+}
+
 export default function Hero() {
   const [heroWide, setHeroWide] = useState(null);
   const [heroMobile, setHeroMobile] = useState(null);
   const [heading, setHeading] = useState(null);
   const [subtext, setSubtext] = useState(null);
+  const [taglines, setTaglines] = useState(DEFAULT_TAGLINES);
+  const [taglineColor, setTaglineColor] = useState(null);
+  const [taglineSize, setTaglineSize] = useState(null);
   const [loading, setLoading] = useState(true);
   const [imageLoaded, setImageLoaded] = useState(false);
   // "W / H" of whichever image is showing; the band takes this exact shape
@@ -53,6 +119,22 @@ export default function Hero() {
 
       setHeroWide(resolveImage(data.hero_image));
       setHeroMobile(resolveImage(data.content?.hero_image_mobile));
+
+      // CMS taglines: one phrase per line
+      const rawTaglines = data.content?.hero_taglines;
+      const parsed = (
+        Array.isArray(rawTaglines)
+          ? rawTaglines
+          : String(rawTaglines || "").split(/\r?\n/)
+      )
+        .map((t) => String(t).trim())
+        .filter(Boolean);
+      if (parsed.length) setTaglines(parsed);
+
+      if (data.content?.hero_tagline_color)
+        setTaglineColor(data.content.hero_tagline_color);
+      const sizeNum = Number(data.content?.hero_tagline_size);
+      if (sizeNum > 0) setTaglineSize(sizeNum);
 
       if (data.hero_heading) setHeading(normalize(data.hero_heading));
       if (data.hero_subtext) setSubtext(normalize(data.hero_subtext));
@@ -139,6 +221,22 @@ export default function Hero() {
                   </span>
                 ))}
             </p>
+
+          </div>
+        )}
+
+        {!loading && taglines.length > 0 && (
+          <div
+            className="hero-tagline"
+            aria-label={taglines.join(". ")}
+            style={{
+              ...(taglineColor ? { "--tagline-color": taglineColor } : {}),
+              ...(taglineSize
+                ? { "--tagline-size": `${taglineSize}px` }
+                : {}),
+            }}
+          >
+            <AnimatedTagline phrases={taglines} />
           </div>
         )}
       </section>
