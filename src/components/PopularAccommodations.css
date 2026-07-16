@@ -34,6 +34,14 @@
   padding-bottom: 20px;
 }
 
+/* Desktop: all rooms side by side so guests compare without scrolling */
+@media (min-width: 1100px) {
+  .accommodation-cards {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+}
+
 .accommodation-card {
   background: white;
   border-radius: 12px;

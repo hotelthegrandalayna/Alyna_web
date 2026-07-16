@@ -169,7 +169,9 @@ export default function PopularAccommodations({
                     {/* <button className="img-btn">
                       <MdOutlineBreakfastDining />
                     </button> */}
-                    {item.title !== "The Explorer Dune " && (
+                    {!(item.tags || []).some(
+                      (t) => String(t).toLowerCase() === "non-ac",
+                    ) && (
                       <button className="img-btn">
                         <TbAirConditioning />
                       </button>

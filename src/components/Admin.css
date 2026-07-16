@@ -258,7 +258,9 @@
 
 .calendar-admin-shell {
   position: relative;
-  overflow: hidden;
+  /* clip (not hidden): contains the backdrop without creating a
+     scroll container, which would break position: sticky inside */
+  overflow: clip;
   min-height: calc(100vh - 180px);
   padding: 3.5rem 1.25rem 4rem;
   background:
@@ -472,7 +474,9 @@
   font-weight: 600;
 }
 
-.calendar-admin-field input {
+.calendar-admin-field input,
+.calendar-admin-field textarea,
+.calendar-admin-field select {
   width: 100%;
   padding: 0.92rem 1rem;
   border: 1px solid rgba(45, 63, 56, 0.14);
@@ -487,10 +491,28 @@
     transform 0.2s ease;
 }
 
-.calendar-admin-field input:focus {
-  border-color: rgba(141, 92, 29, 0.45);
-  box-shadow: 0 0 0 4px rgba(215, 184, 137, 0.16);
+.calendar-admin-field textarea {
+  resize: vertical;
+  min-height: 96px;
+  line-height: 1.5;
+}
+
+.calendar-admin-field input:focus,
+.calendar-admin-field textarea:focus,
+.calendar-admin-field select:focus {
+  border-color: rgba(101, 71, 219, 0.55);
+  box-shadow: 0 0 0 4px rgba(101, 71, 219, 0.14);
   transform: translateY(-1px);
+}
+
+.calendar-admin-field input[type="color"] {
+  padding: 0.25rem;
+  min-height: 44px;
+  cursor: pointer;
+}
+
+.calendar-admin-field input[type="number"] {
+  max-width: 140px;
 }
 
 .calendar-admin-add-button,
@@ -513,10 +535,11 @@
   box-shadow: 0 16px 28px rgba(31, 53, 45, 0.18);
 }
 
-/* .calendar-admin-add-button:hover:not(:disabled),
+.calendar-admin-add-button:hover:not(:disabled),
 .calendar-admin-save-button:hover:not(:disabled) {
   transform: translateY(-2px);
-} */
+  box-shadow: 0 14px 26px rgba(101, 71, 219, 0.32);
+}
 
 .calendar-admin-add-button:disabled,
 .calendar-admin-save-button:disabled {
@@ -742,6 +765,29 @@
   box-shadow: 0 12px 24px rgba(31, 53, 45, 0.12);
 }
 
+.admin-nav-item:hover:not(.is-active) {
+  background: rgba(116, 89, 223, 0.1);
+}
+
+/* Softer section dividers inside the editor card */
+.calendar-admin-card hr {
+  margin: 1.4rem 0;
+  border: none;
+  border-top: 1px solid rgba(45, 63, 56, 0.1);
+}
+
+/* Collapsible raw-data preview at the bottom of the editor */
+.calendar-admin-list-wrap summary {
+  cursor: pointer;
+  color: #62726b;
+  font-weight: 600;
+  padding: 0.35rem 0;
+}
+
+.calendar-admin-list-wrap summary:hover {
+  color: #6547db;
+}
+
 .admin-main-area {
   min-height: 400px;
 }
@@ -781,9 +827,12 @@
   display: block;
 }
 
-/* Add horizontal scroll fallback for narrow viewports */
-.admin-main-area {
-  overflow-x: auto;
+/* Horizontal scroll fallback only on narrow viewports — on desktop it
+   would create a scroll container and break the sticky save bar */
+@media (max-width: 768px) {
+  .admin-main-area {
+    overflow-x: auto;
+  }
 }
 
 /* Reservations small styles */

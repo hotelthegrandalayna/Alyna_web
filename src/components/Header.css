@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    DESKTOP / BASE STYLES  (unchanged from original)
    ============================================================ */
 .header {
@@ -181,7 +181,7 @@
   display: block;
 }
 
-/* ── Hide all mobile-only elements on desktop ── */
+/* - Hide all mobile-only elements on desktop - */
 .nav-icon,
 .mobile-drawer-header,
 .mobile-close-btn,
@@ -197,7 +197,7 @@
 }
 
 /* ============================================================
-   MOBILE STYLES — centred panel drops from top
+   MOBILE STYLES - centred panel drops from top
    ============================================================ */
 @media (max-width: 768px) {
   .hamburger {
@@ -216,7 +216,7 @@
     display: block;
   }
 
-  /* Panel — slides in from right to left */
+  /* Panel - slides in from right to left */
   .nav-links {
     position: fixed;
     top: 64px;
@@ -253,7 +253,7 @@
     visibility: visible;
   }
 
-  /* ── Drawer header: × close btn + "Menu" title ── */
+  /* - Drawer header: - close btn + "Menu" title - */
   .mobile-drawer-header {
     display: flex;
     align-items: center;
@@ -292,7 +292,7 @@
     padding-right: 34px; /* balance close btn so "Menu" is visually centred */
   }
 
-  /* ── Nav items ── */
+  /* - Nav items - */
   .nav-item {
     width: 100%;
     border-bottom: 1px solid #f5f5f5;
@@ -324,7 +324,7 @@
     /* background: #f0edfb; */
   }
 
-  /* Icon box — mobile only */
+  /* Icon box - mobile only */
   .nav-icon {
     display: flex;
     align-items: center;
@@ -365,7 +365,7 @@
     border: none;
   }
 
-  /* ▲ / ▼ arrow */
+  /* - / - arrow */
   .nav-parent-arrow {
     display: inline;
     margin-left: auto;
@@ -409,7 +409,7 @@
       color 0.15s;
   }
   .dropdown li a::before {
-    content: "▶";
+    content: "-";
     font-size: 0.45rem;
     color: #6547db;
     flex-shrink: 0;
@@ -428,7 +428,7 @@
   }
 }
 
-/* ── Desktop arrow hidden on mobile, mobile arrow hidden on desktop ── */
+/* - Desktop arrow hidden on mobile, mobile arrow hidden on desktop - */
 .desktop-arrow {
   display: inline;
 }
@@ -436,5 +436,66 @@
 @media (max-width: 768px) {
   .desktop-arrow {
     display: none;
+  }
+}
+
+/* - Book Now button - */
+.header-book-btn {
+  display: inline-block;
+  padding: 0.6rem 1.35rem;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #6547db !important;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.header-book-btn:hover {
+  transform: translateY(-2px);
+  background: #f3efff;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+  .nav-item-book {
+    margin-top: 0.75rem;
+    padding: 0 1rem;
+  }
+
+  .header-book-btn {
+    display: block;
+    text-align: center;
+    padding: 0.9rem 1.35rem;
+  }
+}
+
+/* Soft glowing pulse - noticeable without looking like a blinking ad */
+@keyframes header-book-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 6px 18px rgba(0, 0, 0, 0.15),
+      0 0 0 0 rgba(255, 255, 255, 0.5);
+  }
+  50% {
+    box-shadow:
+      0 6px 18px rgba(0, 0, 0, 0.15),
+      0 0 0 11px rgba(255, 255, 255, 0);
+  }
+}
+
+.header-book-btn {
+  animation: header-book-glow 2.6s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header-book-btn {
+    animation: none;
   }
 }

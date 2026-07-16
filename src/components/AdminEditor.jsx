@@ -1041,6 +1041,61 @@ export default function AdminEditor({ view }) {
 
             <hr />
 
+            <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+              <label className="calendar-admin-field">
+                <span>Google rating (e.g. 4.8 — empty hides the badge)</span>
+                <input
+                  type="number"
+                  min={1}
+                  max={5}
+                  step={0.1}
+                  placeholder="e.g. 4.8"
+                  value={data.content?.google_rating || ""}
+                  onChange={(e) =>
+                    handleChange("content", {
+                      ...(data.content || {}),
+                      google_rating: e.target.value,
+                    })
+                  }
+                  style={{ width: 120 }}
+                />
+              </label>
+
+              <label className="calendar-admin-field">
+                <span>Number of Google reviews</span>
+                <input
+                  type="number"
+                  min={0}
+                  placeholder="e.g. 120"
+                  value={data.content?.google_review_count || ""}
+                  onChange={(e) =>
+                    handleChange("content", {
+                      ...(data.content || {}),
+                      google_review_count: e.target.value,
+                    })
+                  }
+                  style={{ width: 120 }}
+                />
+              </label>
+            </div>
+
+            <label className="calendar-admin-field">
+              <span>Google reviews link (from your Business Profile)</span>
+              <input
+                type="url"
+                placeholder="https://g.page/..."
+                value={data.content?.google_reviews_url || ""}
+                onChange={(e) =>
+                  handleChange("content", {
+                    ...(data.content || {}),
+                    google_reviews_url: e.target.value,
+                  })
+                }
+              />
+            </label>
+
+            <hr />
+
             <div>
               <div
                 style={{
@@ -2149,18 +2204,16 @@ export default function AdminEditor({ view }) {
           </div>
         </div>
 
-        {/* Current data preview */}
+        {/* Current data preview (collapsed by default to keep the page tidy) */}
         <div className="calendar-admin-list-wrap">
-          <div className="calendar-admin-list-header">
-            <h3>Current data preview</h3>
-            <span>Rendered preview of the values below</span>
-          </div>
-
-          <div style={{ padding: 12 }}>
-            <pre style={{ whiteSpace: "pre-wrap", fontSize: 13 }}>
-              {JSON.stringify(data, null, 2)}
-            </pre>
-          </div>
+          <details>
+            <summary>Raw data preview (for troubleshooting)</summary>
+            <div style={{ padding: 12 }}>
+              <pre style={{ whiteSpace: "pre-wrap", fontSize: 13 }}>
+                {JSON.stringify(data, null, 2)}
+              </pre>
+            </div>
+          </details>
         </div>
       </div>
     </div>

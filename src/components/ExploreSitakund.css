@@ -1,0 +1,63 @@
+.explore-sitakund {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3.5rem 2rem 2rem;
+}
+
+.explore-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.explore-card {
+  padding: 1.75rem 1.5rem;
+  border: 1px solid rgba(101, 71, 219, 0.12);
+  border-radius: 20px;
+  background: linear-gradient(160deg, #f8f6ff 0%, #ffffff 55%);
+  box-shadow: 0 14px 34px rgba(76, 52, 170, 0.08);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.explore-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 44px rgba(76, 52, 170, 0.14);
+}
+
+.explore-card-icon {
+  font-size: 2.4rem;
+  line-height: 1;
+  margin-bottom: 0.9rem;
+}
+
+.explore-card h3 {
+  margin: 0 0 0.35rem;
+  color: #2a2440;
+  font-size: 1.2rem;
+}
+
+.explore-card-distance {
+  display: inline-block;
+  margin-bottom: 0.7rem;
+  color: #6547db;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.explore-card p {
+  margin: 0;
+  color: #5c5b62;
+  line-height: 1.6;
+  font-size: 0.97rem;
+}
+
+@media (max-width: 900px) {
+  .explore-cards {
+    grid-template-columns: 1fr;
+  }
+}

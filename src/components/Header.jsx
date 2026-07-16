@@ -24,6 +24,10 @@ const navLinks = [
   { label: "Contact Us", href: "/contact" },
 ];
 
+export const BOOKING_WHATSAPP_URL = `https://wa.me/8801883352526?text=${encodeURIComponent(
+  "Hello! I'd like to book a room at Hotel The Grand Alayna.",
+)}`;
+
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -79,6 +83,18 @@ export default function Header() {
                 </NavLink>
               </li>
             ))}
+
+            <li className="nav-item nav-item-book">
+              <a
+                className="header-book-btn"
+                href={BOOKING_WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMenuOpen(false)}
+              >
+                Book Now
+              </a>
+            </li>
           </ul>
         </nav>
       </header>

@@ -7,6 +7,7 @@ import {
 import { HelmetProvider } from "react-helmet-async";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import WhatsAppFloat from "./components/WhatsAppFloat";
 import Home from "./Home";
 import AboutPage from "./components/AboutPage";
 import "./App.css";
@@ -59,6 +60,7 @@ function App() {
             </Routes>
           </main>
           <Footer />
+          <WhatsAppFloat />
           <Analytics />
         </div>
       </CalendarProvider>

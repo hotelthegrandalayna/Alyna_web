@@ -78,38 +78,47 @@ export default function Footer() {
               <span className="follow-text-2">Follow us</span>
             </div>
             <div className="social-icons">
-              <a
-                href={social.facebook || "#"}
-                aria-label="Facebook"
-                className="facebook"
-              >
-                <FaFacebook />
-              </a>
-              <a
-                href={
-                  waPhone
-                    ? `https://wa.me/${waPhone.replace(/^\+/, "")}`
-                    : social.whatsapp || "#"
-                }
-                aria-label="WhatsApp"
-                className="whatsapp"
-              >
-                <FaWhatsapp />
-              </a>
-              <a
-                href={social.instagram || "#"}
-                aria-label="Instagram"
-                className="instagram"
-              >
-                <FaInstagram />
-              </a>
-              <a
-                href={social.youtube || "#"}
-                aria-label="YouTube"
-                className="youtube"
-              >
-                <FaYoutube />
-              </a>
+              {/* Only show icons that have a real link — no dead buttons */}
+              {social.facebook && social.facebook !== "#" && (
+                <a
+                  href={social.facebook}
+                  aria-label="Facebook"
+                  className="facebook"
+                >
+                  <FaFacebook />
+                </a>
+              )}
+              {(waPhone || (social.whatsapp && social.whatsapp !== "#")) && (
+                <a
+                  href={
+                    waPhone
+                      ? `https://wa.me/${waPhone.replace(/^\+/, "")}`
+                      : social.whatsapp
+                  }
+                  aria-label="WhatsApp"
+                  className="whatsapp"
+                >
+                  <FaWhatsapp />
+                </a>
+              )}
+              {social.instagram && social.instagram !== "#" && (
+                <a
+                  href={social.instagram}
+                  aria-label="Instagram"
+                  className="instagram"
+                >
+                  <FaInstagram />
+                </a>
+              )}
+              {social.youtube && social.youtube !== "#" && (
+                <a
+                  href={social.youtube}
+                  aria-label="YouTube"
+                  className="youtube"
+                >
+                  <FaYoutube />
+                </a>
+              )}
             </div>
           </div>
         </div>

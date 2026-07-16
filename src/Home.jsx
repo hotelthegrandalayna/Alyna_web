@@ -4,6 +4,7 @@ import Hero from "./components/Hero";
 import PopularAccommodations from "./components/PopularAccommodations";
 import Features from "./components/Features";
 import Testimonials from "./components/Testimonials";
+import ExploreSitakund from "./components/ExploreSitakund";
 import MapSection from "./components/MapSection";
 import ScrollReveal from "./components/ScrollReveal";
 import { supabase } from "./lib/supabaseClient";
@@ -56,6 +57,10 @@ const Home = () => {
 
       <div className="scroll-animate">
         <Features key={`features-${reloadKey}`} />
+      </div>
+
+      <div className="scroll-animate">
+        <ExploreSitakund />
       </div>
 
       <div className="scroll-animate">

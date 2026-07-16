@@ -3,6 +3,65 @@ import OptimizedImage from "./OptimizedImage";
 import "./Testimonials.css";
 import { supabase } from "../lib/supabaseClient";
 
+/* Google rating badge — shows only when the rating is filled in the CMS
+   (Admin → Home → Google rating fields, stored on pages.content) */
+function GoogleRatingBadge() {
+  const [info, setInfo] = useState(null);
+
+  useEffect(() => {
+    let mounted = true;
+    supabase
+      .from("pages")
+      .select("content")
+      .eq("slug", "home")
+      .maybeSingle()
+      .then(({ data }) => {
+        if (!mounted) return;
+        const c = data?.content || {};
+        const rating = Number(c.google_rating);
+        if (rating > 0 && rating <= 5) {
+          setInfo({
+            rating,
+            count: Number(c.google_review_count) || null,
+            url: c.google_reviews_url || null,
+          });
+        }
+      });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  if (!info) return null;
+
+  const stars =
+    "★".repeat(Math.round(info.rating)) +
+    "☆".repeat(5 - Math.round(info.rating));
+
+  const badge = (
+    <span className="google-rating-badge">
+      <strong>{info.rating.toFixed(1)}</strong>
+      <span className="google-rating-stars" aria-hidden="true">
+        {stars}
+      </span>
+      {info.count ? <span>({info.count} Google reviews)</span> : <span>on Google</span>}
+    </span>
+  );
+
+  return info.url ? (
+    <a
+      className="google-rating-link"
+      href={info.url}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {badge}
+    </a>
+  ) : (
+    badge
+  );
+}
+
 // testimonials are loaded from Supabase `testimonials` table
 function getCardStyle(offset) {
   const abs = Math.abs(offset);
@@ -90,6 +149,7 @@ export default function Testimonials() {
           What Our Satisfied Clients Have to Say!
         </h2>
         <h2 className="testimonial-title-mobile">Check our client reviews!</h2>
+        <GoogleRatingBadge />
       </div>
 
       <div className="testimonials-wrapper">
