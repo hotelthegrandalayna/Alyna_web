@@ -12,11 +12,15 @@
 }
 
 .explore-card {
+  display: block;
   padding: 1.75rem 1.5rem;
   border: 1px solid rgba(101, 71, 219, 0.12);
   border-radius: 20px;
   background: linear-gradient(160deg, #f8f6ff 0%, #ffffff 55%);
   box-shadow: 0 14px 34px rgba(76, 52, 170, 0.08);
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
   transition:
     transform 0.25s ease,
     box-shadow 0.25s ease;
@@ -31,6 +35,25 @@
   font-size: 2.4rem;
   line-height: 1;
   margin-bottom: 0.9rem;
+}
+
+/* Photo header (used when a card has a real picture) */
+.explore-card-media {
+  margin: -1.75rem -1.5rem 1.1rem;
+  height: 170px;
+  overflow: hidden;
+}
+
+.explore-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.explore-card:hover .explore-card-media img {
+  transform: scale(1.05);
 }
 
 .explore-card h3 {
@@ -54,6 +77,31 @@
   color: #5c5b62;
   line-height: 1.6;
   font-size: 0.97rem;
+}
+
+.explore-card-cta {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #6547db;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: transform 0.2s ease;
+}
+
+.explore-card:hover .explore-card-cta {
+  transform: translateX(4px);
+}
+
+.explore-credits {
+  margin: 1.5rem 0 0;
+  color: #a5a1b5;
+  font-size: 0.78rem;
+  text-align: right;
+}
+
+.explore-credits a {
+  color: #a5a1b5;
+  text-decoration: underline;
 }
 
 @media (max-width: 900px) {

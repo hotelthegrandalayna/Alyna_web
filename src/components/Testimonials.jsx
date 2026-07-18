@@ -175,7 +175,12 @@ export default function Testimonials() {
                     : `View testimonial by ${t.name}`
                 }
               >
-                <span className="quote-icon">"</span>
+                <span className="quote-icon" aria-hidden="true">
+                  &ldquo;
+                </span>
+                <div className="testimonial-stars" aria-hidden="true">
+                  ★★★★★
+                </div>
                 <p>{t.quote}</p>
                 <div className="footer-divider" />
                 <div className="testimonial-author">
@@ -183,7 +188,9 @@ export default function Testimonials() {
                     {t.avatar ? (
                       <OptimizedImage src={t.avatar} alt={t.name} />
                     ) : (
-                      <div className="avatar-placeholder" />
+                      <div className="avatar-placeholder">
+                        {(t.name || "G").trim().charAt(0).toUpperCase()}
+                      </div>
                     )}
                   </div>
                   <div>
