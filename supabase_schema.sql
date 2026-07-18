@@ -163,7 +163,7 @@ ON CONFLICT DO NOTHING;
 INSERT INTO contact_info (resort_name, address, phones, email, map_url, social)
 VALUES (
   'Alyna''s Resort',
-  'Ward No. 9, Shibpur, Palli Bidyut Road, Sitakund, Chattogram-4310, Bangladesh.',
+  'Ward No. 9, Shibpur, Palli Bidyut Road, Sitakund, Chittagong-4310, Bangladesh.',
   ARRAY['+8801878150350', '+8801878150350'],
   'info@hotelthegrandalayna.com',
   'https://maps.app.goo.gl/fYQViFEFsVq5GEmb9',

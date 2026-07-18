@@ -53,7 +53,7 @@ const seedData = {
   contact: {
     resort_name: "Hotel The Grand Alayna",
     address:
-      "Ward No. 9, Shibpur, Palli Bidyut Road, Sitakund, Chattogram-4310, Bangladesh.",
+      "Ward No. 9, Shibpur, Palli Bidyut Road, Sitakund, Chittagong-4310, Bangladesh.",
     phones: ["+8801878150350", "+8801878150350"],
     email: "info@hotelthegrandalayna.com",
     map_url: "https://maps.app.goo.gl/fYQViFEFsVq5GEmb9",

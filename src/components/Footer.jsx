@@ -35,7 +35,7 @@ export default function Footer() {
 
   const address =
     contact?.address ||
-    "Ward No. 9, Shibpur, Palli Bidyut Road, Sitakund, Chattogram-4310, Bangladesh";
+    "Ward No. 9, Shibpur, Palli Bidyut Road, Sitakund, Chittagong-4310, Bangladesh";
   const phone = (contact?.phones && contact.phones[0]) || "+8801883352526";
   const email = contact?.email || "info@hotelthegrandalayna.com";
   const social = contact?.social || {};

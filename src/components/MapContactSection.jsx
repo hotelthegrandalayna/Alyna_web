@@ -79,7 +79,7 @@ const MapContactSection = () => {
                 <p className="italicS">
                   {!loading
                     ? info?.address ||
-                      "Ward No. 9, Shibpur, Palli Bidyut Road, Sitakund, Chattogram-4310, Bangladesh."
+                      "Ward No. 9, Shibpur, Palli Bidyut Road, Sitakund, Chittagong-4310, Bangladesh."
                     : ""}
                 </p>
               </div>
