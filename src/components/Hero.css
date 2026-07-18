@@ -271,19 +271,20 @@
     align-items: stretch;
   }
 
-  /* Photo becomes a normal block: full width, own shape, no crop */
+  /* Photo becomes a normal block at a generous height; wide banners
+     are gently cropped (keeping the right side, where the hotel sits)
+     instead of rendering as a thin strip */
   .hero-image {
     position: relative;
     inset: auto;
     width: 100%;
-    aspect-ratio: var(--hero-ar, 1536 / 1024);
-    height: auto;
+    aspect-ratio: auto;
+    height: clamp(250px, 64vw, 430px);
   }
 
-  /* Show the whole photo when stacked */
   .hero-image img {
     object-fit: cover;
-    object-position: center;
+    object-position: 68% center;
   }
 
   /* Text is not over the photo on mobile, so no darkening needed */
@@ -296,20 +297,25 @@
     display: none;
   }
 
+  /* Tighter purple band under the photo */
   .hero-content {
     position: relative;
     z-index: 2;
-    padding: 1.75rem 1.5rem 2rem;
+    padding: 1.2rem 1.25rem 1.35rem;
     max-width: 100%;
     width: 100%;
     display: flex;
     flex-direction: column;
   }
 
+  .hero-content p {
+    margin: 0;
+  }
+
   /* CMS sizes are capped on phones so huge desktop values stay sensible */
   .hero-content h1 {
     font-size: min(var(--heading-size, 1.75rem), 2.1rem);
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.6rem;
     text-shadow: none;
   }
 
