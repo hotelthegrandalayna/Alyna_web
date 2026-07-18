@@ -4,12 +4,8 @@ import { supabase } from "../lib/supabaseClient";
 import heroBgFallback from "../assets/hero-bg.jpg";
 import heroBgWideFallback from "../assets/hero-bg-wide.jpg";
 
-// Shown when the CMS has no taglines yet (Admin → Home → Animated taglines)
-const DEFAULT_TAGLINES = [
-  "Sea, hills & waterfalls at your doorstep",
-  "Wake up to birdsong in the heart of Sitakund",
-  "Adventure by day, comfort by night",
-];
+// Taglines come only from the CMS (Admin → Home → Animated taglines);
+// an empty box there means no animated tagline is shown.
 
 /* Luxury fade: the line appears with letters gently spread apart,
    then they settle together into focus; holds, then softly fades out */
@@ -59,9 +55,12 @@ export default function Hero() {
   const [heroMobile, setHeroMobile] = useState(null);
   const [heading, setHeading] = useState(null);
   const [subtext, setSubtext] = useState(null);
-  const [taglines, setTaglines] = useState(DEFAULT_TAGLINES);
+  const [taglines, setTaglines] = useState([]);
   const [taglineColor, setTaglineColor] = useState(null);
   const [taglineSize, setTaglineSize] = useState(null);
+  const [headingSize, setHeadingSize] = useState(null);
+  const [subtextSize, setSubtextSize] = useState(null);
+  const [textPosition, setTextPosition] = useState("left");
   const [loading, setLoading] = useState(true);
   const [imageLoaded, setImageLoaded] = useState(false);
   // "W / H" of whichever image is showing; the band takes this exact shape
@@ -107,7 +106,7 @@ export default function Hero() {
       setHeroWide(resolveImage(data.hero_image));
       setHeroMobile(resolveImage(data.content?.hero_image_mobile));
 
-      // CMS taglines: one phrase per line
+      // CMS taglines: one phrase per line; empty = feature off
       const rawTaglines = data.content?.hero_taglines;
       const parsed = (
         Array.isArray(rawTaglines)
@@ -116,12 +115,19 @@ export default function Hero() {
       )
         .map((t) => String(t).trim())
         .filter(Boolean);
-      if (parsed.length) setTaglines(parsed);
+      setTaglines(parsed);
 
       if (data.content?.hero_tagline_color)
         setTaglineColor(data.content.hero_tagline_color);
       const sizeNum = Number(data.content?.hero_tagline_size);
       if (sizeNum > 0) setTaglineSize(sizeNum);
+
+      const hSize = Number(data.content?.hero_heading_size);
+      if (hSize > 0) setHeadingSize(hSize);
+      const sSize = Number(data.content?.hero_subtext_size);
+      if (sSize > 0) setSubtextSize(sSize);
+      if (["left", "center", "right"].includes(data.content?.hero_text_position))
+        setTextPosition(data.content.hero_text_position);
 
       if (data.hero_heading) setHeading(normalize(data.hero_heading));
       if (data.hero_subtext) setSubtext(normalize(data.hero_subtext));
@@ -157,9 +163,13 @@ export default function Hero() {
   return (
     <div className="hero-wrapper">
       <section
-        className="hero"
+        className={`hero hero-text-${textPosition}`}
         id="home"
-        style={ratio ? { "--hero-ar": ratio } : undefined}
+        style={{
+          ...(ratio ? { "--hero-ar": ratio } : {}),
+          ...(headingSize ? { "--heading-size": `${headingSize}px` } : {}),
+          ...(subtextSize ? { "--subtext-size": `${subtextSize}px` } : {}),
+        }}
       >
         {!loading && (
           <div className="hero-image">

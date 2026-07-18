@@ -983,6 +983,62 @@ export default function AdminEditor({ view }) {
               />
             </label>
 
+            <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+              <label className="calendar-admin-field">
+                <span>Heading size (px, empty = automatic)</span>
+                <input
+                  type="number"
+                  min={16}
+                  max={96}
+                  placeholder="auto"
+                  value={data.content?.hero_heading_size || ""}
+                  onChange={(e) =>
+                    handleChange("content", {
+                      ...(data.content || {}),
+                      hero_heading_size: e.target.value,
+                    })
+                  }
+                  style={{ width: 120 }}
+                />
+              </label>
+
+              <label className="calendar-admin-field">
+                <span>Subtext size (px, empty = automatic)</span>
+                <input
+                  type="number"
+                  min={10}
+                  max={48}
+                  placeholder="auto"
+                  value={data.content?.hero_subtext_size || ""}
+                  onChange={(e) =>
+                    handleChange("content", {
+                      ...(data.content || {}),
+                      hero_subtext_size: e.target.value,
+                    })
+                  }
+                  style={{ width: 120 }}
+                />
+              </label>
+
+              <label className="calendar-admin-field">
+                <span>Text position on the banner</span>
+                <select
+                  value={data.content?.hero_text_position || "left"}
+                  onChange={(e) =>
+                    handleChange("content", {
+                      ...(data.content || {}),
+                      hero_text_position: e.target.value,
+                    })
+                  }
+                  style={{ width: 140 }}
+                >
+                  <option value="left">Left</option>
+                  <option value="center">Center</option>
+                  <option value="right">Right</option>
+                </select>
+              </label>
+            </div>
+
             <label className="calendar-admin-field">
               <span>
                 Animated taglines — one per line, typed out on the homepage

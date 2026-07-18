@@ -142,7 +142,7 @@
 
 .hero-content h1 {
   color: white;
-  font-size: 2.4rem;
+  font-size: var(--heading-size, 2.4rem);
   font-weight: 700;
   line-height: 1.2;
   margin: 0 0 1.2rem 0;
@@ -153,7 +153,31 @@
   position: relative;
   padding-left: 0px;
   color: #ffffff;
+  font-size: var(--subtext-size, 1rem);
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Text position, controlled from the CMS (Admin → Home) */
+.hero.hero-text-left {
+  justify-content: flex-start;
+}
+
+.hero.hero-text-center {
+  justify-content: center;
+}
+
+.hero.hero-text-center .hero-content {
+  text-align: center;
+  padding-right: 0;
+}
+
+.hero.hero-text-right {
+  justify-content: flex-end;
+}
+
+.hero.hero-text-right .hero-content {
+  text-align: right;
+  padding-right: 3rem;
 }
 
 .hero-accent {
@@ -282,14 +306,15 @@
     flex-direction: column;
   }
 
+  /* CMS sizes are capped on phones so huge desktop values stay sensible */
   .hero-content h1 {
-    font-size: 1.75rem;
+    font-size: min(var(--heading-size, 1.75rem), 2.1rem);
     margin-bottom: 0.75rem;
     text-shadow: none;
   }
 
   .hero-content p {
-    font-size: 0.9rem;
+    font-size: min(var(--subtext-size, 0.9rem), 1.1rem);
     text-shadow: none;
   }
 
