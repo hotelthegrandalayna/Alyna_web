@@ -1,6 +1,6 @@
 # Messenger AI agent — Hotel The Grand Alayna
 
-A front-desk assistant called **Rafi** that answers your Facebook Page messages
+A front-desk assistant called **Coordinator** that answers your Facebook Page messages
 like a person, not like a chatbot menu.
 
 ---

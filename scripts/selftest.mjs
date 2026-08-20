@@ -102,12 +102,21 @@ console.log("\n3. no stale prices baked into the knowledge file\n");
 
 // Prices move with the season. A number typed into the file WILL go out of date
 // and the bot would quote it forever. This guards against that mistake coming back.
-// Only NIGHTLY ROOM RATES are banned from the file. The advance amount and the
-// 20% rule are policy, not seasonal pricing, and belong here.
-const NIGHTLY_RATE = /\d{1,2}[,.]?\d{3}\s*(tk|taka|৳)\s*(per night|\/night|a night)/i;
-check("knowledge file carries no nightly room rate", !NIGHTLY_RATE.test(HOTEL_KNOWLEDGE),
-      "someone typed a room rate back into knowledge.js — it will go stale");
-check("the guard itself works", NIGHTLY_RATE.test("AC room 3,000 tk per night"));
+// Room rates must never be written in this file — they move with the season and
+// the real ones arrive live from the website. An earlier version said "a non-AC
+// option at 2,000 tk", which quietly undercut the website by 500 tk on every
+// non-AC quote. The first guard only looked for "per night" and missed it, so
+// this one flags ANY thousands-price, wherever it appears in a sentence.
+//
+// The advance is policy rather than seasonal pricing, so lines about it are allowed.
+const roomRates = HOTEL_KNOWLEDGE.split("\n")
+  .filter((l) => /\d{1,2},\d{3}\s*(tk|taka|৳)/i.test(l))
+  .filter((l) => !/advance|20%/i.test(l));
+
+check("knowledge file states no room price at all", roomRates.length === 0,
+      roomRates.length ? `stale price on: "${roomRates[0].trim().slice(0, 60)}"` : "");
+check("the guard itself works",
+      /\d{1,2},\d{3}\s*(tk|taka|৳)/i.test("a non-AC option at 2,000 tk is available"));
 
 /* ------------------------------------------------------------------ */
 console.log("\n4. today's prices, read live from the website\n");

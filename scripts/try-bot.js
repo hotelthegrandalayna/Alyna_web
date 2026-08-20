@@ -122,7 +122,7 @@ async function turn(guestText) {
     liveRooms,
   });
   for (const b of reply.bubbles) {
-    console.log(`\x1b[36m  Rafi:\x1b[0m ${b}`);
+    console.log(`\x1b[36m  Coordinator:\x1b[0m ${b}`);
     history.push({ role: "bot", text: b });
   }
   const flags = [];

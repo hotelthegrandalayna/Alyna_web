@@ -28,10 +28,10 @@ export default async function handler(req) {
       .upsert({ id: 1, enabled, updated_at: new Date().toISOString() }, { onConflict: "id" });
     if (error) return page("Could not change it", error.message, null);
     return page(
-      enabled ? "Rafi is ON" : "Rafi is OFF",
+      enabled ? "Coordinator is ON" : "Coordinator is OFF",
       enabled
-        ? "He is answering guests again, starting with the next message."
-        : "He has stopped. Guests will get no reply until you turn him back on — so watch your inbox.",
+        ? "Answering guests again, starting with the next message."
+        : "Stopped. Guests will get no reply at all until you turn it back on — so watch your inbox.",
       enabled,
       key
     );
@@ -40,8 +40,8 @@ export default async function handler(req) {
   const settings = await getSettings();
   const on = settings.enabled !== false;
   return page(
-    on ? "Rafi is ON" : "Rafi is OFF",
-    on ? "He is answering guest messages." : "He is not replying to anyone.",
+    on ? "Coordinator is ON" : "Coordinator is OFF",
+    on ? "Answering guest messages normally." : "Not replying to anyone right now.",
     on,
     key
   );
@@ -52,8 +52,8 @@ function page(title, detail, on, key) {
     on === null
       ? ""
       : on
-      ? `<a class="btn off" href="?key=${encodeURIComponent(key)}&set=off">Turn Rafi OFF</a>`
-      : `<a class="btn on" href="?key=${encodeURIComponent(key)}&set=on">Turn Rafi back ON</a>`;
+      ? `<a class="btn off" href="?key=${encodeURIComponent(key)}&set=off">Turn Coordinator OFF</a>`
+      : `<a class="btn on" href="?key=${encodeURIComponent(key)}&set=on">Turn Coordinator back ON</a>`;
 
   return new Response(
     `<!doctype html><meta charset="utf-8">
