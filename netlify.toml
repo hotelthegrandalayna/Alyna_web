@@ -1,0 +1,17 @@
+# Deliberately minimal.
+#
+# Anything set here OVERRIDES the build settings in the Netlify dashboard, so this
+# file only declares what the dashboard does not already know about: where the
+# Messenger bot's functions live, and the Node version they need.
+#
+# The build command and publish directory are intentionally NOT set here — the
+# website has been building correctly from the dashboard settings for months and
+# this file must not quietly take that over.
+
+[build]
+  functions = "netlify/functions"
+  environment = { NODE_VERSION = "22" }
+
+[functions]
+  # Node 20 has no built-in WebSocket, which the Supabase client needs.
+  node_bundler = "esbuild"
