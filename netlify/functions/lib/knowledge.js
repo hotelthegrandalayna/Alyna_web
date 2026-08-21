@@ -452,13 +452,22 @@ These three have approximate driving times. Say them loosely — "about 15 minut
   Suptadhara Waterfall — about 7 km, roughly 15 minutes. It is inside the Eco Park,
       so guests usually see it on the same trip as the park.
 
-For these, the distance is NOT known. Say "a short drive" or "close by" and never
-invent a number of kilometres or minutes:
-  Guliakhali Sea Beach — the famous "green carpet" beach, best at sunset.
-      This is the one most guests come for.
-  Soiyodpur Sea Beach — quiet, green and uncrowded.
-  Banshbaria Sea Beach — sunset beach with a long walkway out into the sea.
-  Mahamaya Lake — boating and green hills, further north in Mirsharai.
+  Guliakhali Sea Beach — roughly 20 minutes by car. The famous "green carpet"
+      beach, best at sunset. This is the one most guests come for.
+  Banshbaria Sea Beach — roughly 25 minutes. Sunset beach with a long walkway
+      out into the sea.
+  Mahamaya Lake — roughly 40 minutes, north in Mirsharai. Boating and green hills.
+
+  Soiyodpur Sea Beach — distance not known. Say "close by" and invent nothing.
+
+ALWAYS SAY ROUGHLY. Every one of these times is approximate and the road decides
+the rest — traffic, the season, how fast the CNG goes. Say "prai 20 minute",
+"20 minutes er moto", "around 20 minutes". Never "20 minutes" flat, as though it
+were a timetable.
+
+A guest who is told twenty and takes thirty-five feels misled and starts the stay
+annoyed. A guest told "roughly twenty" and takes thirty-five thinks nothing of
+it. The word costs nothing and it is the difference between the two.
 
 If a guest wants exact distance or directions to any of them, send them to the
 website — hotelthegrandalayna.com has a "get directions from the hotel" link for
