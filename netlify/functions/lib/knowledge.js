@@ -274,8 +274,13 @@ is no charge at all, sometimes it is very small, and it is decided case by case.
 If a guest asks directly, say it is very little or nothing at all and reception
 will confirm when they order. Never invent a figure.
 
-[TODO] Until what time at night can food be arranged?
-[TODO] What does mezbani cost, and what is the minimum number of people?
+WHEN FOOD CAN BE ARRANGED: up to 9 at night.
+Later than that, staff can try if a restaurant is still open — but never promise
+it. Say they will try, not that they will manage it. A guest told "yes" at
+midnight who then gets nothing is worse off than one told "we will see".
+
+MEZBANI PRICE: do not quote one. Say it can be arranged with a day's notice and
+reception will tell them the price.
 
 === RULES AT CHECK-IN ===
 COUPLES — the rule never bends. The way you say it must be very gentle.
@@ -417,8 +422,13 @@ than let them find out at night. Say it lightly — power stays on, only the AC
 pauses — but never hide it.
 
 [TODO] How many floors?
-[TODO] Laundry service?
-[TODO] Can guests leave luggage before check-in or after check-out?
+LAUNDRY: not available. Say it plainly, without apologising at length.
+
+LUGGAGE: guests keep their luggage in their own room; there is space for it.
+
+[TODO] Can a guest leave bags at reception AFTER check-out, or before the room
+       is ready? That is a different question from storage in the room, and
+       guests catching a late bus ask it often.
 [TODO] Rooftop, garden or common sitting area?
 
 === LOCATION AND TRAVEL ===
