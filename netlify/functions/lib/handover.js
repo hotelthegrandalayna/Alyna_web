@@ -7,18 +7,21 @@
  */
 const RECEPTION_PHONE = "+8801883352526";
 
+// The second line offers the phone as a convenience, never as a remedy for
+// impatience. "তাড়া থাকলে" / "if you're in a hurry" puts it on the guest and
+// reads as a brush-off — the owner flagged it. "চাইলে" simply offers.
 const LINES = {
   bangla: [
     `আপনার ব্যাপারটা আমি রিসেপশনে দিয়ে দিচ্ছি, একজন এখনই আপনাকে এখানে মেসেজ করবেন।`,
-    `তাড়া থাকলে সরাসরি কল করতে পারেন — ${RECEPTION_PHONE}`,
+    `চাইলে সরাসরি কলও করতে পারেন — ${RECEPTION_PHONE}`,
   ],
   banglish: [
     `Apnar bishoyta ami reception e diye dicchi, ekjon ekhoni apnake ekhane message korbe.`,
-    `Tara thakle direct call korte paren — ${RECEPTION_PHONE}`,
+    `Chaile direct call o korte paren — ${RECEPTION_PHONE}`,
   ],
   english: [
     `Let me get someone from reception on this — they'll message you here shortly.`,
-    `If you're in a hurry you can call us directly — ${RECEPTION_PHONE}`,
+    `You're welcome to call us directly as well — ${RECEPTION_PHONE}`,
   ],
 };
 
