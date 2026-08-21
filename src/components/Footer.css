@@ -156,3 +156,25 @@
     padding-left: 0;
   }
 }
+
+/* Privacy link — quiet, but present. Meta requires a reachable privacy policy
+   before approving the Messenger assistant, and guests should be able to find
+   it without hunting. */
+.footer-legal {
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  text-align: center;
+}
+
+.footer-legal a {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+}
+
+.footer-legal a:hover {
+  color: rgba(255, 255, 255, 0.95);
+  text-decoration: underline;
+}

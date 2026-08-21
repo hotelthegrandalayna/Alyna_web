@@ -18,6 +18,7 @@ import MapContactSection from "./components/MapContactSection";
 import Gallery from "./components/Gallery";
 import RoomDetails from "./components/RoomDetails";
 import RoomsPage from "./components/RoomsPage";
+import PrivacyPolicy from "./components/PrivacyPolicy";
 import Admin from "./components/Admin";
 import { CalendarProvider } from "./context/CalendarContext";
 import { Analytics } from "@vercel/analytics/react";
@@ -56,6 +57,7 @@ function App() {
               {/* legacy single-room paths redirect to rooms listing */}
               <Route path="/room" element={<Navigate to="/rooms" replace />} />
               <Route path="/room2" element={<Navigate to="/rooms" replace />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/admin" element={<Admin />} />
             </Routes>
           </main>

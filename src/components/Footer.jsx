@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "./Footer.css";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaPhoneAlt } from "react-icons/fa";
@@ -121,6 +122,10 @@ export default function Footer() {
               )}
             </div>
           </div>
+        </div>
+
+        <div className="footer-legal">
+          <Link to="/privacy">Privacy Policy</Link>
         </div>
       </div>
     </footer>
