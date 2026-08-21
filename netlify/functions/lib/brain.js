@@ -109,7 +109,12 @@ export async function generateReply({ history, guestName, knowledge, personaNote
     {
       type: "text",
       text: buildSystemPrompt(kb, personaNotes || ""),
-      cache_control: { type: "ephemeral" },
+      // One hour, not the default five minutes. Everything the bot knows —
+      // around 7,000 tokens — is re-sent with every single reply, so a cache
+      // miss is the largest single cost in the whole system. Guests answer
+      // slowly: they read, think, ask their husband, come back twenty minutes
+      // later. At five minutes almost every reply paid full price.
+      cache_control: { type: "ephemeral", ttl: "1h" },
     },
   ];
 
