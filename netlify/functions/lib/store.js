@@ -206,3 +206,33 @@ export async function setEnabled(enabled) {
   });
   return res.ok ? null : `${res.status} ${(await res.text()).slice(0, 120)}`;
 }
+
+/**
+ * Did the bot itself send this message?
+ *
+ * Every reply the bot sends is echoed straight back to the webhook by Facebook.
+ * If we mistake our own echo for a staff member replying by hand, the bot pauses
+ * itself for hours after every single reply — it answers once and goes silent.
+ *
+ * Two checks, because the first is exact but not always available:
+ *   1. the message id, which we store when we send
+ *   2. failing that, identical text sent by the bot in the last few minutes
+ */
+export async function wasSentByBot(psid, mid, text, withinMs = 5 * 60 * 1000) {
+  if (mid) {
+    const byMid = await get(
+      "fb_messages",
+      `mid=eq.${encodeURIComponent(mid)}&role=eq.bot&select=id&limit=1`
+    );
+    if (byMid.length) return true;
+  }
+  if (!text) return false;
+
+  const since = new Date(Date.now() - withinMs).toISOString();
+  const recent = await get(
+    "fb_messages",
+    `psid=eq.${encodeURIComponent(psid)}&role=eq.bot&created_at=gt.${encodeURIComponent(since)}&select=text&limit=10`
+  );
+  const norm = (s) => String(s || "").trim();
+  return recent.some((r) => norm(r.text) === norm(text));
+}

@@ -81,8 +81,10 @@ export async function handleTurn({ psid, receivedAtIso, inline = false }) {
     if (i > 0) await sleep(700);
     await fb.sendAction(psid, "typing_on").catch(() => {});
     await sleep(capTyping(typingDelay(bubble)));
-    await fb.sendText(psid, bubble);
-    await store.recordMessage({ psid, mid: null, role: "bot", text: bubble });
+    // Store the id Facebook returns. When this same message echoes back to the
+    // webhook a second later, that id is how we know it was us and not staff.
+    const sent = await fb.sendText(psid, bubble);
+    await store.recordMessage({ psid, mid: sent?.message_id || null, role: "bot", text: bubble });
   }
   await fb.sendAction(psid, "typing_off").catch(() => {});
 
@@ -110,8 +112,8 @@ async function handOver(psid, thread, reason) {
     if (i > 0) await sleep(700);
     await fb.sendAction(psid, "typing_on").catch(() => {});
     await sleep(1200);
-    await fb.sendText(psid, lines[i]);
-    await store.recordMessage({ psid, mid: null, role: "bot", text: lines[i] });
+    const sent = await fb.sendText(psid, lines[i]);
+    await store.recordMessage({ psid, mid: sent?.message_id || null, role: "bot", text: lines[i] });
   }
   await fb.sendAction(psid, "typing_off").catch(() => {});
   await store.pauseBot(psid, cfg.handoffPauseHours, reason);

@@ -71,12 +71,18 @@ async function handleEvent(ev, pageId, origin) {
 
   /* ---- A message sent BY the page ---- */
   if (ev.message?.is_echo) {
-    const fromOurBot = cfg.appId && String(ev.message.app_id || "") === String(cfg.appId);
-    if (fromOurBot) return; // our own reply, already stored
-
-    // A human replied from the Page Inbox. Step back and let them own the chat.
     const psid = ev.recipient?.id;
     if (!psid) return;
+
+    // Facebook echoes the bot's own replies straight back to this webhook.
+    // Mistaking one for a staff reply pauses the bot for hours — so it answers a
+    // guest once and then goes silent. app_id alone did not reliably tell them
+    // apart, so we also check whether we sent this exact message ourselves.
+    const fromOurApp = cfg.appId && String(ev.message.app_id || "") === String(cfg.appId);
+    if (fromOurApp) return;
+    if (await store.wasSentByBot(psid, ev.message.mid, ev.message.text)) return;
+
+    // A human really did reply from the Page Inbox. Step back and let them own it.
     await store.recordMessage({
       psid,
       mid: ev.message.mid,
