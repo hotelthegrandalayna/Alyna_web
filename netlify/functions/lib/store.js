@@ -259,3 +259,28 @@ export async function claimReply(psid, staleAfterMs = 90 * 1000) {
 export async function releaseReply(psid) {
   await upsertThread(psid, { replying_since: null });
 }
+
+/**
+ * How many replies the bot has sent in THIS conversation.
+ *
+ * Not "in the last 24 hours" — that was the first version, and it meant a guest
+ * who messaged in the morning and again at night opened their second chat
+ * already over the limit, so "hello" was answered with "I'm passing you to
+ * reception". A conversation is whatever has happened since the last long quiet
+ * period, which is how a person would think about it too.
+ */
+export async function countRepliesThisConversation(psid, gapMs = 2 * 60 * 60 * 1000) {
+  const rows = await get(
+    "fb_messages",
+    `psid=eq.${encodeURIComponent(psid)}&select=role,created_at&order=created_at.desc&limit=80`
+  );
+  let replies = 0;
+  let newer = null;
+  for (const r of rows) {
+    const t = new Date(r.created_at).getTime();
+    if (newer !== null && newer - t > gapMs) break; // a quiet gap — earlier conversation
+    if (r.role === "bot") replies++;
+    newer = t;
+  }
+  return replies;
+}

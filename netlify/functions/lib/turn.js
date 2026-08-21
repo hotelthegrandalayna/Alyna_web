@@ -53,7 +53,7 @@ export async function handleTurn({ psid, receivedAtIso, inline = false }) {
   const [history, guestCount, repliesSoFar, liveRooms] = await Promise.all([
     store.getHistory(psid, cfg.historyTurns),
     store.countGuestMessages(psid),
-    store.countRecentBotMessages(psid, 24),
+    store.countRepliesThisConversation(psid),
     store.getLiveRooms(),
   ]);
 
