@@ -169,21 +169,16 @@ async function notifyStaff({ psid, guestName, reason, lead }) {
 }
 
 async function notifyNtfy({ psid, guestName, reason, lead }) {
-  // Everything useful in the notification itself, so the phone screen answers
-  // "is this worth stopping for?" without opening anything.
+  // Only the guest's name — enough to find them in the Page Inbox, and nothing
+  // more. The ntfy topic has no password, so anyone who guessed its name would
+  // see whatever is sent to it. Phone numbers, stay dates and room choices are
+  // the guest's private business and stay in the database where they belong.
   const lines = [];
   if (reason) lines.push(reason);
-  if (lead) {
-    const bits = [];
-    if (lead.checkin) bits.push(lead.checkout ? `${lead.checkin} to ${lead.checkout}` : lead.checkin);
-    if (lead.guests) bits.push(`${lead.guests} guests`);
-    if (lead.room_pref) bits.push(lead.room_pref);
-    if (bits.length) lines.push(bits.join("  |  "));
-    if (lead.phone) lines.push(`Phone: ${lead.phone}`);
-  }
   lines.push("Open Page Inbox to reply. The bot stops once you do.");
 
   // A guest with dates on the table is worth interrupting for; a question is not.
+  // The dates decide the priority but are never written into the message.
   const readyToBook = Boolean(lead?.checkin);
 
   try {
