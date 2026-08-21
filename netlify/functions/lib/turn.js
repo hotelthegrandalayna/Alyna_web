@@ -139,7 +139,16 @@ async function handOver(psid, thread, reason) {
   return { handedOver: reason };
 }
 
+/**
+ * Tell a person a guest is waiting.
+ *
+ * The bot is good at knowing when it needs help and has no way to say so — a
+ * handoff nobody sees is a guest nobody answers. ntfy is used because the owner
+ * already runs it for the hotel and already checks it; a perfect notifier in an
+ * app he would forget to open is worth nothing.
+ */
 async function notifyStaff({ psid, guestName, reason, lead }) {
+  if (cfg.ntfyUrl) await notifyNtfy({ psid, guestName, reason, lead });
   if (!cfg.staffNotifyUrl) return;
   try {
     await fetch(cfg.staffNotifyUrl, {
@@ -156,5 +165,39 @@ async function notifyStaff({ psid, guestName, reason, lead }) {
     });
   } catch (e) {
     console.warn("staff notify failed:", e.message);
+  }
+}
+
+async function notifyNtfy({ psid, guestName, reason, lead }) {
+  // Everything useful in the notification itself, so the phone screen answers
+  // "is this worth stopping for?" without opening anything.
+  const lines = [];
+  if (reason) lines.push(reason);
+  if (lead) {
+    const bits = [];
+    if (lead.checkin) bits.push(lead.checkout ? `${lead.checkin} to ${lead.checkout}` : lead.checkin);
+    if (lead.guests) bits.push(`${lead.guests} guests`);
+    if (lead.room_pref) bits.push(lead.room_pref);
+    if (bits.length) lines.push(bits.join("  |  "));
+    if (lead.phone) lines.push(`Phone: ${lead.phone}`);
+  }
+  lines.push("Open Page Inbox to reply. The bot stops once you do.");
+
+  // A guest with dates on the table is worth interrupting for; a question is not.
+  const readyToBook = Boolean(lead?.checkin);
+
+  try {
+    await fetch(cfg.ntfyUrl, {
+      method: "POST",
+      headers: {
+        Title: `Guest needs you${guestName ? ` — ${guestName}` : ""}`,
+        Priority: readyToBook ? "high" : "default",
+        Tags: readyToBook ? "hotel,bell" : "speech_balloon",
+        Click: "https://business.facebook.com/latest/inbox/all",
+      },
+      body: lines.join("\n"),
+    });
+  } catch (e) {
+    console.warn("ntfy notify failed:", e.message);
   }
 }

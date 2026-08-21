@@ -25,6 +25,8 @@ export const cfg = {
   maxRepliesPerChat: intEnv("BOT_MAX_REPLIES_PER_CHAT", 10), // then hand the guest to a person
   passToInbox: process.env.BOT_PASS_TO_INBOX === "true",
   staffNotifyUrl: process.env.BOT_STAFF_NOTIFY_URL || "",
+  // Full ntfy topic URL, e.g. https://ntfy.sh/alayna-desk-7fk2
+  ntfyUrl: process.env.BOT_NTFY_URL || "",
 
   siteUrl: process.env.URL || "",
 };
