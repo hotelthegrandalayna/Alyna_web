@@ -236,3 +236,26 @@ export async function wasSentByBot(psid, mid, text, withinMs = 5 * 60 * 1000) {
   const norm = (s) => String(s || "").trim();
   return recent.some((r) => norm(r.text) === norm(text));
 }
+
+/**
+ * Claim the right to reply to this conversation. Returns false if another run
+ * already holds it.
+ *
+ * Facebook can deliver the same event twice, and a background invoke that looks
+ * failed may still be running. Without this, one guest message produced two
+ * overlapping replies saying the same thing in different words — confusing to
+ * read, and paid for twice.
+ *
+ * The claim expires on its own so a crashed run cannot lock a guest out.
+ */
+export async function claimReply(psid, staleAfterMs = 90 * 1000) {
+  const thread = await getThread(psid);
+  const since = thread?.replying_since ? new Date(thread.replying_since).getTime() : 0;
+  if (since && Date.now() - since < staleAfterMs) return false; // someone else is mid-reply
+  await upsertThread(psid, { replying_since: new Date().toISOString() });
+  return true;
+}
+
+export async function releaseReply(psid) {
+  await upsertThread(psid, { replying_since: null });
+}

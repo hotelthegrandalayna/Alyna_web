@@ -56,3 +56,8 @@ alter table fb_threads   enable row level security;
 alter table fb_messages  enable row level security;
 alter table fb_leads     enable row level security;
 alter table bot_settings enable row level security;
+
+-- Added after the first live test: two replies were generated for one guest
+-- message when the same turn ran twice. This column is a short-lived lock so
+-- only one reply is ever in flight per conversation.
+alter table fb_threads add column if not exists replying_since timestamptz;

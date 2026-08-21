@@ -6,7 +6,6 @@ import { handoverLines } from "./handover.js";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-const SELF_HANDOFF_PAUSE_HOURS = parseFloat(process.env.BOT_SELF_HANDOFF_PAUSE_HOURS || "1");
 
 function typingDelay(text) {
   const ms = text.length * cfg.msPerChar;
@@ -44,6 +43,13 @@ export async function handleTurn({ psid, receivedAtIso, inline = false }) {
   thread = await store.getThread(psid);
   if (store.isPaused(thread)) return { skipped: "human replied while waiting" };
 
+  // Only one reply per conversation at a time. Facebook sometimes delivers the
+  // same message twice, and a background run that looked failed may still be
+  // going — without this, the guest gets two replies saying the same thing.
+  if (!(await store.claimReply(psid))) {
+    return { skipped: "another reply is already being written" };
+  }
+
   const [history, guestCount, repliesSoFar, liveRooms] = await Promise.all([
     store.getHistory(psid, cfg.historyTurns),
     store.countGuestMessages(psid),
@@ -56,7 +62,9 @@ export async function handleTurn({ psid, receivedAtIso, inline = false }) {
   // wins more bookings AND stops one conversation running up a long bill,
   // because every extra reply re-reads the whole chat.
   if (repliesSoFar >= cfg.maxRepliesPerChat) {
-    return handOver(psid, thread, `${repliesSoFar} replies — conversation needs a person`);
+    const handed = await handOver(psid, thread, `${repliesSoFar} replies — conversation needs a person`);
+    await store.releaseReply(psid);
+    return handed;
   }
 
   let guestName = thread?.name || null;
@@ -96,11 +104,20 @@ export async function handleTurn({ psid, receivedAtIso, inline = false }) {
   await store.saveLead(psid, reply.lead);
 
   if (reply.handoff) {
-    await store.pauseBot(psid, SELF_HANDOFF_PAUSE_HOURS, reply.handoff_reason || "bot asked for help");
+    // Flag it for staff, but do NOT go silent. The bot asking for help does not
+    // mean the guest has stopped having questions, and meeting their next
+    // question with silence is worse than not having handed off at all.
+    // Only a real staff reply from the Page Inbox mutes the bot — that arrives
+    // as an echo and pauses it properly.
+    await store.upsertThread(psid, {
+      needs_human: true,
+      handoff_reason: reply.handoff_reason || "bot asked for help",
+    });
     await fb.passToInbox(psid, reply.handoff_reason);
     await notifyStaff({ psid, guestName, reason: reply.handoff_reason, lead: reply.lead });
   }
 
+  await store.releaseReply(psid);
   return { sent: reply.bubbles.length, handoff: reply.handoff };
 }
 
