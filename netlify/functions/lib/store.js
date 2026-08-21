@@ -1,39 +1,83 @@
-import { createClient } from "@supabase/supabase-js";
+/**
+ * Database access over Supabase's REST API, using plain fetch.
+ *
+ * Deliberately NOT using @supabase/supabase-js here. That client builds a
+ * realtime websocket connection the moment it is created, and on Node 20 it
+ * throws "Node.js 20 detected without native WebSocket support" before doing any
+ * work at all. Netlify sets the function runtime's Node version separately from
+ * the build's, so we cannot guarantee Node 22 — and a bot that dies on the
+ * runtime's version is not worth the convenience. We only ever read and write
+ * rows, so REST does everything we need with no dependency.
+ */
 import { cfg } from "./config.js";
 
-let _db = null;
-export function db() {
-  if (!_db) {
-    _db = createClient(cfg.supabaseUrl, cfg.supabaseServiceKey, {
-      auth: { persistSession: false, autoRefreshToken: false },
-    });
+function base() {
+  return `${cfg.supabaseUrl.replace(/\/$/, "")}/rest/v1`;
+}
+
+function headers(extra = {}) {
+  return {
+    apikey: cfg.supabaseServiceKey,
+    Authorization: `Bearer ${cfg.supabaseServiceKey}`,
+    "Content-Type": "application/json",
+    ...extra,
+  };
+}
+
+async function get(table, query) {
+  const res = await fetch(`${base()}/${table}?${query}`, { headers: headers() });
+  if (!res.ok) {
+    console.warn(`select ${table} failed:`, res.status, (await res.text()).slice(0, 160));
+    return [];
   }
-  return _db;
+  return res.json();
+}
+
+/** Row count without fetching the rows. */
+async function count(table, query) {
+  const res = await fetch(`${base()}/${table}?${query}&select=id&limit=1`, {
+    headers: headers({ Prefer: "count=exact" }),
+  });
+  if (!res.ok) return 0;
+  const range = res.headers.get("content-range") || ""; // e.g. "0-0/42"
+  const total = parseInt(range.split("/")[1] || "", 10);
+  return Number.isFinite(total) ? total : 0;
 }
 
 /* ---------- settings ---------- */
 
 export async function getSettings() {
-  const { data, error } = await db().from("bot_settings").select("*").eq("id", 1).maybeSingle();
-  if (error) console.warn("bot_settings read failed:", error.message);
-  return data || { enabled: true, knowledge: null, persona_notes: null };
+  const rows = await get("bot_settings", "id=eq.1&select=*");
+  return rows[0] || { enabled: true, knowledge: null, persona_notes: null };
+}
+
+/**
+ * The live room list, straight from the table the website itself reads.
+ * When the owner changes a price on the website, the bot changes with it.
+ */
+export async function getLiveRooms() {
+  const rows = await get("accommodations", "select=title,price,tags,description&order=price.asc");
+  return rows.length ? rows : null;
 }
 
 /* ---------- threads ---------- */
 
 export async function getThread(psid) {
-  const { data } = await db().from("fb_threads").select("*").eq("psid", psid).maybeSingle();
-  return data || null;
+  const rows = await get("fb_threads", `psid=eq.${encodeURIComponent(psid)}&select=*`);
+  return rows[0] || null;
 }
 
 export async function upsertThread(psid, patch) {
-  const { data, error } = await db()
-    .from("fb_threads")
-    .upsert({ psid, ...patch, updated_at: new Date().toISOString() }, { onConflict: "psid" })
-    .select()
-    .maybeSingle();
-  if (error) console.warn("upsertThread failed:", error.message);
-  return data;
+  const res = await fetch(`${base()}/fb_threads?on_conflict=psid`, {
+    method: "POST",
+    headers: headers({ Prefer: "resolution=merge-duplicates,return=representation" }),
+    body: JSON.stringify({ psid, ...patch, updated_at: new Date().toISOString() }),
+  });
+  if (!res.ok) {
+    console.warn("upsertThread failed:", res.status, (await res.text()).slice(0, 160));
+    return null;
+  }
+  return (await res.json())[0] || null;
 }
 
 export function isPaused(thread) {
@@ -55,57 +99,57 @@ export async function pauseBot(psid, hours, reason) {
  * database's clock, not the server's — the two are never exactly in step.
  */
 export async function recordMessage({ psid, mid, role, text, attachments }) {
-  const row = { psid, mid: mid || null, role, text: text || null, attachments: attachments || null };
-  const { data, error } = await db().from("fb_messages").insert(row).select("created_at").maybeSingle();
-  if (error) {
-    if (error.code === "23505") return { isNew: false, createdAt: null }; // duplicate mid
-    console.warn("recordMessage failed:", error.message);
+  const res = await fetch(`${base()}/fb_messages`, {
+    method: "POST",
+    headers: headers({ Prefer: "return=representation" }),
+    body: JSON.stringify({
+      psid,
+      mid: mid || null,
+      role,
+      text: text || null,
+      attachments: attachments || null,
+    }),
+  });
+
+  if (res.status === 409) return { isNew: false, createdAt: null }; // duplicate mid
+  if (!res.ok) {
+    const body = await res.text();
+    if (body.includes("23505")) return { isNew: false, createdAt: null };
+    console.warn("recordMessage failed:", res.status, body.slice(0, 160));
     return { isNew: true, createdAt: null };
   }
-  return { isNew: true, createdAt: data?.created_at || null };
+  const rows = await res.json();
+  return { isNew: true, createdAt: rows[0]?.created_at || null };
 }
 
 export async function getHistory(psid, limit) {
-  const { data } = await db()
-    .from("fb_messages")
-    .select("role, text, created_at")
-    .eq("psid", psid)
-    .order("created_at", { ascending: false })
-    .limit(limit);
-  return (data || []).reverse();
+  const rows = await get(
+    "fb_messages",
+    `psid=eq.${encodeURIComponent(psid)}&select=role,text,created_at&order=created_at.desc&limit=${limit}`
+  );
+  return rows.reverse();
 }
 
 /** True if a newer guest message arrived while we were waiting — someone else will answer. */
 export async function newerGuestMessageExists(psid, sinceIso) {
-  const { data } = await db()
-    .from("fb_messages")
-    .select("id")
-    .eq("psid", psid)
-    .eq("role", "guest")
-    .gt("created_at", sinceIso)
-    .limit(1);
-  return (data || []).length > 0;
+  const rows = await get(
+    "fb_messages",
+    `psid=eq.${encodeURIComponent(psid)}&role=eq.guest&created_at=gt.${encodeURIComponent(sinceIso)}&select=id&limit=1`
+  );
+  return rows.length > 0;
 }
 
-/** Replies the bot has sent this guest in the last `hoursBack` hours — i.e. this conversation. */
+/** Replies the bot has sent this guest recently — i.e. in this conversation. */
 export async function countRecentBotMessages(psid, hoursBack = 24) {
   const since = new Date(Date.now() - hoursBack * 3600 * 1000).toISOString();
-  const { count } = await db()
-    .from("fb_messages")
-    .select("id", { count: "exact", head: true })
-    .eq("psid", psid)
-    .eq("role", "bot")
-    .gt("created_at", since);
-  return count || 0;
+  return count(
+    "fb_messages",
+    `psid=eq.${encodeURIComponent(psid)}&role=eq.bot&created_at=gt.${encodeURIComponent(since)}`
+  );
 }
 
 export async function countGuestMessages(psid) {
-  const { count } = await db()
-    .from("fb_messages")
-    .select("id", { count: "exact", head: true })
-    .eq("psid", psid)
-    .eq("role", "guest");
-  return count || 0;
+  return count("fb_messages", `psid=eq.${encodeURIComponent(psid)}&role=eq.guest`);
 }
 
 /* ---------- leads ---------- */
@@ -123,24 +167,42 @@ export async function saveLead(psid, lead) {
     notes: lead.notes || null,
     updated_at: new Date().toISOString(),
   };
-  const hasSomething = Object.entries(clean).some(([k, v]) => k !== "psid" && k !== "updated_at" && v);
+  const hasSomething = Object.entries(clean).some(
+    ([k, v]) => k !== "psid" && k !== "updated_at" && v
+  );
   if (!hasSomething) return;
 
-  const { data: existing } = await db()
-    .from("fb_leads")
-    .select("*")
-    .eq("psid", psid)
-    .in("status", ["new", "contacted"])
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
+  const existing = await get(
+    "fb_leads",
+    `psid=eq.${encodeURIComponent(psid)}&status=in.(new,contacted)&select=id&order=created_at.desc&limit=1`
+  );
 
-  if (existing) {
-    // only fill in blanks / overwrite with newer non-null info
-    const merged = { ...clean };
-    for (const k of Object.keys(clean)) if (clean[k] == null) delete merged[k];
-    await db().from("fb_leads").update(merged).eq("id", existing.id);
+  if (existing[0]) {
+    // Only fill in blanks — never wipe something already known with a null.
+    const merged = {};
+    for (const [k, v] of Object.entries(clean)) if (v != null) merged[k] = v;
+    const res = await fetch(`${base()}/fb_leads?id=eq.${existing[0].id}`, {
+      method: "PATCH",
+      headers: headers(),
+      body: JSON.stringify(merged),
+    });
+    if (!res.ok) console.warn("lead update failed:", res.status, (await res.text()).slice(0, 160));
   } else {
-    await db().from("fb_leads").insert({ ...clean, status: "new" });
+    const res = await fetch(`${base()}/fb_leads`, {
+      method: "POST",
+      headers: headers(),
+      body: JSON.stringify({ ...clean, status: "new" }),
+    });
+    if (!res.ok) console.warn("lead insert failed:", res.status, (await res.text()).slice(0, 160));
   }
+}
+
+/** Turn the whole bot on or off. Returns an error string, or null on success. */
+export async function setEnabled(enabled) {
+  const res = await fetch(`${base()}/bot_settings?on_conflict=id`, {
+    method: "POST",
+    headers: headers({ Prefer: "resolution=merge-duplicates,return=representation" }),
+    body: JSON.stringify({ id: 1, enabled, updated_at: new Date().toISOString() }),
+  });
+  return res.ok ? null : `${res.status} ${(await res.text()).slice(0, 120)}`;
 }

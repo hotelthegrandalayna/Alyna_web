@@ -10,7 +10,7 @@
  * deploy, no waiting. Conversations already handed to a human stay that way.
  */
 import { cfg } from "./lib/config.js";
-import { db, getSettings } from "./lib/store.js";
+import { setEnabled, getSettings } from "./lib/store.js";
 
 export default async function handler(req) {
   const url = new URL(req.url);
@@ -23,10 +23,8 @@ export default async function handler(req) {
   const set = url.searchParams.get("set");
   if (set === "off" || set === "on") {
     const enabled = set === "on";
-    const { error } = await db()
-      .from("bot_settings")
-      .upsert({ id: 1, enabled, updated_at: new Date().toISOString() }, { onConflict: "id" });
-    if (error) return page("Could not change it", error.message, null);
+    const err = await setEnabled(enabled);
+    if (err) return page("Could not change it", err, null);
     return page(
       enabled ? "Coordinator is ON" : "Coordinator is OFF",
       enabled
