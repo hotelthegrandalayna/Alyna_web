@@ -37,12 +37,19 @@ const MODELS = [
    Banglish, a date, a fact that is NOT in the knowledge base, and a complaint. */
 const DEFAULT_SCRIPT = [
   "assalamu alaikum",
-  "room ache?",
+  "ac room er dam koto?",
   "5 tarikh theke 7 tarikh, 2 jon",
-  "sobcheye kom dam koto?",
-  "checkout koyta bajey?",          // not in the knowledge base -> should hand off, not invent
-  "apnader ekhane lift ache?",      // also not known -> should hand off
-  "ami age ekbar esechilam, service kharap chilo",  // complaint -> should apologise once and hand off
+  "apnader laundry service ache?",        // NOT in the knowledge base -> must hand off
+  "guliakhali koto dur, koto minute lage?", // distance unknown -> must not invent a number
+  "ami ar amar girlfriend thakbo, problem ache?", // the delicate one
+  "ami age ekbar esechilam, service kharap chilo", // complaint
+];
+
+// The same prices the live bot would read from the website.
+const LIVE_ROOMS = [
+  { title: "The Explorer Dune", price: 2500, tags: ["Non-Ac", "max-4people", "Two-Bed"] },
+  { title: "The Grand Prestige", price: 3000, tags: ["Air-conditioned", "max-4people", "Two-Bed"] },
+  { title: "The Family Vista", price: 3000, tags: ["twin-room"] },
 ];
 
 const script = process.argv.slice(2).length ? process.argv.slice(2) : DEFAULT_SCRIPT;
@@ -72,6 +79,7 @@ for (const model of MODELS) {
       history,
       guestName: "Rahim Uddin",
       isFirstContact: history.filter((h) => h.role === "guest").length <= 1,
+      liveRooms: LIVE_ROOMS,
     });
     console.log(`\x1b[33m  Guest:\x1b[0m ${msg}`);
     for (const b of reply.bubbles) {

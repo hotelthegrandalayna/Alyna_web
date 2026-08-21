@@ -1,19 +1,51 @@
 /**
  * HOTEL KNOWLEDGE BASE
  * --------------------
- * This is the ONLY place the bot gets its facts from.
- * Edit this file in plain language — no code knowledge needed.
+ * Everything the bot is allowed to say. Nothing else. If a fact is not here,
+ * the bot will say it is checking and hand the guest to a person rather than
+ * guess — which is the behaviour you want.
  *
- * RULES:
- *   - Anything written here, the bot may say.
- *   - Anything NOT written here, the bot will NOT invent. It will say it is
- *     confirming with reception and hand the chat to a human.
- *   - Lines starting with  [TODO]  are unanswered. Fill them in and the bot
- *     starts answering that question. Leave them and the bot hands off instead.
  *
- * A live version can also be stored in Supabase (table `bot_settings`,
- * column `knowledge`). If that row exists it OVERRIDES this file, so you can
- * edit the bot's knowledge without redeploying the site.
+ * HOW TO ADD SOMETHING
+ * ====================
+ *
+ * 1. Write FACTS, never questions and answers.
+ *
+ *       Laundry: available, 100 tk per set. Same day if given before noon.
+ *
+ *    That one line answers "laundry ache?", "kapor dhoa jabe?", "washing
+ *    service koto?" and every other way a guest might ask it. A list of
+ *    questions only works when the guest words it your way. They never do.
+ *
+ * 2. For anything SENSITIVE — money, rules, refusing someone, anything
+ *    embarrassing — a bare fact makes the bot blunt. Add three more lines:
+ *
+ *       BREAKFAST: not included in the room rate, but staff arrange it on order.
+ *       HOW TO SAY IT: "Amader staff arrange kore dibe, ager raate bole dilei hobe."
+ *       NEVER SAY: "breakfast is not included" — it sounds like a shortage.
+ *       WHY: it is a service you provide, not something you lack.
+ *
+ * 3. ALWAYS WRITE THE WHY. This is the part people skip and it matters most.
+ *    The couples rule reads gently because this sentence is in the file:
+ *    "handled badly it feels like an accusation, and people are humiliated".
+ *    "Be polite about it" would have been shorter and would not have worked.
+ *    The bot follows reasons far better than orders, and a reason covers
+ *    situations you never described.
+ *
+ * 4. Don't know something yet? Write [TODO] and the question. The bot hands
+ *    off instead of inventing an answer.
+ *
+ * 5. NO ROOM PRICES IN THIS FILE. They change with the season and are read
+ *    live from the website every time. A price typed here goes stale and the
+ *    bot quotes it forever. There is a test that fails if one appears.
+ *
+ *
+ * WHERE THIS RUNS
+ * ===============
+ * This file is the default. If the Supabase table `bot_settings` has anything
+ * in its `knowledge` column, that is used instead and this file is ignored —
+ * which is how the knowledge can be changed without a developer. Empty the
+ * column and it falls back here.
  */
 
 export const HOTEL_KNOWLEDGE = `
