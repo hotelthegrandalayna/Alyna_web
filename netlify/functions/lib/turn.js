@@ -192,6 +192,7 @@ async function notifyNtfy({ psid, guestName, reason, lead }) {
       .replace(/\b\d{7,15}\b/g, "[number in the panel]");
 
   const lines = [];
+  if (isAtTheDoor) lines.push("GUEST IS HERE NOW AND WANTS A ROOM TONIGHT.");
   if (reason) lines.push(redact(reason));
   lines.push("Open Page Inbox to reply. The bot stops once you do.");
 
@@ -202,6 +203,15 @@ async function notifyNtfy({ psid, guestName, reason, lead }) {
   const wantsCallBack = /call ?back|could not reach|couldn'?t reach|no answer|nobody (answered|picked)|ring them|phone number for a call/i.test(
     reason || ""
   );
+
+  // A guest already at or near the hotel wanting a room TONIGHT cannot wait for
+  // the morning — by then they have slept somewhere else. This is the one alert
+  // that should cut through everything, including a sleeping phone.
+  const isAtTheDoor =
+    /already (here|there|nearby|arrived)|at the hotel|near the hotel|in sitakund|outside|tonight|right now|immediately|urgent|walk[- ]?in/i.test(
+      reason || ""
+    );
+
   const readyToBook = Boolean(lead?.checkin) || wantsCallBack;
 
   try {
@@ -209,8 +219,14 @@ async function notifyNtfy({ psid, guestName, reason, lead }) {
       method: "POST",
       headers: {
         Title: `Guest needs you${guestName ? ` — ${guestName}` : ""}`,
-        Priority: readyToBook ? "high" : "default",
-        Tags: wantsCallBack ? "telephone_receiver,bell" : readyToBook ? "hotel,bell" : "speech_balloon",
+        Priority: isAtTheDoor ? "urgent" : readyToBook ? "high" : "default",
+        Tags: isAtTheDoor
+          ? "rotating_light,hotel"
+          : wantsCallBack
+          ? "telephone_receiver,bell"
+          : readyToBook
+          ? "hotel,bell"
+          : "speech_balloon",
         Click: "https://business.facebook.com/latest/inbox/all",
       },
       body: lines.join("\n"),
