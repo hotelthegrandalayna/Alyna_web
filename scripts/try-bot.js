@@ -117,7 +117,7 @@ async function turn(guestText) {
   history.push({ role: "guest", text: guestText });
   const reply = await generateReply({
     history,
-    guestName: "Rahim Uddin",
+    guestName: process.env.GUEST_NAME === "" ? null : (process.env.GUEST_NAME || "Rahim Uddin"),
     isFirstContact: history.filter((h) => h.role === "guest").length <= 1,
     liveRooms,
   });
