@@ -182,13 +182,27 @@ async function notifyNtfy({ psid, guestName, reason, lead }) {
   // more. The ntfy topic has no password, so anyone who guessed its name would
   // see whatever is sent to it. Phone numbers, stay dates and room choices are
   // the guest's private business and stay in the database where they belong.
+  // The reason is written by the model and often contains the guest's phone
+  // number — "wants a callback. Phone: 01712345678". Useful, but it must not
+  // travel over an unprotected topic, so it is taken out here. The number is
+  // still saved against the lead, where the key-protected panel can show it.
+  const redact = (t) =>
+    String(t || "")
+      .replace(/(\+?8801|01)[0-9\s-]{7,12}\b/g, "[number in the panel]")
+      .replace(/\b\d{7,15}\b/g, "[number in the panel]");
+
   const lines = [];
-  if (reason) lines.push(reason);
+  if (reason) lines.push(redact(reason));
   lines.push("Open Page Inbox to reply. The bot stops once you do.");
 
-  // A guest with dates on the table is worth interrupting for; a question is not.
-  // The dates decide the priority but are never written into the message.
-  const readyToBook = Boolean(lead?.checkin);
+  // Worth interrupting for: a guest with dates on the table, and a guest waiting
+  // for a call back. The second one has already tried to reach the hotel and been
+  // let down, so they are closest to giving up. A general question is not urgent.
+  // The dates decide priority but are never written into the message.
+  const wantsCallBack = /call ?back|could not reach|couldn'?t reach|no answer|nobody (answered|picked)|ring them|phone number for a call/i.test(
+    reason || ""
+  );
+  const readyToBook = Boolean(lead?.checkin) || wantsCallBack;
 
   try {
     await fetch(cfg.ntfyUrl, {
@@ -196,7 +210,7 @@ async function notifyNtfy({ psid, guestName, reason, lead }) {
       headers: {
         Title: `Guest needs you${guestName ? ` — ${guestName}` : ""}`,
         Priority: readyToBook ? "high" : "default",
-        Tags: readyToBook ? "hotel,bell" : "speech_balloon",
+        Tags: wantsCallBack ? "telephone_receiver,bell" : readyToBook ? "hotel,bell" : "speech_balloon",
         Click: "https://business.facebook.com/latest/inbox/all",
       },
       body: lines.join("\n"),
