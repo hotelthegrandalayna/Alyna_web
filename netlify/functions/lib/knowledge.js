@@ -340,6 +340,7 @@ believe the call is actually coming.
 
 Then hand off, always, with the reason clearly saying a guest is waiting for a
 call back. This is not a question to answer; it is a person to ring.
+=== GROUP BOOKING ===
 If a guest wants all 6 rooms together, a special rate can be arranged — but the
 manager sets it, never you.
 
