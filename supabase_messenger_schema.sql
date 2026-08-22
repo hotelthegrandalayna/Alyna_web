@@ -61,3 +61,8 @@ alter table bot_settings enable row level security;
 -- message when the same turn ran twice. This column is a short-lived lock so
 -- only one reply is ever in flight per conversation.
 alter table fb_threads add column if not exists replying_since timestamptz;
+
+-- Admin panel: settings that used to live in Netlify environment variables, so
+-- the owner can change them from a web page instead of needing a redeploy.
+alter table bot_settings add column if not exists max_replies_per_chat int;
+alter table bot_settings add column if not exists staff_pause_hours numeric;

@@ -284,3 +284,33 @@ export async function countRepliesThisConversation(psid, gapMs = 2 * 60 * 60 * 1
   }
   return replies;
 }
+
+/** Save the editable settings from the admin panel. Returns an error string, or null. */
+export async function saveSettings(patch) {
+  const res = await fetch(`${base()}/bot_settings?on_conflict=id`, {
+    method: "POST",
+    headers: headers({ Prefer: "resolution=merge-duplicates,return=representation" }),
+    body: JSON.stringify({ id: 1, ...patch, updated_at: new Date().toISOString() }),
+  });
+  return res.ok ? null : `${res.status} ${(await res.text()).slice(0, 160)}`;
+}
+
+/** Recent booking enquiries, newest first. */
+export async function recentLeads(limit = 25) {
+  return get(
+    "fb_leads",
+    `select=id,psid,name,phone,checkin,checkout,guests,room_pref,notes,status,created_at&order=created_at.desc&limit=${limit}`
+  );
+}
+
+/**
+ * Conversations the bot could not finish, with the reason it gave.
+ * This is the owner's list of things worth teaching it — the same question
+ * usually appears several times before anyone notices it is missing.
+ */
+export async function recentHandoffs(limit = 40) {
+  return get(
+    "fb_threads",
+    `handoff_reason=not.is.null&select=psid,name,handoff_reason,updated_at&order=updated_at.desc&limit=${limit}`
+  );
+}

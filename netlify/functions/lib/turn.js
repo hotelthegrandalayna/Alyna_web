@@ -30,6 +30,15 @@ export async function handleTurn({ psid, receivedAtIso, inline = false }) {
   const settings = await store.getSettings();
   if (settings.enabled === false) return { skipped: "bot disabled" };
 
+  // The admin panel writes these into the database. Netlify's values are only
+  // the fallback, so changing them no longer needs a redeploy.
+  const maxReplies = Number.isFinite(settings.max_replies_per_chat)
+    ? settings.max_replies_per_chat
+    : cfg.maxRepliesPerChat;
+  const staffPauseHours = Number.isFinite(Number(settings.staff_pause_hours))
+    ? Number(settings.staff_pause_hours)
+    : cfg.handoffPauseHours;
+
   let thread = await store.getThread(psid);
   if (store.isPaused(thread)) return { skipped: "human is handling this chat" };
 
@@ -61,8 +70,8 @@ export async function handleTurn({ psid, receivedAtIso, inline = false }) {
   // bot — they are a serious enquiry that deserves a person. Handing over here
   // wins more bookings AND stops one conversation running up a long bill,
   // because every extra reply re-reads the whole chat.
-  if (repliesSoFar >= cfg.maxRepliesPerChat) {
-    const handed = await handOver(psid, thread, `${repliesSoFar} replies — conversation needs a person`);
+  if (repliesSoFar >= maxReplies) {
+    const handed = await handOver(psid, thread, `${repliesSoFar} replies — conversation needs a person`, staffPauseHours);
     await store.releaseReply(psid);
     return handed;
   }
@@ -122,7 +131,7 @@ export async function handleTurn({ psid, receivedAtIso, inline = false }) {
 }
 
 /** Step aside and give the guest to a human. Written by hand — costs nothing. */
-async function handOver(psid, thread, reason) {
+async function handOver(psid, thread, reason, pauseHours = cfg.handoffPauseHours) {
   const lines = handoverLines(thread?.language);
   await fb.sendAction(psid, "mark_seen").catch(() => {});
   for (let i = 0; i < lines.length; i++) {
@@ -133,7 +142,7 @@ async function handOver(psid, thread, reason) {
     await store.recordMessage({ psid, mid: sent?.message_id || null, role: "bot", text: lines[i] });
   }
   await fb.sendAction(psid, "typing_off").catch(() => {});
-  await store.pauseBot(psid, cfg.handoffPauseHours, reason);
+  await store.pauseBot(psid, pauseHours, reason);
   await fb.passToInbox(psid, reason);
   await notifyStaff({ psid, guestName: thread?.name || null, reason, lead: null });
   return { handedOver: reason };
