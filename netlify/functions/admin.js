@@ -165,6 +165,35 @@ function page({ key, settings = {}, leads = [], handoffs = [], notice = "", erro
       Saving applies to the very next guest message — no deploy.
       Empty the box and save to go back to the built-in version.
     </p>
+
+    <details class="guide">
+      <summary>How to write it so the bot sounds right</summary>
+      <p><b>Write facts, not questions and answers.</b><br>
+      <code>Laundry: available, 100 tk per set. Same day if given before noon.</code><br>
+      That one line answers "laundry ache?", "kapor dhoa jabe?", "washing service koto?"
+      and every other wording. A list of questions only works when the guest words it
+      your way, and they never do.</p>
+
+      <p><b>For anything sensitive</b> — money, rules, refusing someone, anything
+      embarrassing — a bare fact makes the bot blunt. Add three more lines:</p>
+      <pre>BREAKFAST: not included, but staff arrange it on order.
+HOW TO SAY IT: "Amader staff arrange kore dibe, ager raate bole dilei hobe."
+NEVER SAY: "breakfast is not included" — it sounds like a shortage.
+WHY: it is a service you provide, not something you lack.</pre>
+
+      <p><b>Always write the WHY.</b> This is the part people skip and it matters most.
+      The couples rule reads gently because the file says "handled badly it feels like
+      an accusation, and people are humiliated". "Be polite about it" would have been
+      shorter and would not have worked. The bot follows reasons far better than
+      orders, and a reason covers situations you never described.</p>
+
+      <p><b>Don't know something yet?</b> Write <code>[TODO]</code> and the question.
+      The bot hands off to you instead of inventing an answer.</p>
+
+      <p><b>Never put a room price here.</b> Prices change with the season and are read
+      live from your website every time. A price typed here would go stale and the bot
+      would quote it forever.</p>
+    </details>
     <form method="post" action="?key=${k}">
       <input type="hidden" name="action" value="knowledge">
       <textarea name="knowledge" spellcheck="false">${esc(knowledge)}</textarea>
@@ -232,6 +261,13 @@ function shell(inner) {
   td{padding:9px 10px 9px 0;border-bottom:1px solid #f1eef7;vertical-align:top}
   .notice{background:#e8f6ee;border:1px solid #bfe3cd;color:#1f6b42;padding:11px 15px;border-radius:8px;margin-bottom:16px}
   .bad{color:#b03535}
+  .guide{margin:0 0 14px;border:1px solid #e6e2ee;border-radius:8px;background:#fbfafd;padding:0 14px}
+  .guide summary{cursor:pointer;padding:11px 0;font-weight:600;font-size:14px;color:#6547db}
+  .guide p{font-size:13.5px;color:#4a4557;margin:0 0 12px}
+  .guide pre{background:#fff;border:1px solid #e6e2ee;border-radius:6px;padding:10px;
+             font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;margin:0 0 12px}
+  .guide code{background:#fff;border:1px solid #e6e2ee;border-radius:4px;padding:1px 5px;
+              font:12px ui-monospace,Menlo,Consolas,monospace}
   @media(max-width:600px){body{padding:12px}.card{padding:16px}table{font-size:12.5px}}
 </style>
 <div class="wrap">
