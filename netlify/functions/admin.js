@@ -26,7 +26,13 @@ export default async function handler(req) {
   const secret = process.env.BOT_ADMIN_KEY || process.env.BOT_SWITCH_KEY || "";
 
   if (!secret) return html(page({ error: "BOT_SWITCH_KEY is not set in Netlify." }), 200);
-  if (key !== secret) return new Response("forbidden", { status: 403 });
+  if (key !== secret) // no-store matters: without it an edge or the browser can cache this refusal
+    // against the URL, so a request made before deploy finished keeps being
+    // answered "forbidden" even once the correct key works.
+    return new Response("forbidden", {
+      status: 403,
+      headers: { "cache-control": "no-store, no-cache, must-revalidate" },
+    });
 
   let notice = "";
 
