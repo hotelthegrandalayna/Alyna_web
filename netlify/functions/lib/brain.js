@@ -86,7 +86,16 @@ export async function generateReply({ history, guestName, knowledge, personaNote
 
   // Volatile context goes last so the cached system prefix stays byte-identical.
   // Prices live here rather than in the knowledge file precisely because they move.
-  const turnCtx = buildTurnContext({ guestName, nowDhaka, isFirstContact });
+  // Whether it is night in Bangladesh decides whether the assistant may tell a
+  // guest to ring the hotel. Computed here rather than left for the model to
+  // infer from a formatted time string, because getting it wrong means waking
+  // the owner or promising a call nobody will make.
+  const dhakaHour = Number(
+    new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Dhaka", hour: "2-digit", hour12: false }).format(new Date())
+  );
+  const isLateNight = dhakaHour >= 22 || dhakaHour < 8;
+
+  const turnCtx = buildTurnContext({ guestName, nowDhaka, isFirstContact, isLateNight });
   const priceCtx = formatLiveRooms(liveRooms);
   messages.push({
     role: "user",
