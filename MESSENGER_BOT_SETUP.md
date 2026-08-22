@@ -148,6 +148,28 @@ typing… → a short human reply.
 
 ---
 
+## The control panel
+
+Everything the owner needs is on one page:
+
+    https://hotelthegrandalayna.com/.netlify/functions/admin?key=BOT_SWITCH_KEY
+
+There is a Desktop shortcut called "Coordinator control panel" holding the full
+link. Open it from there — typing the address without the key returns forbidden,
+which is correct.
+
+The page carries no keys or tokens, only text and numbers, so a leaked link
+exposes room rules and guest enquiries rather than anything that costs money.
+
+  On / off ............ stops or starts the assistant, next message onwards
+  What it knows ....... the whole knowledge base, editable. Save applies to the
+                        next guest message. Empty it and save to fall back to the
+                        version built into the site, so it cannot be broken.
+  Settings ............ the reply cap and how long to stay quiet after staff reply
+  Could not answer .... every handoff reason. This is the list worth working
+                        through — written by guests rather than guessed at.
+  Booking enquiries ... names, phones, dates, room preferences
+
 ## Running it day to day
 
 **To take over a chat:** just reply from the Page Inbox. The bot stops for 8 hours.
