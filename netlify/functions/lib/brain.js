@@ -160,8 +160,8 @@ export async function generateReply({ history, guestName, knowledge, personaNote
     // Very occasionally a stray character from another writing system lands in the
     // middle of a Bangla word. A guest reads that as a hacked page, so throw the
     // reply away and ask once more rather than send it.
-    if (hasForeignScript(parsed.bubbles)) {
-      console.warn("foreign script in reply, retrying:", parsed.bubbles.join(" | "));
+    if (hasForeignScript(parsed.bubbles) || hasSplicedScript(parsed.bubbles)) {
+      console.warn("script problem in reply, retrying:", parsed.bubbles.join(" | "));
       // Append the nudge to the last turn rather than adding another user message,
       // so the conversation still alternates the way the first attempt did.
       const nudged = merged.map((m, i) =>
@@ -175,7 +175,7 @@ export async function generateReply({ history, guestName, knowledge, personaNote
           : m
       );
       const retry = await ask(nudged);
-      if (retry && !hasForeignScript(retry.bubbles)) parsed = retry;
+      if (retry && !hasForeignScript(retry.bubbles) && !hasSplicedScript(retry.bubbles)) parsed = retry;
       else if (retry) parsed = { ...retry, bubbles: retry.bubbles.map(stripForeignScript) };
       else parsed = { ...parsed, bubbles: parsed.bubbles.map(stripForeignScript) };
     }
@@ -198,6 +198,19 @@ export async function generateReply({ history, guestName, knowledge, personaNote
  */
 const FOREIGN_SCRIPT =
   /[぀-ヿ一-鿿가-힯ऀ-ॣ०-ॿ฀-๿Ѐ-ӿ]/g;
+
+/**
+ * A word with Latin letters AND Bangla letters inside it — "tারপর", "ekসাথে".
+ *
+ * Nobody types this way; it is the model slipping scripts mid-word, and a guest
+ * reads it as a broken machine. Telling it not to in the prompt did not hold
+ * across three attempts, so it is caught here and the reply is written again.
+ */
+export function hasSplicedScript(bubbles) {
+  return bubbles.some((b) =>
+    /[A-Za-z][ঀ-৿]|[ঀ-৿][A-Za-z]/.test(String(b || ""))
+  );
+}
 
 export function hasForeignScript(bubbles) {
   return bubbles.some((b) => {

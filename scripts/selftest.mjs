@@ -44,7 +44,7 @@ globalThis.fetch = async (url, init) => {
 const { generateReply } = await import("../netlify/functions/lib/brain.js");
 const { verifySignature } = await import("../netlify/functions/lib/fb.js");
 const { handoverLines } = await import("../netlify/functions/lib/handover.js");
-const { hasForeignScript } = await import("../netlify/functions/lib/brain.js");
+const { hasForeignScript, hasSplicedScript } = await import("../netlify/functions/lib/brain.js");
 const { cfg } = await import("../netlify/functions/lib/config.js");
 const { HOTEL_KNOWLEDGE } = await import("../netlify/functions/lib/knowledge.js");
 const crypto = await import("node:crypto");
@@ -195,6 +195,14 @@ check("ALLOWS bangla ending in a danda", !hasForeignScript(["আমরা সী
 check("ALLOWS a danda mid-sentence", !hasForeignScript(["জি আছে। কোন তারিখে?"]));
 check("ALLOWS bangla digits", !hasForeignScript(["ভাড়া ৩,০০০ টাকা।"]));
 check("ALLOWS plain banglish", !hasForeignScript(["AC room 3,000 tk theke"]));
+
+// Three separate replies spliced Latin and Bangla inside one word — "tারপর",
+// "ekসাথে". Telling it not to in the prompt did not hold, so it is caught here.
+check("catches a word spliced mid-way", hasSplicedScript(["bus e ashen, tারপর CNG niye"]));
+check("catches ekসাথে", hasSplicedScript(["6 jon ekসাথে welcome"]));
+check("ALLOWS clean banglish", !hasSplicedScript(["bus e ashen, tarpor CNG niye"]));
+check("ALLOWS clean bangla", !hasSplicedScript(["বাসে আসেন, তারপর সিএনজি নিয়ে"]));
+check("ALLOWS whole bangla words in a banglish line", !hasSplicedScript(["Highway theke o মাত্র 1 km vitore"]));
 
 console.log(`\n  ${pass} passed, ${fail} failed\n`);
 process.exit(fail ? 1 : 0);
